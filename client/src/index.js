@@ -5,12 +5,9 @@ import { ApolloProvider } from 'react-apollo';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
-
+import './App.css';
 // THESE ARE OUR REACT SCREENS, WHICH WE WILL ROUTE HERE
 import HomeScreen from './components/HomeScreen';
-import EditLogoScreen from './components/EditLogoScreen';
-import CreateLogoScreen from './components/CreateLogoScreen';
-import ViewLogoScreen from './components/ViewLogoScreen';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -19,9 +16,9 @@ ReactDOM.render(
         <Router>
             <div>
                 <Route exact path='/' component={HomeScreen} />
-                <Route path='/edit/:id' component={EditLogoScreen} />
+                {/* <Route path='/edit/:id' component={EditLogoScreen} />
                 <Route path='/create' component={CreateLogoScreen} />
-                <Route path='/view/:id' component={ViewLogoScreen} />
+                <Route path='/view/:id' component={ViewLogoScreen} /> */}
             </div>
         </Router>
     </ApolloProvider>, 

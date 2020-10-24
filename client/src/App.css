@@ -14,8 +14,10 @@
 }
 
 body {
-  background-color: var(--swatch-foundation);
+  /* background-color: var(--swatch-foundation); */
+  background-color: white;
   font-family: 'Lexend Exa';
+  color: #ed4e85;
 }
 
 #home_banner_container {
@@ -30,4 +32,40 @@ body {
   padding-left: 10%;
   padding-top: 5%;
   padding-bottom: 5%;
+}
+
+.nav-btn, .nav-btn:active, .nav-btn:focus{
+  width: 90%;
+  margin: 3%;
+  font-size: 24px;
+  font-weight: 600;
+  background-color: #F06E9C !important;
+  border: none !important;
+  transition: 0.2s;
+}
+.nav-btn:focus{
+  box-shadow: 0 0 0 0.2rem rgb(237 78 144);
+}
+.nav-btn:hover{
+  background-color: #ed4e85 !important;
+}
+
+.nav-bar{
+  background-color: #F6D8FC;
+}
+
+.volume-slider{
+  width: 30% !important;
+  vertical-align: middle;
+  color: #ed4e85 !important;
+  margin: 15px;
+}
+.audio-slider{
+  width: 90% !important;
+  vertical-align: middle;
+  color: #ed4e85 !important;
+}
+
+.content-center{
+  text-align: center;
 }
