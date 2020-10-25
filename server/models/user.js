@@ -7,16 +7,16 @@ var UserSchema = new mongoose.Schema({
   nickName: String,
   friends: [String],
   nowListening: {
-		  type: think.Mongoose.Schema.Types.ObjectId,
+		  type: mongoose.Schema.Types.ObjectId,
           ref: 'music'
   },
   favourites: {
-          type: think.Mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: 'musicList'
   },
   tracks: [
 	{
-          type: think.Mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: 'musicList'
 	}
   ],
