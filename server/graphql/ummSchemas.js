@@ -56,7 +56,7 @@ var musicListType = new GraphQLObjectType({
                 type: GraphQLString
             },
             musics:{
-                type: new GraphQLList(musicType)
+                type: GraphQLList(musicType)
             },
             lastUpdate: {
                 type: GraphQLDate
@@ -82,16 +82,16 @@ var userType = new GraphQLObjectType({
                 type: GraphQLString
             },
             friends:{
-                type: new GraphQLList(GraphQLString)
+                type: GraphQLList(GraphQLString)
             },
             nowListening:{
                 type: musicType
             },
             favourites:{
-                type: new GraphQLList(musicListType)
+                type: GraphQLList(musicListType)
             },
             tracks:{
-                type: new GraphQLList(musicListType)
+                type: GraphQLList(musicListType)
             },
             lastUpdate:{
                 type: GraphQLDate
@@ -200,7 +200,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     album: {
-                        type: new GraphQLNonNull(GraphQLInt)
+                        type: new GraphQLNonNull(GraphQLString)
                     },
                     artist:{
                         type: new GraphQLNonNull(GraphQLString)
@@ -209,7 +209,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     likes:{
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(GraphQLInt)
                     }
                 },
                 resolve: function (root, params) {
@@ -235,7 +235,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     album: {
-                        type: new GraphQLNonNull(GraphQLInt)
+                        type: new GraphQLNonNull(GraphQLString)
                     },
                     artist:{
                         type: new GraphQLNonNull(GraphQLString)
@@ -244,7 +244,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     likes:{
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(GraphQLInt)
                     }
                 },
                 resolve(root, params) {
@@ -279,9 +279,6 @@ var mutation = new GraphQLObjectType({
                 args: {
                     trackName: {
                         type: new GraphQLNonNull(GraphQLString)
-                    },
-                    musics:{
-                        type: new GraphQLList(musicType)
                     }
                 },
                 resolve: function (root, params) {
@@ -296,17 +293,67 @@ var mutation = new GraphQLObjectType({
             updateMusicList: {
                 type: musicListType,
                 args: {
-                    trackName: {
+                    id: {
+                        name: 'id',
                         type: new GraphQLNonNull(GraphQLString)
                     },
-                    musics:{
-                        type: new GraphQLList(musicType)
+                    trackName: {
+                        type: new GraphQLNonNull(GraphQLString)
                     }
                 },
                 resolve(root, params) {
-                    return MusicModel.findByIdAndUpdate(params.id, { trackName: params.trackName, 
-                                                                    musics: params.musics,                        
+                    return MusicListModel.findByIdAndUpdate(params.id, { trackName: params.trackName, 
                                                                     lastUpdate: new Date() }, function (err) {
+                        if (err) return next(err);
+                    });
+                }
+            },
+            addMusicToMusicList: {
+                type: musicListType,
+                args: {
+                    id: {
+                        name: 'id',
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    musicId: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
+                },
+                resolve(root, params) {
+                    let addedMusic = MusicModel.findById(params.musicId).exec()
+                    if(!addedMusic){
+                        throw new Error('error')
+                    }
+                    
+                    return MusicListModel.findByIdAndUpdate(params.id, 
+                                                            {$push:{musics: params.musicId}},
+                                                            {lastUpdate: new Date()}, 
+                                                            function (err) {
+                        if (err) return next(err);
+                    });
+                }
+            },
+            removeMusicFromMusicList: {
+                type: musicListType,
+                args: {
+                    id: {
+                        name: 'id',
+                        type: new GraphQLNonNull(GraphQLString)
+                    },
+                    musicId: {
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
+                },
+                resolve(root, params) {
+                    let addedMusic = MusicModel.findById(params.musicId).exec()
+                    if(!addedMusic){
+                        throw new Error('error')
+                    }
+                    
+                    return MusicListModel.findByIdAndUpdate(params.id, 
+                                                            {$pull:{musics: params.musicId}},
+                                                            {lastUpdate: new Date()}, 
+                                                            function (err) {
                         if (err) return next(err);
                     });
                 }
@@ -326,97 +373,97 @@ var mutation = new GraphQLObjectType({
                     return remMusicList;
                 }
             },
-            addUser:{
-                type: userType,
-                args:{
-                    userName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    password: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    nickName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    friends:{
-                        type: new GraphQLList(GraphQLString)
-                    },
-                    nowListening:{
-                        type: new GraphQLNonNull(musicType)
-                    },
-                    favourites:{
-                        type: new GraphQLNonNull(musicListType)
-                    },
-                    tracks:{
-                        type: new GraphQLList(musicListType)
-                    }
-                },
-                resolve: function (root, params) {
-                    const userModel = new UserModel(params);
-                    const newUser = userModel.save();
-                    if (!newUser) {
-                        throw new Error('Error');
-                    }
-                    return newUser
-                }
-            },
-            updateUser: {
-                type: userType,
-                args: {
-                    id: {
-                        name: 'id',
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    userName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    password: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    nickName: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    },
-                    friends:{
-                        type: new GraphQLList(GraphQLString)
-                    },
-                    nowListening:{
-                        type: new GraphQLNonNull(musicType)
-                    },
-                    favourites:{
-                        type: new GraphQLNonNull(musicListType)
-                    },
-                    tracks:{
-                        type: new GraphQLList(musicListType)
-                    }
-                },
-                resolve(root, params) {
-                    return MusicModel.findByIdAndUpdate(params.id, { userName: params.userName, 
-                                                                    password: params.password, 
-                                                                    nickName: params.nickName, 
-                                                                    friends: params.friends,
-                                                                    nowListening: params.nowListening,
-                                                                    favourites: params.favourites, 
-                                                                    tracks: params.tracks,                       
-                                                                    lastUpdate: new Date() }, function (err) {
-                        if (err) return next(err);
-                    });
-                }
-            },
-            removeUser: {
-                type: userType,
-                args: {
-                    id: {
-                        type: new GraphQLNonNull(GraphQLString)
-                    }
-                },
-                resolve(root, params) {
-                    const remUser = UserModel.findByIdAndRemove(params.id).exec();
-                    if (!remUser) {
-                        throw new Error('Error')
-                    }
-                    return remUser;
-                }
-            }
+            // addUser:{
+            //     type: userType,
+            //     args:{
+            //         userName: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         password: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         nickName: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         friends:{
+            //             type: new GraphQLList(GraphQLString)
+            //         },
+            //         nowListening:{
+            //             type: new GraphQLNonNull(musicType)
+            //         },
+            //         favourites:{
+            //             type: new GraphQLNonNull(musicListType)
+            //         },
+            //         tracks:{
+            //             type: new GraphQLList(musicListType)
+            //         }
+            //     },
+            //     resolve: function (root, params) {
+            //         const userModel = new UserModel(params);
+            //         const newUser = userModel.save();
+            //         if (!newUser) {
+            //             throw new Error('Error');
+            //         }
+            //         return newUser
+            //     }
+            // },
+            // updateUser: {
+            //     type: userType,
+            //     args: {
+            //         id: {
+            //             name: 'id',
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         userName: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         password: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         nickName: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         },
+            //         friends:{
+            //             type: new GraphQLList(GraphQLString)
+            //         },
+            //         nowListening:{
+            //             type: new GraphQLNonNull(musicType)
+            //         },
+            //         favourites:{
+            //             type: new GraphQLNonNull(musicListType)
+            //         },
+            //         tracks:{
+            //             type: new GraphQLList(musicListType)
+            //         }
+            //     },
+            //     resolve(root, params) {
+            //         return MusicModel.findByIdAndUpdate(params.id, { userName: params.userName, 
+            //                                                         password: params.password, 
+            //                                                         nickName: params.nickName, 
+            //                                                         friends: params.friends,
+            //                                                         nowListening: params.nowListening,
+            //                                                         favourites: params.favourites, 
+            //                                                         tracks: params.tracks,                       
+            //                                                         lastUpdate: new Date() }, function (err) {
+            //             if (err) return next(err);
+            //         });
+            //     }
+            // },
+            // removeUser: {
+            //     type: userType,
+            //     args: {
+            //         id: {
+            //             type: new GraphQLNonNull(GraphQLString)
+            //         }
+            //     },
+            //     resolve(root, params) {
+            //         const remUser = UserModel.findByIdAndRemove(params.id).exec();
+            //         if (!remUser) {
+            //             throw new Error('Error')
+            //         }
+            //         return remUser;
+            //     }
+            // }
         }
     }
 });
