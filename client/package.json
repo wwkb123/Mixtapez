@@ -13,6 +13,7 @@
     "react-bootstrap": "^1.4.0",
     "react-dom": "^16.8.6",
     "react-icons": "^3.11.0",
+    "react-popup": "^0.10.0",
     "react-router-dom": "^5.0.0",
     "react-script": "^2.0.5",
     "react-scripts": "^2.1.8"
