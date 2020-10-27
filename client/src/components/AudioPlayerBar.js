@@ -35,7 +35,9 @@ class AudioPlayerBar extends Component {
                         
                     <Row>
                         <Col className="content-center">
+                        <span style={{"margin":"10px"}}>00:00</span>
                         <Slider className="audio-slider" aria-labelledby="continuous-slider" />
+                        <span style={{"margin":"10px"}}>04:00</span>
                         </Col>
                     </Row>
                 </Container>
