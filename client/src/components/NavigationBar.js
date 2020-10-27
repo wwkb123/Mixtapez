@@ -8,7 +8,7 @@ class NavigationBar extends Component{
                 <Button className="nav-btn" size="lg">Home</Button>
                 <Button className="nav-btn" size="lg">Search</Button>
                 <Button className="nav-btn" size="lg">Your Library</Button>
-                
+                <Button className="nav-btn" size="lg">Friends</Button>
                 <h3>Playlists</h3>
                 <Button className="nav-btn" size="lg">Create Playlist</Button>
                 <Button className="nav-btn" size="lg">Liked Songs</Button>

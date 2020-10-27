@@ -8,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import './App.css';
 // THESE ARE OUR REACT SCREENS, WHICH WE WILL ROUTE HERE
 import HomeScreen from './components/HomeScreen';
+import FriendScreen from './components/FriendPage/FriendScreen'
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Router>
             <div>
                 <Route exact path='/' component={HomeScreen} />
+                <Route path='/friends' component={FriendScreen} />
                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                 <Route path='/create' component={CreateLogoScreen} />
                 <Route path='/view/:id' component={ViewLogoScreen} /> */}
