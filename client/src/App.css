@@ -169,3 +169,11 @@ body {
   overflow: hidden;
   height: 250px;
 }
+
+.playlist-card{
+  border: 2px solid #ed4e85;
+  border-radius: 5px;
+  padding: 7px;
+  color: #ed4e85;
+  margin: 10px;
+}

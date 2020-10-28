@@ -10,6 +10,7 @@ import './App.css';
 import HomeScreen from './components/HomePage/HomeScreen';
 import FriendScreen from './components/FriendPage/FriendScreen'
 import ChatScreen from './components/FriendPage/ChatScreen';
+import PlaylistsScreen from './components/PlaylistsScreen'
 import NavigationBar from './components/NavigationBar.js'
 import AudioPlayerBar from './components/AudioPlayerBar.js';
 import CreateNewList from './components/CreateNewList.js'
@@ -23,7 +24,7 @@ const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 ReactDOM.render(
     <ApolloProvider client={client}>
         <Router>
-            <div className="primary-bg">
+            <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
                 <Container>
                     <Row>
                         <Col xs={3}>
@@ -36,7 +37,7 @@ ReactDOM.render(
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' component={ChatScreen} />
                                 <Route path='/create' component={CreateNewList} />
-                                <Route path='/playlists' component={DisplayPlaylistScreen} />
+                                <Route path='/playlists' component={PlaylistsScreen} />
                                 <Route path='/playlist/:id' component={DisplayPlaylistScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
