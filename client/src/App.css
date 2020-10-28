@@ -188,7 +188,8 @@ body {
 }
 
 .search-btn, .search-btn:active, .search-btn:focus{
-  width: 10%;
+  /* width: 10%; */
+  width: fit-content;
   margin: 0 5px;
   background-color: #F06E9C !important;
   border: none !important;

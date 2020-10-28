@@ -24,7 +24,7 @@ class SignUpScreen extends Component{
                     <TextField type="password" size="small" placeholder="confirm password" variant="outlined" />
                 </div>
                 <br/>
-                <Button className="search-btn">Sign Up</Button>
+                <Link to="/verification"><Button className="search-btn">Sign Up</Button></Link>
                 <br/><br/>
                 <div className="border-bottom-accent"></div>
             </div>

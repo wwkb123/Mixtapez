@@ -6,22 +6,16 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
 
-class SignInScreen extends Component{
+class ForgetPasswordScreen extends Component{
     render() {
         return(
             <div>
-                <br/><h1>Sign In</h1>
-                <h6>Email Address:</h6>
+                <br/><h1>Forget Password</h1>
+                <h6>Enter your email address:</h6>
                 <div style={{"padding":"5px"}}>
                     <TextField size="small" placeholder="email address" variant="outlined" />
                 </div>
-                <h6>Password:</h6>
-                <div style={{"padding":"5px"}}>
-                    <TextField type="password" size="small" placeholder="password" variant="outlined" />
-                </div>
-                <br/>
-                <Button className="search-btn">Sign In</Button>
-                <Link to="/forgetpassword"><Button className="search-btn">Forget Password</Button></Link>
+                <Link to="/verification"><Button className="search-btn">Submit</Button></Link>
                 <br/><br/>
                 <div className="border-bottom-accent"></div>
             </div>
@@ -29,4 +23,4 @@ class SignInScreen extends Component{
         );
     }
 }
-export default SignInScreen;
+export default ForgetPasswordScreen;
