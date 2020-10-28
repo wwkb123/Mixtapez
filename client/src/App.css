@@ -156,3 +156,16 @@ body {
   border-top: 1px solid #ed4e85;
   padding: 8px;
 }
+
+.album-card{
+  margin: 10px;
+  text-align: center;
+}
+
+.feature-album{
+  display: flex;
+  align-items: center; /* vertical */
+  justify-content: center; /* horizontal */
+  overflow: hidden;
+  height: 250px;
+}

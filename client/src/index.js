@@ -7,7 +7,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 import './App.css';
 // THESE ARE OUR REACT SCREENS, WHICH WE WILL ROUTE HERE
-import HomeScreen from './components/HomeScreen';
+import HomeScreen from './components/HomePage/HomeScreen';
 import FriendScreen from './components/FriendPage/FriendScreen'
 import ChatScreen from './components/FriendPage/ChatScreen';
 import NavigationBar from './components/NavigationBar.js'
@@ -37,6 +37,7 @@ ReactDOM.render(
                                 <Route path='/profile/:id' component={ChatScreen} />
                                 <Route path='/create' component={CreateNewList} />
                                 <Route path='/playlists' component={DisplayPlaylistScreen} />
+                                <Route path='/playlist/:id' component={DisplayPlaylistScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}
