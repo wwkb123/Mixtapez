@@ -17,11 +17,17 @@ import CreateNewList from './components/PlaylistPage/CreateNewList.js'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+
+
 import DisplayPlaylistScreen from './components/PlaylistPage/DisplayPlaylist';
 import QueueScreen from './components/QueueScreen';
 import LikedSongsScreen from './components/LikedSongsScreen';
 import SearchScreen from './components/SearchScreen';
 import ProfileScreen from './components/ProfileScreen';
+
+import Popup from './components/Popup';
+import SignInScreen from './components/SignInScreen';
+import SignUpScreen from './components/SignUpScreen';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -46,6 +52,9 @@ ReactDOM.render(
                                 <Route path='/queue' component={QueueScreen} />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' component={SearchScreen} />
+                                <Route path='/popup' component={Popup} />
+                                <Route path='/signin' component={SignInScreen} />
+                                <Route path='/signup' component={SignUpScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}

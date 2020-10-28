@@ -200,3 +200,9 @@ body {
 .search-btn:hover{
   background-color: #ed4e85 !important;
 }
+
+.modal{
+  position: fixed;
+  z-index: 1; /* Sit on top */
+
+}
