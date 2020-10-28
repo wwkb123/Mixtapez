@@ -8,6 +8,13 @@ import { TextField } from '@material-ui/core';
 
 class VerificationScreen extends Component{
     render() {
+        console.log(this.props.location.state);
+        var link = "/";
+        if(this.props.location.state){
+            if(this.props.location.state.changepassword){
+                link = "/changepassword";
+            }
+        }
         return(
             <div>
                 <br/><h1>Verification</h1>
@@ -15,7 +22,7 @@ class VerificationScreen extends Component{
                 <div style={{"padding":"5px"}}>
                     <TextField size="small" placeholder="6-digit code" variant="outlined" />
                 </div>
-                <Button className="search-btn">Verify</Button>
+                <Link to={link}><Button className="search-btn">Verify</Button></Link>
                 <br/><br/>
                 <div className="border-bottom-accent"></div>
             </div>

@@ -15,7 +15,16 @@ class ForgetPasswordScreen extends Component{
                 <div style={{"padding":"5px"}}>
                     <TextField size="small" placeholder="email address" variant="outlined" />
                 </div>
-                <Link to="/verification"><Button className="search-btn">Submit</Button></Link>
+                <Link
+                to={{
+                    pathname: '/verification',
+                    state: {
+                        changepassword: true
+                    }
+                }}
+                >
+                    <Button className="search-btn">Submit</Button>
+                </Link>
                 <br/><br/>
                 <div className="border-bottom-accent"></div>
             </div>
