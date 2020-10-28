@@ -21,6 +21,7 @@ import DisplayPlaylistScreen from './components/PlaylistPage/DisplayPlaylist';
 import QueueScreen from './components/QueueScreen';
 import LikedSongsScreen from './components/LikedSongsScreen';
 import SearchScreen from './components/SearchScreen';
+import ProfileScreen from './components/ProfileScreen';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -38,7 +39,7 @@ ReactDOM.render(
                                 <Route exact path='/' component={HomeScreen} />
                                 <Route path='/friends' component={FriendScreen} />
                                 <Route path='/chat/:id' component={ChatScreen} />
-                                <Route path='/profile/:id' component={ChatScreen} />
+                                <Route path='/profile/:id' component={ProfileScreen} />
                                 <Route path='/create' component={CreateNewList} />
                                 <Route path='/playlists' component={PlaylistsScreen} />
                                 <Route path='/playlist/:id' component={DisplayPlaylistScreen} />
