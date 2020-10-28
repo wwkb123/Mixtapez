@@ -11,7 +11,7 @@ import Slider from '@material-ui/core/Slider';
 class AudioPlayerBar extends Component {
     render() {
         return (
-            <div>
+            <div className="secondary-bg">
                 <Container>
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>

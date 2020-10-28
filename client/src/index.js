@@ -16,25 +16,27 @@ import CreateNewList from './components/CreateNewList.js'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import DisplayPlaylistScreen from './components/DisplayPlaylist';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
 ReactDOM.render(
     <ApolloProvider client={client}>
         <Router>
-            <div>
+            <div className="primary-bg">
                 <Container>
                     <Row>
-                        <Col xs={3} className="nav-bar">
+                        <Col xs={3}>
                             <NavigationBar/>
                         </Col>
-                        <Col xs={9}>
+                        <Col xs={9} className="white-bg">
                             <Switch>
                                 <Route exact path='/' component={HomeScreen} />
                                 <Route path='/friends' component={FriendScreen} />
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' component={ChatScreen} />
                                 <Route path='/create' component={CreateNewList} />
+                                <Route path='/playlists' component={DisplayPlaylistScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}

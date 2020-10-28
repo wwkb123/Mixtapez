@@ -50,8 +50,16 @@ body {
   background-color: #ed4e85 !important;
 }
 
-.nav-bar{
+.primary-bg{
   background-color: #F6D8FC;
+}
+
+.secondary-bg{
+  background-color: #fdf2ff;
+}
+
+.white-bg{
+  background-color: white;
 }
 
 .volume-slider{
