@@ -7,6 +7,7 @@ import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
     MdShuffle, MdRepeat, MdVolumeUp
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
+import { Link } from 'react-router-dom';
 
 class AudioPlayerBar extends Component {
     render() {
@@ -16,7 +17,7 @@ class AudioPlayerBar extends Component {
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={4} className="content-center">
-                                <MdPlaylistPlay />
+                                <Link to="/queue"><MdPlaylistPlay /></Link>
                                 <span>Song Name</span>
                             </Col>
                             <Col xs={4} className="content-center">

@@ -11,7 +11,7 @@ class NavigationBar extends Component{
                 <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Link to="/create"><Button className="nav-btn" size="lg">Create Playlist</Button></Link>
-                <Link to="/liked"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
+                <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
                 <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
                 <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link>
             </div>

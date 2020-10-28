@@ -10,14 +10,17 @@ import './App.css';
 import HomeScreen from './components/HomePage/HomeScreen';
 import FriendScreen from './components/FriendPage/FriendScreen'
 import ChatScreen from './components/FriendPage/ChatScreen';
-import PlaylistsScreen from './components/PlaylistsScreen'
+import PlaylistsScreen from './components/PlaylistPage/PlaylistsScreen'
 import NavigationBar from './components/NavigationBar.js'
 import AudioPlayerBar from './components/AudioPlayerBar.js';
-import CreateNewList from './components/CreateNewList.js'
+import CreateNewList from './components/PlaylistPage/CreateNewList.js'
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import DisplayPlaylistScreen from './components/DisplayPlaylist';
+import DisplayPlaylistScreen from './components/PlaylistPage/DisplayPlaylist';
+import QueueScreen from './components/QueueScreen';
+import LikedSongsScreen from './components/LikedSongsScreen';
+import SearchScreen from './components/SearchScreen';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -39,6 +42,9 @@ ReactDOM.render(
                                 <Route path='/create' component={CreateNewList} />
                                 <Route path='/playlists' component={PlaylistsScreen} />
                                 <Route path='/playlist/:id' component={DisplayPlaylistScreen} />
+                                <Route path='/queue' component={QueueScreen} />
+                                <Route path='/likedsongs' component={LikedSongsScreen} />
+                                <Route path='/search' component={SearchScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}

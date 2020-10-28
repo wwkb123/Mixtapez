@@ -177,3 +177,26 @@ body {
   color: #ed4e85;
   margin: 10px;
 }
+
+.border-bottom-accent{
+  border-bottom: 1px solid #F6D8FC;
+}
+
+.border-bottom-accent:hover{
+  background-color: #F6D8FC;
+  transition: 0.2s;
+}
+
+.search-btn, .search-btn:active, .search-btn:focus{
+  width: 10%;
+  margin: 0 5px;
+  background-color: #F06E9C !important;
+  border: none !important;
+  transition: 0.2s;
+}
+.search-btn:focus{
+  box-shadow: 0 0 0 0.2rem rgb(237 78 144);
+}
+.search-btn:hover{
+  background-color: #ed4e85 !important;
+}
