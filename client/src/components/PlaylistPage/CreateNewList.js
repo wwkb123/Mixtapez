@@ -7,6 +7,7 @@ import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
 import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
+import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 /*
 class playPauseButton extends Component {
     constructor(props) {
@@ -52,7 +53,7 @@ class CreateNewListScreen extends Component{
                     <Row xs={10}>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                             <MdPauseCircleOutline/>
-                            <IoMdHeartEmpty/>
+                            <AiOutlinePlusCircle/>
                             <MdMoreHoriz/>
                         </IconContext.Provider>
                     </Row>

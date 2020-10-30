@@ -10,6 +10,9 @@ class FriendScreen extends Component {
     render() {
         return (
             <div>
+                <br/>
+                <h1>Friends</h1>
+                <Link to="/friendrequests"><h4>Friend Requests (1)</h4></Link>
                 <Link to="/chat/1"><FriendCard/></Link>
                 <FriendCard/>
                 <FriendCard/>

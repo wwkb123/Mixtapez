@@ -207,3 +207,8 @@ body {
   z-index: 1; /* Sit on top */
 
 }
+
+.bg-gray{
+  background-color: gray !important;
+  margin-left: 15%;
+}

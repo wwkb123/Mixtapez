@@ -9,6 +9,7 @@ import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
 import { Grid, Paper } from '@material-ui/core';
 import { pink } from '@material-ui/core/colors';
+import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 /*
 class playPauseButton extends Component {
     constructor(props) {
@@ -55,7 +56,7 @@ class DisplayPlaylistScreen extends Component{
                     <Row xs={10}>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                             <MdPauseCircleOutline/>
-                            <IoMdHeartEmpty/>
+                            <AiOutlinePlusCircle/>
                             <MdMoreHoriz/>
                         </IconContext.Provider>
                     </Row>
