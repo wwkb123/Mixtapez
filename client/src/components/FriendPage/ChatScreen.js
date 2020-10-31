@@ -6,15 +6,16 @@ import Col from 'react-bootstrap/Col'
 import FriendCard from './FriendCard.js'
 import { TextField } from '@material-ui/core';
 import Button from 'react-bootstrap/Button'
+import data from '../Mixtapez_data.json'
 
 class ChatScreen extends Component {
 
     render() {
-        var userID = 0;
+        var userID = this.props.match.params.id;
         return (
             <div>
                 <Link to={'/profile/' + userID} key={userID}>
-                    <FriendCard/>
+                    <FriendCard name={data.users[userID].nickName}/>
                 </Link>
                 <div className="dialog-area">
                     <div className="friend-dialog">Hi How are you</div>
@@ -27,7 +28,7 @@ class ChatScreen extends Component {
                     <div style={{"verticalAlign":"middle","display":"table-cell"}}>Your Message: </div>
                     <TextField style={{"width":"90%"}} placeholder="Aa" variant="outlined" />
                     <div style={{"verticalAlign":"middle","display":"table-cell"}}>
-                        <Button style={{"font-size":"16px"}} className="nav-btn">Send</Button>
+                        <Button style={{"fontSize":"16px"}} className="nav-btn">Send</Button>
                     </div>
                 </div>
             </div>

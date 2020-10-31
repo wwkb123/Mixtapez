@@ -4,9 +4,12 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import data from './Mixtapez_data.json'
 
 class LikedSongsScreen extends Component{
+    
     render() {
+        var songIDs = data.users[0].favorites;
         return(
             <div>
                 <br/><h1>Liked Songs</h1>
@@ -33,26 +36,31 @@ class LikedSongsScreen extends Component{
                             Options
                         </Col>
                     </Row>
-                    <Row className="border-bottom-accent">
-                        <Col xs={2}>
-                            &#9825;
-                        </Col>
-                        <Col xs={2}>
-                            Song1
-                        </Col>
-                        <Col xs={2}>
-                            ABC
-                        </Col>
-                        <Col xs={2}>
-                            AAA
-                        </Col>
-                        <Col xs={2}>
-                            01:11
-                        </Col>
-                        <Col xs={2}>
-                            ...
-                        </Col>
-                    </Row>
+                    {songIDs.map(id => {
+                        return (
+                            <Row className="border-bottom-accent" key={id}>
+                                <Col xs={2}>
+                                    &#9825;
+                                </Col>
+                                <Col xs={2}>
+                                    {data.music[id].musicName}
+                                </Col>
+                                <Col xs={2}>
+                                    {data.music[id].artist}
+                                </Col>
+                                <Col xs={2}>
+                                    {data.music[id].album}
+                                </Col>
+                                <Col xs={2}>
+                                    0{data.music[id].length / 60}:{data.music[id].length % 60}0
+                                </Col>
+                                <Col xs={2}>
+                                    ...
+                                </Col>
+                            </Row>
+                        )
+                    })}
+                    
                     <Row className="border-bottom-accent">
                         <Col xs={2}>
                             &#9825;

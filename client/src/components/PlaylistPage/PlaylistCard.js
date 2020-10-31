@@ -3,15 +3,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
+import data from '../Mixtapez_data.json'
 
 class PlaylistCard extends Component {
 
     render() {
+        var playlistID = this.props.id;
+        var link = "/playlist/"+playlistID;
         return (
             <div>
-                <Link to="/playlist/1">
+                <Link to={link}>
                     <div className="playlist-card">
-                        <div>New Playlist</div>
+                        <div>{data.PlayList[playlistID].trackName}</div>
                     </div>
                 </Link>
             </div>

@@ -18,7 +18,7 @@ class FriendCard extends Component {
                         </IconContext.Provider>
                         </Col>
                         <Col xs={9}>
-                            <h4>david123</h4>
+                            <h4>{this.props.name}</h4>
                             <h6>Now Playing: Hasodaodihdoash</h6>
                         </Col>
                     </Row>

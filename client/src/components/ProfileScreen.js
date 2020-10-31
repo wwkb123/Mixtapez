@@ -5,15 +5,17 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import AlbumCard from './HomePage/AlbumCard.js'
 import FriendCard from './FriendPage/FriendCard.js'
+import data from './Mixtapez_data.json'
 
 class ProfileScreen extends Component {
 
     render() {
+        var userID = this.props.match.params.id;
         return (
             <div>
                 <br/>
                 <h1>Profile</h1>
-                <FriendCard/>
+                <FriendCard name={data.users[userID].nickName}/>
                 <Button className="search-btn bg-gray">Remove Friend</Button><br/><br/>
                 <Container>
                     <Row>

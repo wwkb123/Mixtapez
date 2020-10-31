@@ -1,0 +1,100 @@
+{
+	"users": [
+		{
+			"id": "f06e905f9505e53017b5c953",
+			"userEmail": "tommy123@gmail.com",
+			"password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+			"nickName": "Tommy",
+			"friends": [
+				"17b5cf065e90953f9505e530", "90953f9505e53017b5cf065e"
+			],
+			"socketId": "f06e905f9505e530AAAA",
+			"nowListening": "0",
+			"favorites": ["0"],
+			"tracks": ["0", "1"],
+			"lastUpdate": "10/10/2020 10:59:36"
+		},
+
+		{
+			"id": "17b5cf065e90953f9505e530",
+			"userEmail": "test@gmail.com",
+			"password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+			"nickName": "TestPerson",
+			"friends": [
+				"f06e905f9505e53017b5c953"
+			],
+			"socketId": "f06e905f9505e530AAAB",
+			"nowListening": {},
+			"favorites": [],
+			"tracks": [],
+			"lastUpdate": "10/10/2020 10:59:36"
+		},
+
+		{
+			"id": "90953f9505e53017b5cf065e",
+			"userEmail": "user@gmail.com",
+			"password": "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f",
+			"nickName": "User",
+			"friends": [
+				"f06e905f9505e53017b5c953"
+			],
+			"socketId": null,
+			"nowListening": {},
+			"favorites": [],
+			"tracks": [],
+			"lastUpdate": "10/10/2020 10:59:36"
+		}
+	],
+
+	"PlayList": [
+		{
+			"id": "0",
+			"userId": "f06e905f9505e53017b5c953",
+			"trackName": "My Track",
+			"musics":["0", "2"],
+			"lastUpdate": "10/10/2020 10:59:36"
+		},
+		{
+			"id": "1",
+			"userId": "f06e905f9505e53017b5c953",
+			"trackName": "My Track2",
+			"musics":["1"],
+			"lastUpdate": "10/10/2020 10:59:36"
+		}
+	],
+	"music":[
+		{
+			"id": "0",
+			"musicName": "Song",
+			"URI": "https://api.spotify.com/v1/tracks/0",
+			"album": "album1",
+			"artist": "Me",
+			"image": "https://images.macrumors.com/t/vMbr05RQ60tz7V_zS5UEO9SbGR0=/1600x900/smart/article-new/2018/05/apple-music-note.jpg",
+			"likes": 10,
+			"lastUpdate": "10/10/2020 10:59:36",
+			"length": 60
+		},
+		{
+			"id": "1",
+			"musicName": "Song2",
+			"URI": "https://api.spotify.com/v1/tracks/1",
+			"album": "album2",
+			"artist": "Me",
+			"image": "https://images.macrumors.com/t/vMbr05RQ60tz7V_zS5UEO9SbGR0=/1600x900/smart/article-new/2018/05/apple-music-note.jpg",
+			"likes": 0,
+			"lastUpdate": "10/10/2020 10:59:36",
+			"length": 60
+		},
+		{
+			"id": "2",
+			"musicName": "Song3",
+			"URI": "https://api.spotify.com/v1/tracks/2",
+			"album": "album1",
+			"artist": "Me",
+			"image": "https://images.macrumors.com/t/vMbr05RQ60tz7V_zS5UEO9SbGR0=/1600x900/smart/article-new/2018/05/apple-music-note.jpg",
+			"likes": 1,
+			"lastUpdate": "10/10/2020 10:59:36",
+			"length": 60
+		}
+	]
+}
