@@ -47,7 +47,7 @@ class SignUpScreen extends Component{
     }
     render() {
         return(
-            <Mutation  mutation={ADD_USER} onCompleted={() => this.props.history.push('/')}>
+            <Mutation  mutation={ADD_USER} onCompleted={() => this.props.history.push('/verification')}>
                 {(addUser,{loading, error}) => (
                     <div>
                         <form onSubmit={ e => {
@@ -65,7 +65,7 @@ class SignUpScreen extends Component{
                             }
                            
                             }
-                        }></form>
+                        }>
                         <br/><h1>Sign Up</h1>
                         <h6>Email Address:</h6>
                         <div style={{"padding":"5px"}}>
@@ -74,11 +74,13 @@ class SignUpScreen extends Component{
                         </div>
                         <h6>Password:</h6>
                         <div style={{"padding":"5px"}}>
-                            <TextField type="password" size="small" placeholder="password" variant="outlined" />
+                            <TextField type="password" size="small" placeholder="password" variant="outlined" 
+                            id = "password" onChange={this.handleChange}/>
                         </div>
                         <h6>Confirm Password:</h6>
                         <div style={{"padding":"5px"}}>
-                            <TextField type="password" size="small" placeholder="confirm password" variant="outlined" />
+                            <TextField type="password" size="small" placeholder="confirm password" variant="outlined" 
+                            id = "passwordConfirm" onChange={this.handleChange}/>
                         </div>
                         <br/>
                         {/* <Link to="/verification"> */}
@@ -86,6 +88,7 @@ class SignUpScreen extends Component{
                         {/* </Link> */}
                         <br/><br/>
                         <div className="border-bottom-accent"></div>
+                        </form>
                     </div>
                 )}
                 
