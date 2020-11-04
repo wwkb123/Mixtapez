@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
 
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 const ADD_USER = gql`
     mutation AddUser(
         $userName: String!,
@@ -20,6 +20,15 @@ const ADD_USER = gql`
             nickName: $nickName
             ) {
             _id
+        }
+    }
+`;
+
+const GET_USER = gql`
+    query userByUserName($userName: String!) {
+        userByUserName(userName: $userName) {
+            _id
+            userName
         }
     }
 `;
@@ -45,9 +54,20 @@ class SignUpScreen extends Component{
     
         }));
     }
+
+    onCompleted = () => {
+        console.log("added");
+        return <Query pollInterval={500} query={GET_USER} variables={{ userName: this.state.email }}>
+            {({ loading, error, data }) => {
+                console.log("error", error);
+                console.log("data is",data);
+            }}
+        </Query>
+        // this.props.history.push('/verification');
+    }
     render() {
         return(
-            <Mutation  mutation={ADD_USER} onCompleted={() => this.props.history.push('/verification')}>
+            <Mutation  mutation={ADD_USER} onCompleted={this.onCompleted}>
                 {(addUser,{loading, error}) => (
                     <div>
                         <form onSubmit={ e => {
