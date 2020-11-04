@@ -130,6 +130,21 @@ var queryType = new GraphQLObjectType({
                     return musicDetails
                 }
             },
+            musicByName: {
+                type: GraphQLList(musicType),
+                args: {
+                    musicName: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    const musicDetails = MusicModel.find({musicName: params.musicName}).exec();
+                    if (!musicDetails) {
+                        throw new Error('Error')
+                    }
+                    return musicDetails
+                }
+            },
             musicLists:{
                 type: new GraphQLList(musicListType),
                 resolve: function() {
@@ -180,6 +195,21 @@ var queryType = new GraphQLObjectType({
                         throw new Error('Error')
                     }
                     return userDetails
+                }
+            },
+            userByUserName:{
+                type: userType,
+                args: {
+                    userName: {
+                        type: GraphQLString
+                    }
+                },
+                resolve: function (root, params) {
+                    const fiteredUsers = UserModel.findOne({userName: params.userName}).exec()
+                    if (!fiteredUsers) {
+                        throw new Error('Error')
+                    }
+                    return fiteredUsers
                 }
             }
         }
