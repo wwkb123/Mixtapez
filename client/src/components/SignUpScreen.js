@@ -111,7 +111,7 @@ class SignUpScreen extends Component{
                         });
                         if(sendEmail_response.data.status == "success"){
                             console.log("success");
-                            // this.props.signedIn();
+                            // this.props.signedIn("NewUser");
                             this.props.history.push('/emailsent');
                         }else{
                             this.props.history.push('/error');
