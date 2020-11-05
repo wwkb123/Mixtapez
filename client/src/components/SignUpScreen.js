@@ -8,6 +8,7 @@ import { TextField } from '@material-ui/core';
 
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
+import { useQuery } from '@apollo/client';
 const ADD_USER = gql`
     mutation AddUser(
         $userName: String!,
@@ -56,16 +57,10 @@ class SignUpScreen extends Component{
     }
 
     onCompleted = () => {
-        console.log("added");
-        return <Query pollInterval={500} query={GET_USER} variables={{ userName: this.state.email }}>
-            {({ loading, error, data }) => {
-                console.log("error", error);
-                console.log("data is",data);
-            }}
-        </Query>
-        // this.props.history.push('/verification');
+        this.props.history.push('/emailsent');
     }
     render() {
+
         return(
             <Mutation  mutation={ADD_USER} onCompleted={this.onCompleted}>
                 {(addUser,{loading, error}) => (

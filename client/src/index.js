@@ -32,6 +32,7 @@ import ForgetPasswordScreen from './components/ForgetPasswordScreen';
 import VerificationScreen from './components/VerificationScreen';
 import ChangePasswordScreen from './components/ChangePasswordScreen';
 import FriendRequestsScreen from './components/FriendPage/FriendRequestsScreen';
+import EmailSentScreen from './components/EmailSentScreen';
 
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
@@ -63,6 +64,7 @@ ReactDOM.render(
                                 <Route path='/changepassword' component={ChangePasswordScreen} />
                                 <Route path='/verification' component={VerificationScreen} />
                                 <Route path='/friendrequests' component={FriendRequestsScreen} />
+                                <Route path='/emailsent' component={EmailSentScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}
