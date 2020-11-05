@@ -32,24 +32,27 @@ import Banner from './components/Banner'
 class App extends Component{
     constructor(){
         super()
-        this.state = {signedUp: false};
+        this.state = {signedUp: false,
+                     nickName: ""};
     }
 
-    signedIn = () =>{
+    signedIn = (name) =>{
         console.log("signed in");
-        this.setState({signedUp: true});
+        this.setState({signedUp: true,
+                        nickName: name});
     }
 
     signedOut = () =>{
         console.log("signed out");
-        this.setState({signedUp: false});
+        this.setState({signedUp: false,
+                        nickName: ""});
     }
     
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
                 <Container>
-                    <Banner/>
+                    <Banner nickName={this.state.nickName}/>
                     <Row>
                         <Col xs={3}>
                             <NavigationBar 
