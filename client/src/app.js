@@ -44,6 +44,7 @@ class App extends Component{
 
     signedOut = () =>{
         console.log("signed out");
+        window.location.href = '/';
         this.setState({signedUp: false,
                         nickName: ""});
     }
