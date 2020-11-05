@@ -76,35 +76,50 @@ class SignUpScreen extends Component{
     //   .catch(err => console.log(err))
         if(this.state.status == "success"){
             this.props.history.push('/emailsent');
-        }else{
-            this.props.history.push('/error');
         }
+        // else{
+        //     this.props.history.push('/error');
+        // }
         
     }
 
-    onSubmit = async (e) => {
+    onSubmit = async (e, addUser) => {
         e.preventDefault();
         var email = this.state.email;
         console.log(email);
         if(this.state.password === this.state.passwordConfirm){
             // check email exists
             try {
-                const response = await UserAPI.post("/register", {
+                const register_response = await UserAPI.post("/register", {
                     email
                 });
-                console.log(response.data.data);
-                this.setState({status: response.data.data.message});
+                if(register_response.data.status == "success"){  // email can be used
+                    addUser({
+                        variables: {
+                            userName: this.state.email,
+                            password: this.state.password,
+                            nickName: "New User"
+                        }
+                    })
+                    const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+                        email
+                    });
+                    if(sendEmail_response.data.status == "success"){
+                        console.log("sucess");
+                    }
+                    if(sendEmail_response){
+                        this.setState({status: sendEmail_response.data.status});
+                    }
+                    
+                }else{
+                    alert("This email has been registered.");
+                }
+                
                 
             } catch (err) {
                 console.log(err);
             }
-            // addUser({
-            //     variables: {
-            //         userName: this.state.email,
-            //         password: this.state.password,
-            //         nickName: "New User"
-            //     }
-            // })
+            
         }else{
             alert("Password do not match");
         }
@@ -116,7 +131,7 @@ class SignUpScreen extends Component{
             <Mutation  mutation={ADD_USER} onCompleted={this.onCompleted}>
                 {(addUser,{loading, error}) => (
                     <div>
-                        <form onSubmit={this.onSubmit}>
+                        <form onSubmit={(e) => this.onSubmit(e, addUser)}>
                         <br/><h1>Sign Up</h1>
                         <h6>Email Address:</h6>
                         <div style={{"padding":"5px"}}>
