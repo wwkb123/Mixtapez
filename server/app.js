@@ -17,7 +17,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var UserModel = require('./models/user');
-
+var MusicListModel = require('./models/musicList')
 var app = express();
 
 // view engine setup
