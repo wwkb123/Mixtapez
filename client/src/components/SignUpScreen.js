@@ -39,8 +39,8 @@ const GET_USER = gql`
 
 
 class SignUpScreen extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             email: "",
             password: "",
@@ -75,6 +75,7 @@ class SignUpScreen extends Component{
     //   })
     //   .catch(err => console.log(err))
         if(this.state.status == "success"){
+            this.props.signedIn();
             this.props.history.push('/emailsent');
         }
         // else{
