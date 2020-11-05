@@ -7,7 +7,10 @@ import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
 
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
+import { useQuery } from '@apollo/client';
+import UserAPI from "../apis/UserAPI";
+
 const ADD_USER = gql`
     mutation AddUser(
         $userName: String!,
@@ -24,6 +27,15 @@ const ADD_USER = gql`
     }
 `;
 
+const GET_USER = gql`
+    query userByUserName($userName: String!) {
+        userByUserName(userName: $userName) {
+            _id
+            userName
+        }
+    }
+`;
+
 
 
 class SignUpScreen extends Component{
@@ -32,7 +44,8 @@ class SignUpScreen extends Component{
         this.state = {
             email: "",
             password: "",
-            passwordConfirm: ""
+            passwordConfirm: "",
+            status: ""
         }
     }
     
@@ -45,27 +58,80 @@ class SignUpScreen extends Component{
     
         }));
     }
+
+    onCompleted = () => {
+        
+    //     fetch("test", 
+    //     {
+    //         method: 'POST',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         }
+    //       , body: JSON.stringify(email)})
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     console.log(data)
+    //     // this.props.history.push('/emailsent');
+    //   })
+    //   .catch(err => console.log(err))
+        if(this.state.status == "success"){
+            this.props.history.push('/emailsent');
+        }
+        // else{
+        //     this.props.history.push('/error');
+        // }
+        
+    }
+
+    onSubmit = async (e, addUser) => {
+        e.preventDefault();
+        var email = this.state.email;
+        console.log(email);
+        if(this.state.password === this.state.passwordConfirm){
+            // check email exists
+            try {
+                const register_response = await UserAPI.post("/register", {
+                    email
+                });
+                if(register_response.data.status == "success"){  // email can be used
+                    addUser({
+                        variables: {
+                            userName: this.state.email,
+                            password: this.state.password,
+                            nickName: "New User"
+                        }
+                    })
+                    const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+                        email
+                    });
+                    if(sendEmail_response.data.status == "success"){
+                        console.log("sucess");
+                    }
+                    if(sendEmail_response){
+                        this.setState({status: sendEmail_response.data.status});
+                    }
+                    
+                }else{
+                    alert("This email has been registered.");
+                }
+                
+                
+            } catch (err) {
+                console.log(err);
+            }
+            
+        }else{
+            alert("Password do not match");
+        }
+    
+    }
     render() {
+
         return(
-            <Mutation  mutation={ADD_USER} onCompleted={() => this.props.history.push('/verification')}>
+            <Mutation  mutation={ADD_USER} onCompleted={this.onCompleted}>
                 {(addUser,{loading, error}) => (
                     <div>
-                        <form onSubmit={ e => {
-                            e.preventDefault();
-                            if(this.state.password === this.state.passwordConfirm){
-                                addUser({
-                                    variables: {
-                                        userName: this.state.email,
-                                        password: this.state.password,
-                                        nickName: "New User"
-                                    }
-                                })
-                            }else{
-                                alert("Password do not match");
-                            }
-                           
-                            }
-                        }>
+                        <form onSubmit={(e) => this.onSubmit(e, addUser)}>
                         <br/><h1>Sign Up</h1>
                         <h6>Email Address:</h6>
                         <div style={{"padding":"5px"}}>
