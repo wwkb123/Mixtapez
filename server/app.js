@@ -112,14 +112,15 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
 });
 
 
-// verify a user
+// verify a user after they click verify button
 app.post('/api/verify', async (req, res) => {
   await UserModel.findByIdAndUpdate(req.body.id, {verified: "true"}, function (err, result) {
     console.log("result is ", result);
     if(result){ // user found
       console.log("user", result);
       res.status(200).json({
-          status: "success"
+          status: "success",
+          nickName: result[0].nickName
       });
     }else{
       console.log("not found");
