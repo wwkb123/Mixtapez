@@ -9,6 +9,8 @@ import { TextField } from '@material-ui/core';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { useQuery } from '@apollo/client';
+import UserAPI from "../apis/UserAPI";
+
 const ADD_USER = gql`
     mutation AddUser(
         $userName: String!,
@@ -42,7 +44,8 @@ class SignUpScreen extends Component{
         this.state = {
             email: "",
             password: "",
-            passwordConfirm: ""
+            passwordConfirm: "",
+            status: ""
         }
     }
     
@@ -57,7 +60,55 @@ class SignUpScreen extends Component{
     }
 
     onCompleted = () => {
-        this.props.history.push('/emailsent');
+        
+    //     fetch("test", 
+    //     {
+    //         method: 'POST',
+    //         headers: {
+    //         'Content-Type': 'application/json',
+    //         }
+    //       , body: JSON.stringify(email)})
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     console.log(data)
+    //     // this.props.history.push('/emailsent');
+    //   })
+    //   .catch(err => console.log(err))
+        if(this.state.status == "success"){
+            this.props.history.push('/emailsent');
+        }else{
+            this.props.history.push('/error');
+        }
+        
+    }
+
+    onSubmit = async (e) => {
+        e.preventDefault();
+        var email = this.state.email;
+        console.log(email);
+        if(this.state.password === this.state.passwordConfirm){
+            // check email exists
+            try {
+                const response = await UserAPI.post("/register", {
+                    email
+                });
+                console.log(response.data.data);
+                this.setState({status: response.data.data.message});
+                
+            } catch (err) {
+                console.log(err);
+            }
+            // addUser({
+            //     variables: {
+            //         userName: this.state.email,
+            //         password: this.state.password,
+            //         nickName: "New User"
+            //     }
+            // })
+        }else{
+            alert("Password do not match");
+        }
+    
     }
     render() {
 
@@ -65,22 +116,7 @@ class SignUpScreen extends Component{
             <Mutation  mutation={ADD_USER} onCompleted={this.onCompleted}>
                 {(addUser,{loading, error}) => (
                     <div>
-                        <form onSubmit={ e => {
-                            e.preventDefault();
-                            if(this.state.password === this.state.passwordConfirm){
-                                addUser({
-                                    variables: {
-                                        userName: this.state.email,
-                                        password: this.state.password,
-                                        nickName: "New User"
-                                    }
-                                })
-                            }else{
-                                alert("Password do not match");
-                            }
-                           
-                            }
-                        }>
+                        <form onSubmit={this.onSubmit}>
                         <br/><h1>Sign Up</h1>
                         <h6>Email Address:</h6>
                         <div style={{"padding":"5px"}}>
