@@ -43,12 +43,15 @@ class NavigationBar extends Component{
             try {
                const create_response = await UserAPI.post("/createMusicList", {});
                if (create_response.data.status == "success") {
+                   console.log(this.props.userId)
+                   console.log(create_response.data.musicListId)
                    addNewPlaylist({
                        variables:{
-                           id: this.props.userId,
-                           playlistId: create_response.data.musicListId
+                            id: this.props.userId,
+                            playlistId: create_response.data.musicListId
                        }
                    });
+                   window.location.href = '/create';
                }else{
                    alert("Playlist creation failed")
                }
@@ -70,11 +73,11 @@ class NavigationBar extends Component{
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Mutation mutation={ADD_PLAYLIST}>
                     {(addNewPlaylist,{loading, error})=>(
-                        <Link to="/create">
+                        //<Link to="/create">
                             <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
                                 Create Playlist
                             </Button>
-                        </Link>
+                        //</Link>
                     )}
                 </Mutation>
                 <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>

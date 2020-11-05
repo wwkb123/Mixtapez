@@ -44,9 +44,10 @@ class SignInScreen extends Component{
                 alert("Wrong credentials. Please try again.");
             }else if(response.data.status == "not verified"){
                 console.log("not verified");
-                this.props.signedIn(response.data.nickName, response.data.userId);
-                this.props.history.push('/');
-                //alert("Your account is not verified yet. Please follow the instructions in the verification email.");
+                // console.log(response.data)
+                // this.props.signedIn(response.data.nickName, response.data.userId);
+                // this.props.history.push('/');
+                alert("Your account is not verified yet. Please follow the instructions in the verification email.");
             }
         } catch (err) {
             console.log(err);

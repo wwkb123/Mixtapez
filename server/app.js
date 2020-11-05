@@ -133,7 +133,7 @@ app.post('/api/verify', async (req, res) => {
 
 // check if sign in credentials are correct
 app.post('/api/signin', async (req, res) => {
-  UserModel.find({ 'userName': req.body.email }, 'nickname password verified', function (err, result) {
+  UserModel.find({ 'userName': req.body.email }, 'nickName password verified', function (err, result) {
     console.log("result is ", result);
     if(result.length > 0){  // user exists
       // todo: make password hashed
@@ -142,11 +142,13 @@ app.post('/api/signin', async (req, res) => {
           res.status(200).json({
             status: "success",
             nickName: result[0].nickName,
-            userId: result[0].id
+            userId: result[0]._id
           });
         }else{ // not verified user
           res.status(200).json({
-            status: "not verified"
+            status: "not verified",
+            nickName: result[0].nickName,
+            userId: result[0]._id
           });
         }
       }else{ // incorrcet password
@@ -166,15 +168,18 @@ app.post('/api/signin', async (req, res) => {
 // create a new playlist and return its Id
 app.post('/api/createMusicList', async (req, res) => {
   const musicListModel = new MusicListModel({musicListName: "New List"});
-  const newMusicList = musicListModel.save();
-  if (!newMusicList) {
+  console.log(musicListModel)
+  musicListModel.save((err)=>{
+    if (err) return handleError(err);
+  });
+  if (!musicListModel) {
       res.status(200).json({
         status: "failed"
       });
   }
   res.status(200).json({
     status: "success",
-    musicListId: newMusicList.id
+    musicListId: musicListModel._id
   });
 });
 

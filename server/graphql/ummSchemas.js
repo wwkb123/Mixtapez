@@ -490,6 +490,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     playlistId:{
+                        name: 'id',
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
@@ -498,8 +499,8 @@ var mutation = new GraphQLObjectType({
                     if(!playlist){
                         throw new Error('error')
                     }
-                    return MusicModel.findByIdAndUpdate(params.id,
-                                                {$push:{tracks: playlist}},  
+                    return UserModel.findByIdAndUpdate(params.id,
+                                                {$push:{tracks: params.playlistId}},  
                                                 {lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });
