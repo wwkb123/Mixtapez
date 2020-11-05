@@ -64,21 +64,20 @@ app.post('/api/register', async (req, res) => {
 });
 
 app.post('/api/sendVerifyEmail', async (req, res) => {
-  UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
-    var userID = "";
-    console.log(result);
+  var userID = "";
+  await UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
+    console.log("result is ", result);
     if(result.length > 0){ // email found
       userID = result[0]._id
     }else{
       console.log("not found");
     }
     if (err) return handleError(err);
-  })
-
+  });
   var link = `http://localhost:3001/verification/${userID}`;
   var mailOptions = {
     from: 'mixtapez416@gmail.com',
-    to: 'wwkb1233@gmail.com',
+    to: req.body.email,
     subject: 'Welcome to Mixtapez, please verify your email address',
     // text: 'That was easy!\nasdasd'
     html: `<h1>Thanks for registering on Mixtapez!</h1>\
@@ -86,25 +85,19 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
     <a href="${link}">Verify</a>`
   };
   
-  // transporter.sendMail(mailOptions, function(error, info){
-    // if (error) {
-    //   console.log(error);
-    //   res.status(200).json({
-    //           status: "failed",
-    //           data: {
-    //             message: "failed"
-    //           }
-    //       });
-  //   } else {
-  //     console.log('Email sent: ' + info.response);
-  //     res.status(200).json({
-  //         status: "success",
-  //         data: {
-  //           message: "success"
-  //         }
-  //     });
-  //   }
-  // });
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+      res.status(200).json({
+              status: "failed"
+          });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).json({
+          status: "success"
+      });
+    }
+  });
 
 });
 
