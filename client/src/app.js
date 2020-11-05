@@ -1,12 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from 'react-apollo';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import * as serviceWorker from './serviceWorker';
-import './App.css';
-// THESE ARE OUR REACT SCREENS, WHICH WE WILL ROUTE HERE
+import React, {Component} from 'react';
+import { Route, Switch } from 'react-router-dom';
 import HomeScreen from './components/HomePage/HomeScreen';
 import FriendScreen from './components/FriendPage/FriendScreen'
 import ChatScreen from './components/FriendPage/ChatScreen';
@@ -34,19 +27,33 @@ import ChangePasswordScreen from './components/ChangePasswordScreen';
 import FriendRequestsScreen from './components/FriendPage/FriendRequestsScreen';
 import EmailSentScreen from './components/EmailSentScreen';
 import ErrorScreen from './components/ErrorScreen';
-import App from './app';
 
-const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
+class App extends Component{
+    constructor(){
+        super()
+        this.state = {signedUp: false};
+    }
 
-ReactDOM.render(
-    <ApolloProvider client={client}>
-        <Router>
-            <App/>
-            {/* <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
+    signedIn = () =>{
+        console.log("signed in");
+        this.setState({signedUp: true});
+    }
+
+    signedOut = () =>{
+        console.log("signed out");
+        this.setState({signedUp: false});
+    }
+    
+    render(){
+        return(
+            <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
                 <Container>
                     <Row>
                         <Col xs={3}>
-                            <NavigationBar/>
+                            <NavigationBar 
+                            signedUp={this.state.signedUp}
+                            signedOut={this.signedOut}
+                            />
                         </Col>
                         <Col xs={9} className="white-bg">
                             <Switch>
@@ -62,7 +69,7 @@ ReactDOM.render(
                                 <Route path='/search' component={SearchScreen} />
                                 <Route path='/popup' component={Popup} />
                                 <Route path='/signin' component={SignInScreen} />
-                                <Route path='/signup' component={SignUpScreen} />
+                                <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
                                 <Route path='/changepassword' component={ChangePasswordScreen} />
                                 <Route path='/verification' component={VerificationScreen} />
@@ -72,18 +79,14 @@ ReactDOM.render(
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />
                                 <Route path='/create' component={CreateLogoScreen} />
                                 <Route path='/view/:id' component={ViewLogoScreen} /> */}
-                            {/* </Switch>
+                            </Switch>
                         </Col>
                     </Row>
                 </Container>
                 <AudioPlayerBar/>
-            </div> */}
-        </Router>
-    </ApolloProvider>, 
-    document.getElementById('root')
-);
+            </div>
+        );
+    }
+}
+export default App;
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://create-react-app.dev/docs/making-a-progressive-web-app/
-serviceWorker.unregister();
