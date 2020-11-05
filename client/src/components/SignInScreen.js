@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
+import UserAPI from "../apis/UserAPI";
 
 class SignInScreen extends Component{
     constructor(props){
@@ -26,7 +27,10 @@ class SignInScreen extends Component{
         }));
     }
 
-    onSubmit = (e) => {
+    onSubmit = async (e) => {
+        e.preventDefault();
+        var email = this.state.email;
+        var password = this.state.password;
         try {
             const response = await UserAPI.post("/signin", {
                 email,
@@ -34,10 +38,12 @@ class SignInScreen extends Component{
             });
             if(response.data.status == "success"){
                 console.log("success");
-                this.props.signedIn();
+                this.props.signedIn(response.data.nickName);
                 this.props.history.push('/');
-            }else{
+            }else if(response.data.status == "failed"){
                 alert("Wrong credentials. Please try again.");
+            }else if(response.data.status == "not verified"){
+                alert("Your account is not verified yet. Please follow the instructions in the verification email.");
             }
         } catch (err) {
             console.log(err);
@@ -52,14 +58,14 @@ class SignInScreen extends Component{
                 <form onSubmit={(e) => this.onSubmit(e)}>
                     <h6>Email Address:</h6>
                     <div style={{"padding":"5px"}}>
-                        <TextField id="email" size="small" placeholder="email address" variant="outlined" />
+                        <TextField id="email" size="small" placeholder="email address" variant="outlined" onChange={this.handleChange} />
                     </div>
                     <h6>Password:</h6>
                     <div style={{"padding":"5px"}}>
-                        <TextField id="password" type="password" size="small" placeholder="password" variant="outlined" />
+                        <TextField id="password" type="password" size="small" placeholder="password" variant="outlined" onChange={this.handleChange} />
                     </div>
                     <br/>
-                    <Button className="search-btn">Sign In</Button>
+                    <Button type="submit" className="search-btn">Sign In</Button>
                     <Link to="/forgetpassword"><Button className="search-btn">Forget Password</Button></Link>
                     <br/><br/>
                     <div className="border-bottom-accent"></div>

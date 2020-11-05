@@ -133,14 +133,29 @@ app.post('/api/verify', async (req, res) => {
 
 // check if sign in credentials are correct
 app.post('/api/signin', async (req, res) => {
-  UserModel.find({ 'userName': req.body.email }, 'password verified', function (err, result) {
+  UserModel.find({ 'userName': req.body.email }, 'nickname password verified', function (err, result) {
+    console.log("result is ", result);
     if(result.length > 0){  // user exists
+      // todo: make password hashed
+      if(result[0].password == req.body.password){ // correct password
+        if(result[0].verified == "true"){ // correct password and verified
+          res.status(200).json({
+            status: "success",
+            nickName: result[0].nickName
+          });
+        }else{ // not verified user
+          res.status(200).json({
+            status: "not verified"
+          });
+        }
+      }else{ // incorrcet password
+        res.status(200).json({
+          status: "failed"
+        });
+      }
+    }else{ // no such user
       res.status(200).json({
         status: "failed"
-    });
-    }else{
-      res.status(200).json({
-        status: "success"
     });
     }
     if (err) return handleError(err);

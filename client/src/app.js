@@ -73,7 +73,7 @@ class App extends Component{
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' component={SearchScreen} />
                                 <Route path='/popup' component={Popup} />
-                                <Route path='/signin' component={SignInScreen} />
+                                <Route path='/signin'  render={(props) => <SignInScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
                                 <Route path='/changepassword' component={ChangePasswordScreen} />
