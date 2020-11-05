@@ -33,22 +33,26 @@ class App extends Component{
     constructor(){
         super()
         this.state = {signedUp: false,
-                     nickName: ""};
+                        nickName: "",
+                        userId: "",
+                        musicListId: ""};
     }
 
-    signedIn = (name) =>{
+    signedIn = (name,id) =>{
         console.log("signed in");
         this.setState({signedUp: true,
-                        nickName: name});
+                        nickName: name,
+                        userId: id});
     }
 
     signedOut = () =>{
         console.log("signed out");
         window.location.href = '/';
         this.setState({signedUp: false,
-                        nickName: ""});
+                        nickName: "",
+                        userId: ""});
     }
-    
+
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
@@ -57,6 +61,7 @@ class App extends Component{
                     <Row>
                         <Col xs={3}>
                             <NavigationBar 
+                            userId={this.state.userId}
                             signedUp={this.state.signedUp}
                             signedOut={this.signedOut}
                             />

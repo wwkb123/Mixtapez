@@ -97,7 +97,7 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
       } else {
         console.log('Email sent: ' + info.response);
         res.status(200).json({
-            status: "success"
+            status: "success",
         });
       }
     });
@@ -142,7 +142,8 @@ app.post('/api/signin', async (req, res) => {
         if(result[0].verified == "true"){ // correct password and verified
           res.status(200).json({
             status: "success",
-            nickName: result[0].nickName
+            nickName: result[0].nickName,
+            userId: result[0].id
           });
         }else{ // not verified user
           res.status(200).json({
@@ -161,6 +162,21 @@ app.post('/api/signin', async (req, res) => {
     }
     if (err) return handleError(err);
   })
+});
+
+// create a new playlist and return its Id
+app.post('/api/createMusicList', async (req, res) => {
+  const musicListModel = new MusicListModel({musicListName: "New List"});
+  const newMusicList = musicListModel.save();
+  if (!newMusicList) {
+      res.status(200).json({
+        status: "failed"
+      });
+  }
+  res.status(200).json({
+    status: "success",
+    musicListId: newMusicList.id
+  });
 });
 
 // catch 404 and forward to error handler

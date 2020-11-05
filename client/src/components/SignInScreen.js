@@ -38,7 +38,7 @@ class SignInScreen extends Component{
             });
             if(response.data.status == "success"){
                 console.log("success");
-                this.props.signedIn(response.data.nickName);
+                this.props.signedIn(response.data.nickName, response.data.userId);
                 this.props.history.push('/');
             }else if(response.data.status == "failed"){
                 alert("Wrong credentials. Please try again.");
