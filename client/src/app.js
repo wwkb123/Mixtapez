@@ -27,6 +27,7 @@ import ChangePasswordScreen from './components/ChangePasswordScreen';
 import FriendRequestsScreen from './components/FriendPage/FriendRequestsScreen';
 import EmailSentScreen from './components/EmailSentScreen';
 import ErrorScreen from './components/ErrorScreen';
+import Banner from './components/Banner'
 
 class App extends Component{
     constructor(){
@@ -48,6 +49,7 @@ class App extends Component{
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
                 <Container>
+                    <Banner/>
                     <Row>
                         <Col xs={3}>
                             <NavigationBar 
