@@ -7,23 +7,63 @@ import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
 
 class SignInScreen extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            email: "",
+            password: "",
+            status: ""
+        }
+    }
+    
+    handleChange = (e) => {
+        const {target} = e;
+    
+        this.setState( (state) => ({
+            ...state,
+            [target.id]: target.value
+    
+        }));
+    }
+
+    onSubmit = (e) => {
+        try {
+            const response = await UserAPI.post("/signin", {
+                email,
+                password
+            });
+            if(response.data.status == "success"){
+                console.log("success");
+                this.props.signedIn();
+                this.props.history.push('/');
+            }else{
+                alert("Wrong credentials. Please try again.");
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
     render() {
         return(
             <div>
                 <br/><h1>Sign In</h1>
-                <h6>Email Address:</h6>
-                <div style={{"padding":"5px"}}>
-                    <TextField size="small" placeholder="email address" variant="outlined" />
-                </div>
-                <h6>Password:</h6>
-                <div style={{"padding":"5px"}}>
-                    <TextField type="password" size="small" placeholder="password" variant="outlined" />
-                </div>
-                <br/>
-                <Button className="search-btn">Sign In</Button>
-                <Link to="/forgetpassword"><Button className="search-btn">Forget Password</Button></Link>
-                <br/><br/>
-                <div className="border-bottom-accent"></div>
+                <form onSubmit={(e) => this.onSubmit(e)}>
+                    <h6>Email Address:</h6>
+                    <div style={{"padding":"5px"}}>
+                        <TextField id="email" size="small" placeholder="email address" variant="outlined" />
+                    </div>
+                    <h6>Password:</h6>
+                    <div style={{"padding":"5px"}}>
+                        <TextField id="password" type="password" size="small" placeholder="password" variant="outlined" />
+                    </div>
+                    <br/>
+                    <Button className="search-btn">Sign In</Button>
+                    <Link to="/forgetpassword"><Button className="search-btn">Forget Password</Button></Link>
+                    <br/><br/>
+                    <div className="border-bottom-accent"></div>
+                </form>
             </div>
 
         );

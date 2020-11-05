@@ -10,15 +10,19 @@ import UserAPI from "../apis/UserAPI";
 class VerificationScreen extends Component{
     onClick = async (e) => {
         e.preventDefault();
-        const response = await UserAPI.post("/verify", {
-            id: this.props.match.params.id
-        });
-        if(response.data.status == "success"){
-            console.log("success");
-            this.props.signedIn();
-            this.props.history.push('/');
-        }else{
-            this.props.history.push('/error');
+        try {
+            const response = await UserAPI.post("/verify", {
+                id: this.props.match.params.id
+            });
+            if(response.data.status == "success"){
+                console.log("success");
+                this.props.signedIn();
+                this.props.history.push('/');
+            }else{
+                this.props.history.push('/error');
+            }
+        }catch (err) {
+            console.log(err);
         }
     }
 
