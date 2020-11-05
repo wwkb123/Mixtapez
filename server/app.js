@@ -48,6 +48,7 @@ var transporter = nodemailer.createTransport({
   }
 });
 
+// check if an email is already registered
 app.post('/api/register', async (req, res) => {
   UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
     if(result.length > 0){  // email exists
@@ -63,6 +64,7 @@ app.post('/api/register', async (req, res) => {
   })
 });
 
+// send verification email to the user
 app.post('/api/sendVerifyEmail', async (req, res) => {
   var userID = "";
   await UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
@@ -101,6 +103,42 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
 
 });
 
+
+// verify a user
+app.post('/api/verify', async (req, res) => {
+  await UserModel.findByIdAndUpdate(req.body.id, {verified: "true"}, function (err, result) {
+    console.log("result is ", result);
+    if(result){ // user found
+      console.log("user", result);
+      res.status(200).json({
+          status: "success"
+      });
+    }else{
+      console.log("not found");
+      res.status(200).json({
+        status: "failed"
+      });
+    }
+    if (err) return handleError(err);
+  });
+});
+
+// check if sign in credentials are correct
+app.post('/api/signin', async (req, res) => {
+  UserModel.find({ 'userName': req.body.email }, 'password verified', function (err, result) {
+    if(result.length > 0){  // user exists
+      res.status(200).json({
+        status: "failed"
+    });
+    }else{
+      res.status(200).json({
+        status: "success"
+    });
+    }
+    if (err) return handleError(err);
+  })
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -117,4 +155,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+function handleError(err){
+  console.log(err);
+}
 module.exports = app;

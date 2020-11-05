@@ -72,7 +72,7 @@ class App extends Component{
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
                                 <Route path='/changepassword' component={ChangePasswordScreen} />
-                                <Route path='/verification' component={VerificationScreen} />
+                                <Route path='/verification/:id' render={(props) => <VerificationScreen signedIn={this.signedIn} {...props} isAuthed={true}/>}/>
                                 <Route path='/friendrequests' component={FriendRequestsScreen} />
                                 <Route path='/emailsent' component={EmailSentScreen} />
                                 <Route path='/error' component={ErrorScreen} />

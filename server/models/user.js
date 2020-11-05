@@ -5,6 +5,7 @@ var UserSchema = new mongoose.Schema({
   userName: String,
   password: String,
   nickName: String,
+  verified: String,
   friends: [String],
   nowListening: {
 		  type: mongoose.Schema.Types.ObjectId,
