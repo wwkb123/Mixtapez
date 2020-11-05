@@ -6,7 +6,7 @@ var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
 var GraphQLInt = require('graphql').GraphQLInt;
-const { graphql } = require('graphql');
+const { graphql, GraphQLBoolean } = require('graphql');
 var GraphQLDate = require('graphql-date');
 var MusicModel = require('../models/music');
 var MusicListModel = require('../models/musicList');
@@ -79,6 +79,9 @@ var userType = new GraphQLObjectType({
                 type: GraphQLString
             },
             nickName:{
+                type: GraphQLString
+            },
+            verified:{
                 type: GraphQLString
             },
             friends:{

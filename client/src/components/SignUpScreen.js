@@ -39,8 +39,8 @@ const GET_USER = gql`
 
 
 class SignUpScreen extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             email: "",
             password: "",
@@ -74,11 +74,11 @@ class SignUpScreen extends Component{
     //     // this.props.history.push('/emailsent');
     //   })
     //   .catch(err => console.log(err))
-        if(this.state.status == "success"){
-            this.props.history.push('/emailsent');
-        }
+        // if(this.state.status == "success"){
+            
+        // }
         // else{
-        //     this.props.history.push('/error');
+        //     
         // }
         
     }
@@ -86,43 +86,54 @@ class SignUpScreen extends Component{
     onSubmit = async (e, addUser) => {
         e.preventDefault();
         var email = this.state.email;
+        // todo: check email format
         console.log(email);
-        if(this.state.password === this.state.passwordConfirm){
-            // check email exists
-            try {
-                const register_response = await UserAPI.post("/register", {
-                    email
-                });
-                if(register_response.data.status == "success"){  // email can be used
-                    addUser({
-                        variables: {
-                            userName: this.state.email,
-                            password: this.state.password,
-                            nickName: "New User"
-                        }
-                    })
-                    const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+        if(this.state.email !== "" && this.state.password !== "" && this.state.passwordConfirm !== ""){
+            if(this.state.password === this.state.passwordConfirm){
+                // check email exists
+                try {
+                    const register_response = await UserAPI.post("/register", {
                         email
                     });
-                    if(sendEmail_response.data.status == "success"){
-                        console.log("sucess");
-                    }
-                    if(sendEmail_response){
-                        this.setState({status: sendEmail_response.data.status});
+                    if(register_response.data.status == "success"){  // email can be used
+                        addUser({
+                            variables: {
+                                userName: this.state.email,
+                                password: this.state.password,
+                                nickName: "New User",
+                                verified: "false"
+                            }
+                        })
+                        const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+                            email
+                        });
+                        if(sendEmail_response.data.status == "success"){
+                            console.log("success");
+                            // this.props.signedIn();
+                            this.props.history.push('/emailsent');
+                        }else{
+                            this.props.history.push('/error');
+                        }
+                        // if(sendEmail_response){
+                        //     this.setState({status: sendEmail_response.data.status});
+                        // }
+                        
+                    }else{
+                        alert("This email has been registered.");
                     }
                     
-                }else{
-                    alert("This email has been registered.");
+                    
+                } catch (err) {
+                    console.log(err);
                 }
                 
-                
-            } catch (err) {
-                console.log(err);
+            }else{
+                alert("Password do not match");
             }
-            
         }else{
-            alert("Password do not match");
+            alert("All fields must be filled");
         }
+        
     
     }
     render() {

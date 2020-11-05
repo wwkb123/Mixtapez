@@ -3,6 +3,21 @@ import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 
 class NavigationBar extends Component{
+    constructor(props){
+        super(props);
+    }
+
+    selectButtons = () =>{
+        if(this.props.signedUp){
+            return(<Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>Sign Out</Button>)
+        }
+        else{
+            return(<div>
+                <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
+                <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link>
+            </div>)
+        }
+    }
     render() {
         return(
             <div>
@@ -12,8 +27,9 @@ class NavigationBar extends Component{
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Link to="/create"><Button className="nav-btn" size="lg">Create Playlist</Button></Link>
                 <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
-                <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
-                <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link>
+                {this.selectButtons()}
+                {/* <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
+                <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link> */}
             </div>
 
         );
