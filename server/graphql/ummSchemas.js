@@ -52,7 +52,7 @@ var musicListType = new GraphQLObjectType({
             _id: {
                 type: GraphQLString
             },
-            trackName: {
+            musicListName: {
                 type: GraphQLString
             },
             musics:{
@@ -310,7 +310,7 @@ var mutation = new GraphQLObjectType({
             addMusicList: {
                 type: musicListType,
                 args: {
-                    trackName: {
+                    musicListName: {
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
@@ -330,12 +330,12 @@ var mutation = new GraphQLObjectType({
                         name: 'id',
                         type: new GraphQLNonNull(GraphQLString)
                     },
-                    trackName: {
+                    musicListName: {
                         type: new GraphQLNonNull(GraphQLString)
                     }
                 },
                 resolve(root, params) {
-                    return MusicListModel.findByIdAndUpdate(params.id, { trackName: params.trackName, 
+                    return MusicListModel.findByIdAndUpdate(params.id, { musicListName: params.musicListName, 
                                                                     lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });
