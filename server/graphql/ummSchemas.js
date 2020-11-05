@@ -417,6 +417,9 @@ var mutation = new GraphQLObjectType({
                     nickName: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    verified:{
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
                 },
                 resolve: function (root, params) {
                     const userModel = new UserModel(params);
@@ -443,11 +446,15 @@ var mutation = new GraphQLObjectType({
                     nickName: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    verified:{
+                        type: new GraphQLNonNull(GraphQLString)
+                    }
                 },
                 resolve(root, params) {
                     return MusicModel.findByIdAndUpdate(params.id, { userName: params.userName, 
                                                                     password: params.password, 
-                                                                    nickName: params.nickName,                       
+                                                                    nickName: params.nickName,
+                                                                    verified: params.verified,                       
                                                                     lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });

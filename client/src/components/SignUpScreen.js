@@ -15,12 +15,14 @@ const ADD_USER = gql`
     mutation AddUser(
         $userName: String!,
         $password: String!,
-        $nickName: String!
+        $nickName: String!,
+        $verified: String!
         ) {
         addUser(
             userName: $userName,
             password: $password,
-            nickName: $nickName
+            nickName: $nickName,
+            verified: $verified
             ) {
             _id
         }
