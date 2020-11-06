@@ -30,7 +30,7 @@ class ForgetPasswordScreen extends Component{
         var email = this.state.email;
         if(email !== ""){
             try {
-                const response = await UserAPI.post("/forgetpassword", {
+                const response = await UserAPI.post("/forgetPassword", {
                     email
                 });
                 if(response){
