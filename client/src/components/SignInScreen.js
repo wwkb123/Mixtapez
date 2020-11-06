@@ -31,26 +31,28 @@ class SignInScreen extends Component{
         e.preventDefault();
         var email = this.state.email;
         var password = this.state.password;
-        try {
-            const response = await UserAPI.post("/signin", {
-                email,
-                password
-            });
-            if(response.data.status == "success"){
-                console.log("success");
-                this.props.signedIn(response.data.nickName, response.data.userId);
-                this.props.history.push('/');
-            }else if(response.data.status == "failed"){
-                alert("Wrong credentials. Please try again.");
-            }else if(response.data.status == "not verified"){
-                console.log("not verified");
-                // console.log(response.data)
-                // this.props.signedIn(response.data.nickName, response.data.userId);
-                // this.props.history.push('/');
-                alert("Your account is not verified yet. Please follow the instructions in the verification email.");
+        if(email !== "" && password !== ""){
+            try {
+                const response = await UserAPI.post("/signin", {
+                    email,
+                    password
+                });
+                if(response.data.status == "success"){
+                    console.log("success");
+                    this.props.signedIn(response.data.nickName, response.data.userId);
+                    this.props.history.push('/');
+                }else if(response.data.status == "failed"){
+                    alert("Wrong credentials. Please try again.");
+                }else if(response.data.status == "not verified"){
+                    console.log("not verified");
+                    // console.log(response.data)
+                    // this.props.signedIn(response.data.nickName, response.data.userId);
+                    // this.props.history.push('/');
+                    alert("Your account is not verified yet. Please follow the instructions in the verification email.");
+                }
+            } catch (err) {
+                console.log(err);
             }
-        } catch (err) {
-            console.log(err);
         }
 
     }

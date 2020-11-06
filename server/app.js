@@ -102,13 +102,11 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
       }
     });
   }else{ // empty ID, something is wrong
-    console.log(error);
+    console.log("error");
     res.status(200).json({
       status: "failed"
     });
   }
-
-
 });
 
 
@@ -164,6 +162,52 @@ app.post('/api/signin', async (req, res) => {
     }
     if (err) return handleError(err);
   })
+});
+
+
+// send email to the user to change password
+app.post('/api/forgetpassword', async (req, res) => {
+  var userID = "";
+  await UserModel.find({ 'userName': req.body.email }, 'userName', function (err, result) {
+    console.log("send email result is ", result);
+    if(result.length > 0){ // email found
+      userID = result[0]._id
+    }else{
+      console.log("not found");
+    }
+    if (err) return handleError(err);
+  });
+  if(userID !== ""){
+    var link = `http://localhost:3001/changepassword/${userID}`;
+    var mailOptions = {
+      from: 'mixtapez416@gmail.com',
+      to: req.body.email,
+      subject: 'Mixtapez - Forget password',
+      // text: 'That was easy!\nasdasd'
+      html: `<h1>Thanks for using Mixtapez!</h1>\
+      <p>To change your password, please click the link below to proceed:</p><br>\
+      <a href="${link}">Change Password</a>`
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        res.status(200).json({
+                status: "failed"
+            });
+      } else {
+        console.log('Email sent: ' + info.response);
+        res.status(200).json({
+            status: "success",
+        });
+      }
+    });
+  }else{ // empty ID, something is wrong
+    console.log("error");
+    res.status(200).json({
+      status: "failed"
+    });
+  }
 });
 
 // create a new playlist and return its Id
