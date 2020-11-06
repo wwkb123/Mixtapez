@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var MusicListSchema = new mongoose.Schema({
   id: String,
-  trackName: String,
+  musicListName: String,
   musics: [{
           type: mongoose.Schema.Types.ObjectId,
           ref: 'music'

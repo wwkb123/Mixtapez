@@ -6,15 +6,17 @@ import { Mutation } from "react-apollo";
 import UserAPI from "../apis/UserAPI";
 
 const ADD_PLAYLIST=gql`
-mutation AddNewPlayList(
-    $id: String!,
-    $playlistId: String!,
-    ) {
-    addNewPlayList(
-        id: $id,
-        playlistId: $playlistId
-        ) 
-}
+    mutation AddNewPlaylist(
+        $id: String!,
+        $playlistId: String!,
+        ) {
+        addNewPlaylist(
+            id: $id,
+            playlistId: $playlistId
+            ) {
+            _id
+        }
+    }
 `;
 
 class NavigationBar extends Component{
@@ -34,19 +36,22 @@ class NavigationBar extends Component{
         }
     }
 
-    handleCreateNewList = async (e, addNewPlayList) =>{
+    handleCreateNewList = async (e, addNewPlaylist) =>{
         e.preventDefault();
         console.log("Button Pressed");
         if(this.props.signedUp){
             try {
                const create_response = await UserAPI.post("/createMusicList", {});
                if (create_response.data.status == "success") {
-                   addNewPlayList({
+                   console.log(this.props.userId)
+                   console.log(create_response.data.musicListId)
+                   addNewPlaylist({
                        variables:{
-                           id: this.props.userId,
-                           playlistId: create_response.data.musicListId
+                            id: this.props.userId,
+                            playlistId: create_response.data.musicListId
                        }
                    });
+                   window.location.href = '/create';
                }else{
                    alert("Playlist creation failed")
                }
@@ -67,12 +72,12 @@ class NavigationBar extends Component{
                 <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Mutation mutation={ADD_PLAYLIST}>
-                    {(addNewPlayList,{loading, error})=>(
-                        <Link to="/create">
-                            <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlayList)}>
+                    {(addNewPlaylist,{loading, error})=>(
+                        //<Link to="/create">
+                            <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
                                 Create Playlist
                             </Button>
-                        </Link>
+                        //</Link>
                     )}
                 </Mutation>
                 <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>

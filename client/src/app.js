@@ -40,6 +40,7 @@ class App extends Component{
 
     signedIn = (name,id) =>{
         console.log("signed in");
+        console.log(id)
         this.setState({signedUp: true,
                         nickName: name,
                         userId: id});
