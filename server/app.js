@@ -120,7 +120,7 @@ app.post('/api/verify', async (req, res) => {
       console.log("user", result);
       res.status(200).json({
           status: "success",
-          nickName: result[0].nickName
+          nickName: result.nickName
       });
     }else{
       console.log("not found");
