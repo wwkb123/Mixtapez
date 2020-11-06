@@ -213,28 +213,31 @@ app.post('/api/forgetPassword', async (req, res) => {
 // verify the user's current password, and update it to a new password
 app.post('/api/changePassword', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, function (err, user) {
-    if(user.password === req.body.oldPassword){  // old password match
-      user.password = req.body.newPassword;
-      user.save(function (err) {
-        if(err) {
-            console.error('ERROR!');
-          }
-      });
-      res.status(200).json({
-        status: "success"
-      });
-    }else{  // wrong old password, don't update
-      res.status(200).json({
-        status: "failed"
-      });
-    }
-    if (err) {
-        console.log("Something wrong when updating password!");
-        res.status(200).json({
-          status: "error"
+    if(user){
+      if(user.password === req.body.oldPassword){  // old password match
+        user.password = req.body.newPassword;
+        user.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+            }
         });
+        res.status(200).json({
+          status: "success"
+        });
+      }else{  // wrong old password, don't update
+        res.status(200).json({
+          status: "failed"
+        });
+      }
+      if (err) {
+          console.log("Something wrong when updating password!");
+      }
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
     }
-  });
+  });    
 });
 
 // create a new playlist and return its Id
