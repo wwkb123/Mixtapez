@@ -15,7 +15,7 @@ var UserSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: 'musicList'
   },
-  tracks: [
+  musicLists: [
 	{
           type: mongoose.Schema.Types.ObjectId,
           ref: 'musicList'

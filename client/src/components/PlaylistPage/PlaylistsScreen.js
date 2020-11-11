@@ -5,18 +5,60 @@ import Col from 'react-bootstrap/Col'
 import { Link } from 'react-router-dom';
 import PlaylistCard from './PlaylistCard';
 import data from '../Mixtapez_data.json'
+import gql from 'graphql-tag'
+import {Query} from 'react-apollo'
+
+const GET_PLAYLIST = gql`
+    query user($userId: String) {
+        user(id: $userId) {
+            musicLists{
+                id
+            }
+        }
+    }
+`;
+
+const GET_LIST_DETAIL = gql`
+    query musicList($musicListId: String) {
+        musicList(id: $musicListId) {
+            musicListName
+        }
+    }
+`;
 
 class PlaylistsScreen extends Component {
-
+    constructor(props){
+        super(props)
+    }
     render() {
-        var playlistIDs = data.users[0].tracks;
         return (
             <div>
                 <br/><h1>All Playlists</h1>
-                {playlistIDs.map(id => {
-                    return (
-                        <PlaylistCard id={id}/>
-                    )})}
+                <Query pollInterval={500} query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                    {({loading, error, data}) =>{
+                        if (loading) return 'Loading...';
+                        if (error) return `Error! ${error.message}`;
+                        return(<div>
+                            {data.musicLists.map( (musicList) => 
+                                (<Query pollInterval={500} query={GET_LIST_DETAIL} variables={{musicListId: musicList.id}}>
+                                {({loading, error, data}) =>{
+                                    if (loading) return 'Loading...';
+                                    if (error) return `Error! ${error.message}`;
+                                    return(<PlaylistCard
+                                        musicListId={musicList.id}
+                                        musicListName={data.musicList.musicListName}
+                                    />)
+                                }                                   
+                                }
+                                </Query>)
+                            )}
+                        </div>
+                        )
+                    }
+
+                    }
+
+                </Query>
             </div>
         );
     }

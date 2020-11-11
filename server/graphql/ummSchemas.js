@@ -93,7 +93,7 @@ var userType = new GraphQLObjectType({
             favourites:{
                 type: GraphQLList(musicListType)
             },
-            tracks:{
+            musicLists:{
                 type: GraphQLList(musicListType)
             },
             lastUpdate:{
@@ -500,7 +500,7 @@ var mutation = new GraphQLObjectType({
                         throw new Error('error')
                     }
                     UserModel.findByIdAndUpdate(params.id,
-                                                {$push:{tracks: params.playlistId}},  
+                                                {$push:{musicLists: params.playlistId}},  
                                                 {lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });
@@ -523,7 +523,7 @@ var mutation = new GraphQLObjectType({
                         throw new Error('error')
                     }
                     return MusicModel.findByIdAndUpdate(params.id,
-                                                {$pull:{tracks: playlist}},  
+                                                {$pull:{musicLists: playlist}},  
                                                 {lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });

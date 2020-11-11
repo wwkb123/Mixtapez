@@ -51,7 +51,7 @@ class NavigationBar extends Component{
                             playlistId: create_response.data.musicListId
                        }
                    });
-                   window.location.href = '/create';
+                   this.props.history.push('/');
                }else{
                    alert("Playlist creation failed")
                }

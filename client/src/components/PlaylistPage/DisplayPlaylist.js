@@ -35,6 +35,9 @@ class playPauseButton extends Component {
 
 
 class DisplayPlaylistScreen extends Component{
+    constructor(props){
+        super(props);
+    }
     render(){
         return(
             <div>
