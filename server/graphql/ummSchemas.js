@@ -88,7 +88,7 @@ var userType = new GraphQLObjectType({
                 type: GraphQLString
             },
             verified:{
-                type: GraphQLString
+                type: GraphQLBoolean
             },
             friends:{
                 type: GraphQLList(GraphQLString)
@@ -424,7 +424,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     verified:{
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(GraphQLBoolean)
                     }
                 },
                 resolve: function (root, params) {

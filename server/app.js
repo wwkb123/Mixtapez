@@ -130,7 +130,7 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
 
 // verify a user after they click verify button
 app.post('/api/verify', async (req, res) => {
-  await UserModel.findByIdAndUpdate(req.body.id, {verified: "true"}, function (err, result) {
+  await UserModel.findByIdAndUpdate(req.body.id, {verified: true}, function (err, result) {
     console.log("result is ", result);
     if(result){ // user found
       console.log("user", result);
@@ -155,7 +155,7 @@ app.post('/api/signin', async (req, res) => {
     if(result.length > 0){  // user exists
       // todo: make password hashed
       if(result[0].password == req.body.password){ // correct password
-        if(result[0].verified == "true"){ // correct password and verified
+        if(result[0].verified){ // correct password and verified
           res.status(200).json({
             status: "success",
             nickName: result[0].nickName,
