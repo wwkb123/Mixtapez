@@ -16,6 +16,24 @@ mongoose.connect('mongodb://localhost/node-graphql', { promiseLibrary: require('
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var SpotifyWebApi = require('spotify-web-api-node');
+// credentials are optional
+var spotifyApi = new SpotifyWebApi({
+  clientId: '9cf6f8ef5fb94f05bed2ec62cca84b4e',
+  clientSecret: '80205a921f5c4360acc65c72fe03a92f'
+  // accessToken: 'BQCgfkvwWeXeJqTifbjqO4Tgj4v-EP_JYoh_w2e7bN5QsCy8jN3moQssUqTHtRC9YgLf8htziHFlWt-XKXs'
+});
+// Get an access token and 'save' it using a setter
+spotifyApi.clientCredentialsGrant().then(
+  function(data) {
+    console.log('The access token is ' + data.body['access_token']);
+    spotifyApi.setAccessToken(data.body['access_token']);
+  },
+  function(err) {
+    console.log('Something went wrong!', err);
+  }
+);
+
 var UserModel = require('./models/user');
 var MusicListModel = require('./models/musicList')
 var app = express();
@@ -258,6 +276,90 @@ app.post('/api/createMusicList', async (req, res) => {
   });
 });
 
+app.post('/api/search/song', async (req, res) => {
+  // Search songs whose name contains req.body.search_text
+
+  spotifyApi.searchTracks(req.body.search_text)
+    .then(function(data) {
+      res.status(200).json({
+        status: "success",
+        results: data.body.tracks.items
+      });
+    }, function(err) {
+      res.status(200).json({
+        status: "failed"
+      });
+      console.error(err);
+    });
+});
+
+app.post('/api/search/artist', async (req, res) => {
+  // Search songs whose name contains req.body.search_text
+
+  spotifyApi.searchTracks(req.body.search_text)
+    .then(function(data) {
+      res.status(200).json({
+        status: "success",
+        results: data.body.tracks.items
+      });
+    }, function(err) {
+      res.status(200).json({
+        status: "failed"
+      });
+      console.error(err);
+    });
+});
+
+app.post('/api/search/album', async (req, res) => {
+  // Search songs whose name contains req.body.search_text
+
+  spotifyApi.searchTracks(req.body.search_text)
+    .then(function(data) {
+      res.status(200).json({
+        status: "success",
+        results: data.body.tracks.items
+      });
+    }, function(err) {
+      res.status(200).json({
+        status: "failed"
+      });
+      console.error(err);
+    });
+});
+
+app.post('/api/search/user', async (req, res) => {
+  // Search songs whose name contains req.body.search_text
+
+  spotifyApi.searchTracks(req.body.search_text)
+    .then(function(data) {
+      res.status(200).json({
+        status: "success",
+        results: data.body.tracks.items
+      });
+    }, function(err) {
+      res.status(200).json({
+        status: "failed"
+      });
+      console.error(err);
+    });
+});
+
+app.post('/api/search/playlist', async (req, res) => {
+  // Search songs whose name contains req.body.search_text
+
+  spotifyApi.searchTracks(req.body.search_text)
+    .then(function(data) {
+      res.status(200).json({
+        status: "success",
+        results: data.body.tracks.items
+      });
+    }, function(err) {
+      res.status(200).json({
+        status: "failed"
+      });
+      console.error(err);
+    });
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
