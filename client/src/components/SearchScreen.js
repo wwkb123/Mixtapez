@@ -9,6 +9,10 @@ import { NativeSelect } from '@material-ui/core';
 import UserAPI from "../apis/UserAPI";
 import SongCard from "./SongCard.js";
 import SongTitleCard from "./SongTitleCard.js";
+import UserCard from "./UserCard.js";
+import PlaylistCard from "./PlaylistCard.js";
+import UserTitleCard from "./UserTitleCard.js";
+import PlaylistTitleCard from "./PlaylistTitleCard.js";
 
 class SearchScreen extends Component{
     constructor(props){
@@ -59,14 +63,29 @@ class SearchScreen extends Component{
         var search_results = this.state.search_results;
         var select = this.state.select;
         var result_title_card = "";
-        var result_card = "";
+        var result_cards = "";
         if(search_results.length > 0){
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
-                // result_card = 
-            }else{
-                result_title_card = <SongTitleCard></SongTitleCard>
-                // result_card = <SongCard key={result.id} song={result}></SongCard>;
+                result_cards = search_results.map(result => {
+                    return (
+                    <SongCard key={result.id} song={result}></SongCard>
+                    );
+                });
+            }else if(select === "user"){
+                result_title_card = <UserTitleCard></UserTitleCard>
+                result_cards = search_results.map(result => {
+                    return (
+                        <UserCard key={result.id} user={result}></UserCard>
+                    );
+                });
+            }else if(select === "playlist"){
+                result_title_card = <PlaylistTitleCard></PlaylistTitleCard>
+                result_cards = search_results.map(result => {
+                    return (
+                        <PlaylistCard key={result.id} playlist={result}></PlaylistCard>
+                    );
+                });
             }
         }
         
@@ -85,8 +104,8 @@ class SearchScreen extends Component{
                             <option value={"song"}>Song</option>
                             <option value={"artist"}>Artist</option>
                             <option value={"album"}>Album</option>
-                            <option value={"playlist"}>Playlist</option>
                             <option value={"user"}>User</option>
+                            <option value={"playlist"}>Playlist</option>
                         </NativeSelect>
                         <TextField id="search_text" size="small" placeholder="search" variant="outlined" onChange={this.handleChange}/>
                         <Button onClick={this.onClick} type="submit" className="search-btn">Search</Button>
@@ -95,11 +114,7 @@ class SearchScreen extends Component{
                     <div className="border-bottom-accent"></div>
                 </form>
                 { result_title_card }
-                {search_results.map(result => {
-                    return (
-                    <SongCard key={result.id} song={result}></SongCard>
-                    );
-                })}
+                { result_cards }
             </div>
 
         );

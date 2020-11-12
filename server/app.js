@@ -277,7 +277,7 @@ app.post('/api/createMusicList', async (req, res) => {
 });
 
 app.post('/api/search/song', async (req, res) => {
-  // Search songs whose name contains req.body.search_text
+  // Search songs whose name, album or artist contains req.body.search_text
 
   spotifyApi.searchTracks(req.body.search_text)
     .then(function(data) {
@@ -328,20 +328,14 @@ app.post('/api/search/album', async (req, res) => {
 });
 
 app.post('/api/search/user', async (req, res) => {
-  // Search songs whose name contains req.body.search_text
-
-  spotifyApi.searchTracks(req.body.search_text)
-    .then(function(data) {
-      res.status(200).json({
-        status: "success",
-        results: data.body.tracks.items
-      });
-    }, function(err) {
-      res.status(200).json({
-        status: "failed"
-      });
-      console.error(err);
+  await UserModel.find({ 'nickName': req.body.search_text }, '_id nickName', function (err, result) {
+    console.log("search user result is ", result);
+    res.status(200).json({
+      status: "success",
+      results: result
     });
+    if (err) return handleError(err);
+  });
 });
 
 app.post('/api/search/playlist', async (req, res) => {
