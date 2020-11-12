@@ -16,7 +16,7 @@ const ADD_USER = gql`
         $userName: String!,
         $password: String!,
         $nickName: String!,
-        $verified: String!
+        $verified: Boolean!
         ) {
         addUser(
             userName: $userName,
@@ -103,7 +103,7 @@ class SignUpScreen extends Component{
                                 userName: this.state.email,
                                 password: this.state.password,
                                 nickName: "New User",
-                                verified: "false"
+                                verified: false
                             }
                         })
                         const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
