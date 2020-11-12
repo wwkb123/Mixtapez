@@ -339,20 +339,14 @@ app.post('/api/search/user', async (req, res) => {
 });
 
 app.post('/api/search/playlist', async (req, res) => {
-  // Search songs whose name contains req.body.search_text
-
-  spotifyApi.searchTracks(req.body.search_text)
-    .then(function(data) {
-      res.status(200).json({
-        status: "success",
-        results: data.body.tracks.items
-      });
-    }, function(err) {
-      res.status(200).json({
-        status: "failed"
-      });
-      console.error(err);
+  await MusicListModel.find({ 'musicListName': req.body.search_text }, '_id musicListName', function (err, result) {
+    console.log("search user result is ", result);
+    res.status(200).json({
+      status: "success",
+      results: result
     });
+    if (err) return handleError(err);
+  });
 });
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
