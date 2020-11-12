@@ -296,7 +296,7 @@ app.post('/api/search/song', async (req, res) => {
 app.post('/api/search/artist', async (req, res) => {
   // Search songs whose name contains req.body.search_text
 
-  spotifyApi.searchTracks(req.body.search_text)
+  spotifyApi.searchTracks('artist:'+req.body.search_text)
     .then(function(data) {
       res.status(200).json({
         status: "success",
@@ -313,7 +313,7 @@ app.post('/api/search/artist', async (req, res) => {
 app.post('/api/search/album', async (req, res) => {
   // Search songs whose name contains req.body.search_text
 
-  spotifyApi.searchTracks(req.body.search_text)
+  spotifyApi.searchTracks('album:'+req.body.search_text)
     .then(function(data) {
       res.status(200).json({
         status: "success",
