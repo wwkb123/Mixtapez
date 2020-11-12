@@ -13,7 +13,7 @@ import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsTrashFill } from "react-icons/bs";
 import gql from 'graphql-tag'
 import MusicCard from './MusicCard'
-import {Query} from 'react-apollo'
+import {Query, Mutation} from 'react-apollo'
 
 const GET_LIST_DETAIL = gql`
     query musicList($musicListId: String) {
@@ -37,13 +37,51 @@ const GET_PLAYLIST = gql`
     }
 `;
 
+const REMOVE_PLAYLIST = gql`
+    mutation removePlaylist($userId: String!
+                            $playlistId: String!
+        ) {
+        removePlaylist(id: $userId
+                    playlistId: $playlistId){
+                        _id
+                    }
+    }
+`;
+
+const REMOVE_MUSICLIST = gql`
+    mutation removeMusicList($playlistId: String!
+        ) {
+            removeMusicList(id: $playlistId){
+                _id
+            }
+    }
+`;
+
 class DisplayPlaylistScreen extends Component{
     constructor(props){
         super(props);
     }
 
-    handleOnClick = () =>{
-        //a popup confirm deletion
+    handleOnClick = async (e, removePlaylist, removeMusicList) =>{
+        e.preventDefault();
+        console.log('click to remove');
+        if(true){
+            console.log(this.props.userId);
+            console.log(this.props.match.params.id);
+            removePlaylist({
+                variables:{
+                    userId: this.props.userId,
+                    playlistId: this.props.match.params.id
+                }
+            });
+            removeMusicList({
+                variables:{
+                    playlistId: this.props.match.params.id
+                }
+            });
+            this.setState();
+            this.props.history.push('/playlists');
+        }
     }
     render(){
         console.log(this.props.match.params.id);
@@ -56,7 +94,13 @@ class DisplayPlaylistScreen extends Component{
                         if (error) return `Error! ${error.message}`;
                         let numberOfMusics = data.musicList.musics.length;
                         if (this.props.userId === data.musicList.owner._id) {
-                            deleteButton = <BsTrashFill onClick={this.handleOnClick}/>
+                            deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
+                                 {(removePlaylist, { loading, error }) => 
+                                    <Mutation mutation={REMOVE_MUSICLIST}>
+                                         {(removeMusicList, { loading, error }) => 
+                                                <BsTrashFill onClick={(e) => this.handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                                    </Mutation>}
+                            </Mutation>                            
                         }
                         return(
                             <div>

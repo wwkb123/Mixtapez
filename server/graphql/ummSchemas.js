@@ -528,8 +528,8 @@ var mutation = new GraphQLObjectType({
                     if(!playlist){
                         throw new Error('error')
                     }
-                    return MusicModel.findByIdAndUpdate(params.id,
-                                                {$pull:{musicLists: playlist}},  
+                    UserModel.findByIdAndUpdate(params.id,
+                                                {$pull:{musicLists: params.playlistId}},  
                                                 {lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });

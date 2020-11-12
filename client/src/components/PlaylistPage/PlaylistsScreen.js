@@ -36,15 +36,15 @@ class PlaylistsScreen extends Component {
         return (
             <div>
                 <br/><h1>All Playlists</h1>
-                <Query query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                <Query pollInterval={1000} query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
                     {({loading, error, data}) => 
                     {
                         
                         if (loading) return 'Loading...';
                         if (error) return `Error! ${error.message}`;
                         
-                        console.log(data.user);
-                        console.log(data.user.musicLists);
+                        //console.log(data.user);
+                        //console.log(data.user.musicLists);
                         // data.user.musicLists.map( musiclist => console.log(musiclist._id));
                         return(<div>
                             {
@@ -54,7 +54,7 @@ class PlaylistsScreen extends Component {
                                     {({loading, error, data}) =>{
                                         if (loading) return 'Loading...';
                                         if (error) return `Error! ${error.message}`;
-                                        console.log(data);
+                                        //console.log(data);
                                         //return(<div></div>)
                                         if(data.musicList){
                                             return(
