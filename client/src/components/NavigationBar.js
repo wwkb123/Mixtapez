@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import UserAPI from "../apis/UserAPI";
+import { withRouter } from "react-router-dom";
 
 const ADD_PLAYLIST=gql`
     mutation AddNewPlaylist(
@@ -22,6 +23,9 @@ const ADD_PLAYLIST=gql`
 class NavigationBar extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            playlist: ""
+        }
     }
 
     selectButtons = () =>{
@@ -51,7 +55,7 @@ class NavigationBar extends Component{
                             playlistId: create_response.data.musicListId
                        }
                    });
-                   this.props.history.push('/');
+                   this.props.history.push('/playlist/'+create_response.data.musicListId);
                }else{
                    alert("Playlist creation failed")
                }
@@ -73,7 +77,7 @@ class NavigationBar extends Component{
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Mutation mutation={ADD_PLAYLIST}>
                     {(addNewPlaylist,{loading, error})=>(
-                        //<Link to="/create">
+                        //<Link to={'/playlist/${this.state.playlist}'}>
                             <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
                                 Create Playlist
                             </Button>
@@ -89,4 +93,4 @@ class NavigationBar extends Component{
         );
     }
 }
-export default NavigationBar;
+export default withRouter(NavigationBar);
