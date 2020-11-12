@@ -328,7 +328,7 @@ app.post('/api/search/album', async (req, res) => {
 });
 
 app.post('/api/search/user', async (req, res) => {
-  await UserModel.find({ 'nickName': req.body.search_text }, '_id nickName', function (err, result) {
+  await UserModel.find({ 'nickName': { $regex: req.body.search_text, $options: "i" } }, '_id nickName', function (err, result) {
     console.log("search user result is ", result);
     res.status(200).json({
       status: "success",
@@ -339,7 +339,7 @@ app.post('/api/search/user', async (req, res) => {
 });
 
 app.post('/api/search/playlist', async (req, res) => {
-  await MusicListModel.find({ 'musicListName': req.body.search_text }, '_id musicListName', function (err, result) {
+  await MusicListModel.find({ 'musicListName': { $regex: req.body.search_text, $options: "i" } }, '_id musicListName', function (err, result) {
     console.log("search user result is ", result);
     res.status(200).json({
       status: "success",
