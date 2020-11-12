@@ -89,8 +89,14 @@ body {
 
 .music-in-list-info{
   text-align: center;
-  background-color:#e9c2cf;
+  background-color:#f5e6eb;
   color: #ff0059;
+}
+
+.music-list-header{
+  text-align: center;
+  background-color:#ca1652;
+  color: #ddb5c3;
 }
 
 .content-left{

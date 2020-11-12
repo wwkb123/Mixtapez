@@ -36,7 +36,7 @@ class PlaylistsScreen extends Component {
         return (
             <div>
                 <br/><h1>All Playlists</h1>
-                <Query pollInterval={500} query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                <Query query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
                     {({loading, error, data}) => 
                     {
                         
@@ -49,17 +49,18 @@ class PlaylistsScreen extends Component {
                         return(<div>
                             {
                             data.user.musicLists.map( (musicList) => 
-                                    (<Query pollInterval={500} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                    (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
                                     key={musicList}>
                                     {({loading, error, data}) =>{
                                         if (loading) return 'Loading...';
                                         if (error) return `Error! ${error.message}`;
                                         //console.log(data);
                                         //return(<div></div>)
-                                        return(<PlaylistCard
+                                        return(
+                                            <PlaylistCard
                                             musicListId={musicList._id}
-                                            musicListName={data.musicList.musicListName}
-                                        />)
+                                            musicListName={data.musicList.musicListName}/>
+                                        )
                                     }                                   
                                     }
                                     </Query>)

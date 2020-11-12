@@ -45,7 +45,8 @@ class NavigationBar extends Component{
         console.log("Button Pressed");
         if(this.props.signedUp){
             try {
-               const create_response = await UserAPI.post("/createMusicList", {});
+                let userId = this.props.userId;
+               const create_response = await UserAPI.post("/createMusicList", {userId});
                if (create_response.data.status == "success") {
                    console.log(this.props.userId)
                    console.log(create_response.data.musicListId)

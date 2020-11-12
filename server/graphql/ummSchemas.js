@@ -55,6 +55,12 @@ var musicListType = new GraphQLObjectType({
             musicListName: {
                 type: GraphQLString
             },
+            isPublic:{
+                type: GraphQLBoolean
+            },
+            owner:{
+                type: userType
+            },
             musics:{
                 type: GraphQLList(musicType)
             },
