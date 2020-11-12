@@ -74,7 +74,7 @@ class App extends Component{
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' component={ProfileScreen} />
                                 <Route path='/create' component={CreateNewList} />
-                                <Route path='/playlists' component={PlaylistsScreen} />
+                                <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' component={DisplayPlaylistScreen} />
                                 <Route path='/queue' component={QueueScreen} />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
