@@ -71,7 +71,7 @@ class SearchScreen extends Component{
                 result_title_card = <SongTitleCard></SongTitleCard>
                 result_cards = search_results.map(result => {
                     return (
-                    <SongCard key={result._id} song={result}></SongCard>
+                    <SongCard key={result.id} song={result}></SongCard>
                     );
                 });
             }else if(select === "user"){
@@ -85,7 +85,7 @@ class SearchScreen extends Component{
                 result_title_card = <PlaylistTitleCard></PlaylistTitleCard>
                 result_cards = search_results.map(result => {
                     return (
-                        <PlaylistCard key={result.id} playlist={result}></PlaylistCard>
+                        <PlaylistCard key={result._id} playlist={result}></PlaylistCard>
                     );
                 });
             }

@@ -35,7 +35,8 @@ spotifyApi.clientCredentialsGrant().then(
 );
 
 var UserModel = require('./models/user');
-var MusicListModel = require('./models/musicList')
+var MusicListModel = require('./models/musicList');
+const { use } = require('./routes/index');
 var app = express();
 
 // view engine setup
@@ -342,12 +343,43 @@ app.post('/api/search/user', async (req, res) => {
 
 app.post('/api/search/playlist', async (req, res) => {
   await MusicListModel.find({ 'musicListName': { $regex: req.body.search_text, $options: "i" } }, function (err, result) {
-    console.log("search user result is ", result);
+    console.log("search playlist result is ", result);
     res.status(200).json({
       status: "success",
       results: result
     });
     if (err) return handleError(err);
+  });
+});
+
+app.get('/api/user', async (req, res) => {
+  await UserModel.findOne({'_id': req.body.id }, function (err, user) {
+    if(user){
+      res.status(200).json({
+        status: "success",
+        user: user
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });
+});
+
+app.post('/api/user/nickName', async (req, res) => {
+  await UserModel.findOne({'_id': req.body.id }, 'nickName', function (err, user) {
+    console.log(user);
+    if(user){
+      res.status(200).json({
+        status: "success",
+        nickName: user.nickName
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
   });
 });
 // catch 404 and forward to error handler

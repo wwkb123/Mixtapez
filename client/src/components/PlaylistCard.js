@@ -5,12 +5,46 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import data from './Mixtapez_data.json'
+import UserAPI from "../apis/UserAPI";
 
 class PlaylistCard extends Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            owner: ""
+        }
+    }
+
+    getNickName = async (id) => {
+        var owner = "";
+        try {
+            const response = await UserAPI.post("/user/nickName", {
+                id: id
+            });
+            if(response.data.status == "success"){ // search success
+                console.log("success");
+                owner = response.data.nickName;
+                this.setState({owner});
+            }else{ // somehow failed
+                
+            }
+        }catch (err) {
+            console.log(err);
+        }
+    }
     
+    componentDidMount() {
+        var playlist = this.props.playlist;
+        if(playlist){
+            this.getNickName(playlist.owner);
+        }
+        
+    }
+
     render() {
         var playlist = this.props.playlist;
         if(playlist){
+            var owner = this.state.owner;
             return(
                 <div>
                     <Container>
@@ -21,6 +55,9 @@ class PlaylistCard extends Component{
                             <Col xs={3}>
                                 {/* {data.music[id].musicName} */}
                                 { playlist.musicListName }
+                            </Col>
+                            <Col xs={3}>
+                                { owner }
                             </Col>
                             <Col xs={1}>
                                 ...
