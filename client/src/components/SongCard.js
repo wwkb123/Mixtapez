@@ -17,6 +17,14 @@ class SongCard extends Component{
             var seconds = 0;
             seconds = Math.round((song.duration_ms/1000) % 60);
             if(seconds < 10) seconds = "0"+seconds;
+            var artist = "N/A";
+            if(song.artists){
+                artist = song.artists[0].name
+            }
+            var album = "N/A";
+            if(song.album){
+                album = song.album.name;
+            }
             return(
                 <div>
                     <Container>
@@ -30,11 +38,11 @@ class SongCard extends Component{
                             </Col>
                             <Col xs={2}>
                                 {/* {data.music[id].artist} */}
-                                { song.artists[0].name }
+                                { artist }
                             </Col>
                             <Col xs={3}>
                                 {/* {data.music[id].album} */}
-                                { song.album.name }
+                                { album }
                             </Col>
                             <Col xs={2}>
                                 {/* 0{data.music[id].length / 60}:{data.music[id].length % 60}0 */}

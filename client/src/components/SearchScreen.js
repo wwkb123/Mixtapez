@@ -20,7 +20,8 @@ class SearchScreen extends Component{
         this.state = {
             select: "song",
             search_text: "",
-            search_results: []
+            search_results: [],
+            search_results_mode: "song"
         }
     }
 
@@ -50,6 +51,7 @@ class SearchScreen extends Component{
                     // this.props.history.push('/');
                     console.log(response.data.results);
                     this.setState({search_results: response.data.results});
+                    this.setState({search_results_mode: search_for});
                 }else{ // somehow failed
                     
                 }
@@ -61,7 +63,7 @@ class SearchScreen extends Component{
 
     render() {
         var search_results = this.state.search_results;
-        var select = this.state.select;
+        var select = this.state.search_results_mode;
         var result_title_card = "";
         var result_cards = "";
         if(search_results.length > 0){
