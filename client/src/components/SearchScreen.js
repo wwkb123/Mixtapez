@@ -60,13 +60,16 @@ class SearchScreen extends Component{
         var select = this.state.select;
         var result_title_card = "";
         var result_card = "";
-        if(select === "song" || select === "artist" || select === "album" ){
-            result_title_card = <SongTitleCard></SongTitleCard>
-            // result_card = 
-        }else{
-            result_title_card = <SongTitleCard></SongTitleCard>
-            // result_card = <SongCard key={result.id} song={result}></SongCard>;
+        if(search_results.length > 0){
+            if(select === "song" || select === "artist" || select === "album" ){
+                result_title_card = <SongTitleCard></SongTitleCard>
+                // result_card = 
+            }else{
+                result_title_card = <SongTitleCard></SongTitleCard>
+                // result_card = <SongCard key={result.id} song={result}></SongCard>;
+            }
         }
+        
         return(
             <div>
                 <br/><h1>Search</h1>
