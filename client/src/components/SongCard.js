@@ -45,8 +45,13 @@ export default function SongCard(props){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
                 var modal = document.getElementById("search_modal");
-                if(modal)
+                if(modal){
+                    var handler = props.childSongIdHandler;
+                    // console.log(handler)
                     modal.style.display = "block";
+                    handler(song.id);
+                }
+                    
             }
         }else if(index === 3){ // share
 

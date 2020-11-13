@@ -45,8 +45,10 @@ class SearchScreen extends Component{
             select: "song",
             search_text: "",
             search_results: [],
-            search_results_mode: "song"
+            search_results_mode: "song",
+            songID: ""
         }
+        this.childSongIdHandler = this.childSongIdHandler.bind(this)
     }
 
     handleChange = (e) => {
@@ -91,8 +93,19 @@ class SearchScreen extends Component{
     }
 
     onAddPlaylistClick = (e, musicList) => {
-        console.log(musicList);
+        var songID = this.state.songID;
+        if(songID !== ""){
+            console.log(musicList, songID);
+        }
+       
         this.onClose();
+    }
+
+    childSongIdHandler(songID) {
+        console.log(songID);
+        this.setState({
+            songID: songID
+          })
     }
 
     render() {
@@ -106,7 +119,7 @@ class SearchScreen extends Component{
                 result_title_card = <SongTitleCard></SongTitleCard>
                 result_cards = search_results.map(result => {
                     return (
-                    <SongCard key={result.id} song={result}></SongCard>
+                    <SongCard childSongIdHandler={this.childSongIdHandler} key={result.id} song={result}></SongCard>
                     );
                 });
             }else if(select === "user"){
@@ -169,7 +182,7 @@ class SearchScreen extends Component{
                                 {
                                 
                                 data.user.musicLists.map( (musicList) => 
-                                        (<Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                        (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
                                         key={musicList}>
                                         {({loading, error, data}) =>{
                                             if (loading) return 'Loading...';
