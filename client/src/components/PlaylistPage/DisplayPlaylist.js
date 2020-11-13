@@ -176,7 +176,7 @@ export default function DisplayPlaylistScreen(props){
                             <Row xs={10}>
                                 <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                                     <MdPauseCircleOutline/>
-                                    <AiOutlinePlusCircle/>
+                                    {/* <AiOutlinePlusCircle/> */}
                                     {deleteButton}
                                     <IconButton
                                     aria-label="more"
