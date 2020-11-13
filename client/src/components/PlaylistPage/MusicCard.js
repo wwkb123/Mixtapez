@@ -7,7 +7,7 @@ import { Grid } from '@material-ui/core';
 import { IconContext } from "react-icons";
 import { MdMoreHoriz} from "react-icons/md";
 import gql from 'graphql-tag'
-import {Query} from 'react-apollo'
+import {Query, Mutation} from 'react-apollo'
 import Button from 'react-bootstrap/Button'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
@@ -21,6 +21,21 @@ const GET_MUSIC_DETAIL = gql`
         }
     }
 `;
+
+const REMOVE_MUSIC_FROM_MUSICLIST = gql`
+    mutation removeMusicFromMusicList(
+        $musicListId: String!
+        $musicId: String!
+    ) {
+        removeMusicFromMusicList(
+        id: $musicListId
+        musicId: $musicId
+    ){
+    _id
+    }
+    }
+`;
+
 const options = [
     'Add to Queue',
     'Save to Liked Songs',
@@ -42,7 +57,7 @@ export default function MusicCard(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index) => {
+    const handleMenuItemClick = (event, index, musicId, removeMusicFromMusicList) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
@@ -64,6 +79,21 @@ export default function MusicCard(props){
             // }
         }else if(index === 3){ // share
 
+        }else if(index === 4){ //remove from playlist
+            if (props.isOwner) {
+                console.log("removing music");
+                console.log(props.musicListId);
+                console.log(musicId);
+                removeMusicFromMusicList({
+                    variables:{
+                        musicListId: props.musicListId,
+                        musicId: musicId
+                    }
+                });
+            }else{
+                alert("you do not own the list");
+            }
+           
         }
     };
 
@@ -160,12 +190,16 @@ export default function MusicCard(props){
                                         onClose={handleClose}
                                     >
                                         {options.map((option, index) => (
-                                        <MenuItem
-                                            key={option}
-                                            onClick={(event) => handleMenuItemClick(event, index)}
-                                        >
-                                            {option}
-                                        </MenuItem>
+                                            <Mutation mutation={REMOVE_MUSIC_FROM_MUSICLIST}>
+                                                {(removeMusicFromMusicList, { loading, error }) => 
+                                                <MenuItem
+                                                    key={option}
+                                                    onClick={(event) => handleMenuItemClick(event, index, music._id,removeMusicFromMusicList)}
+                                                >
+                                                    {option}
+                                                </MenuItem>
+                                                }
+                                        </Mutation>
                                         ))}
                                     </Menu>
                                     

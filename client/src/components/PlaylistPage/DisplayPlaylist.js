@@ -207,18 +207,22 @@ export default function DisplayPlaylistScreen(props){
                                         </MenuItem>
                                         ))}
                                     </Menu>
-                                </IconContext.Provider>
-                            </Row>   
-                                                        
-                            <MusicCard musics={data.musicList.musics}/>
-                        </div>
-                    )
-                }                                   
-                }
-            </Query>              
-        </div>
-        
-    )
+                                    </IconContext.Provider>
+                                </Row>   
+                                                         
+                                <MusicCard 
+                                musics={data.musicList.musics} 
+                                isOwner={props.userId === data.musicList.owner._id} 
+                                musicListId={props.match.params.id}/>
+                            </div>
+                        )
+                    }                                   
+                    }
+                </Query>              
+            </div>
+
+        );
+
 }
 
 
