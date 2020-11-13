@@ -364,7 +364,7 @@ var mutation = new GraphQLObjectType({
                         throw new Error('error')
                     }
                     
-                    return MusicListModel.findByIdAndUpdate(params.id, 
+                    MusicListModel.findByIdAndUpdate(params.id, 
                                                             {$push:{musics: params.musicId}},
                                                             {lastUpdate: new Date()}, 
                                                             function (err) {
