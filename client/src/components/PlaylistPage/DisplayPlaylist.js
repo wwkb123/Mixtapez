@@ -153,7 +153,6 @@ export default function DisplayPlaylistScreen(props){
                     playlistId: props.match.params.id
                 }
             });
-            this.setState();
             props.history.push('/playlists');
         }
     }
