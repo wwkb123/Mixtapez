@@ -30,7 +30,8 @@ class EditNamePopup extends Component{
             this.props.updateMusicList({
                 variables:{
                     musicListId: this.props.musicListId,
-                    musicListNewName: inputName
+                    musicListNewName: inputName,
+                    isPublic: this.props.isPublic
                 }
             })
             this.props.handleClose()

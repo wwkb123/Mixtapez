@@ -28,10 +28,12 @@ const EDIT_MUSICLIST = gql`
     mutation updateMusicList(
         $musicListId: String!
         $musicListNewName: String!
+        $isPublic: Boolean!
     ) {
     updateMusicList(
         id: $musicListId
         musicListName: $musicListNewName
+        isPublic: $isPublic
     ){
       _id
     }
@@ -107,6 +109,7 @@ class PlaylistCard extends Component {
                                     show = {this.state.popupDisplay}
                                     ownerId = {this.props.ownerId}
                                     handleClose = {this.handleCloseOnClick}
+                                    isPublic={this.props.isPublic}
                                     />}
                 </Mutation>
             </Row>

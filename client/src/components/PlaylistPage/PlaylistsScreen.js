@@ -24,6 +24,7 @@ const GET_LIST_DETAIL = gql`
             owner{
                 _id
             }
+            isPublic
         }
     }
 `;
@@ -68,7 +69,8 @@ class PlaylistsScreen extends Component {
                                                 userId={this.props.userId}
                                                 musicListId={musicList._id}
                                                 musicListName={data.musicList.musicListName}
-                                                ownerId={data.musicList.owner._id}/>
+                                                ownerId={data.musicList.owner._id}
+                                                isPublic={data.musicList.isPublic}/>
                                             )
                                         }else{
                                             return <></>
