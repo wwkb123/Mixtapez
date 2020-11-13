@@ -112,9 +112,9 @@ export default function MusicCard(props){
                     <div className='music-list-header'>Length</div>
                 </Grid>
                 <Grid item xs ={1}>
-                    <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
+                    {/* <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
                         <MdMoreHoriz/>
-                    </IconContext.Provider>
+                    </IconContext.Provider> */}
                 </Grid>
             </Grid>
             {listblock}

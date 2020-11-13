@@ -14,6 +14,9 @@ import { BsTrashFill } from "react-icons/bs";
 import gql from 'graphql-tag'
 import MusicCard from './MusicCard'
 import {Query, Mutation} from 'react-apollo'
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const GET_LIST_DETAIL = gql`
     query musicList($musicListId: String) {
@@ -57,100 +60,161 @@ const REMOVE_MUSICLIST = gql`
     }
 `;
 
-class DisplayPlaylistScreen extends Component{
-    constructor(props){
-        super(props);
-    }
+const options = [
+    'Make Private',  // should toggle with Make Public
+    'Edit Details',
+    'Delete',
+    'Share'
+  ];
 
-    handleOnClick = async (e, removePlaylist, removeMusicList) =>{
+export default function DisplayPlaylistScreen(props){
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
+    const handleMenuItemClick = (event, index) => {
+        setSelectedIndex(index);
+        setAnchorEl(null);
+        if(index === 0){  // add to queue
+            
+        }else if(index === 1){ // add to liked songs
+
+        }else if(index === 2){ // add to playlist
+            // if(song){
+            //     // alert("hi" + song.name);
+            //     // console.log(song.name, "asdad");
+            //     var modal = document.getElementById("search_modal");
+            //     if(modal){
+            //         var handler = props.childSongIdHandler;
+            //         // console.log(handler)
+            //         modal.style.display = "block";
+            //         handler(song.id,song);
+            //     }
+                    
+            // }
+        }else if(index === 3){ // share
+
+        }
+    };
+
+    const handleOnClick = async (e, removePlaylist, removeMusicList) =>{
         e.preventDefault();
         console.log('click to remove');
         if(true){
-            console.log(this.props.userId);
-            console.log(this.props.match.params.id);
+            console.log(props.userId);
+            console.log(props.match.params.id);
             removePlaylist({
                 variables:{
-                    userId: this.props.userId,
-                    playlistId: this.props.match.params.id
+                    userId: props.userId,
+                    playlistId: props.match.params.id
                 }
             });
             removeMusicList({
                 variables:{
-                    playlistId: this.props.match.params.id
+                    playlistId: props.match.params.id
                 }
             });
             this.setState();
-            this.props.history.push('/playlists');
+            props.history.push('/playlists');
         }
     }
-    render(){
-        console.log(this.props.match.params.id);
-        let deleteButton = null;
-        return(
-            <div>
-                <Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: this.props.match.params.id}}>
-                    {({loading, error, data}) =>{
-                        if (loading) return 'Loading...';
-                        if (error) return `Error! ${error.message}`;
-                        let numberOfMusics = data.musicList.musics.length;
-                        if (this.props.userId === data.musicList.owner._id) {
-                            deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
-                                 {(removePlaylist, { loading, error }) => 
-                                    <Mutation mutation={REMOVE_MUSICLIST}>
-                                         {(removeMusicList, { loading, error }) => 
-                                                <BsTrashFill onClick={(e) => this.handleOnClick(e,removePlaylist, removeMusicList )}/> }
-                                    </Mutation>}
-                            </Mutation>                            
-                        }
-                        return(
-                            <div>
-                                <Row>
-                                    <img src={Image} width={175} height={175} alt="">
-                                    </img>
-                                    <Col>
-                                        <Col xs={10} className="content-left">
-                                            <h3>Playlists</h3>
-                                            <h1 style={{fontWeight: "bold"}} >{data.musicList.musicListName} </h1> 
-                                        </Col>
-                                        <Col xs={10} className="content-center">
-                                            <Query query={GET_PLAYLIST} variables={{userId: data.musicList.owner._id}}>
-                                                {({loading, error, data}) => 
-                                                    {                                                    
-                                                        if (loading) return 'Loading...';
-                                                        if (error) return `Error! ${error.message}`;
-                                                        console.log(data);
-                                                        return(
-                                                            <div>
-                                                                <h5>Artirst</h5>                    
-                                                                <h3 style={{fontWeight: "bold"}} >{data.user.nickName}|{numberOfMusics} Song|0 second</h3>
-                                                            </div>
-                                                        )
-                                                    }
-                                                }
-                                            </Query>                                            
-                                        </Col>
-                                    </Col>
-                                </Row>
-                                <Row xs={10}>
-                                    <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                                        <MdPauseCircleOutline/>
-                                        <AiOutlinePlusCircle/>
-                                        {deleteButton}
-                                        <MdMoreHoriz/>
-                                    </IconContext.Provider>
-                                </Row>   
-                                                         
-                                <MusicCard musics={data.musicList.musics}/>
-                            </div>
-                        )
-                    }                                   
-                    }
-                </Query>              
-            </div>
-           
-        )
-    };
 
+    console.log(props.match.params.id);
+    let deleteButton = null;
+    return(
+        <div>
+            <Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: props.match.params.id}}>
+                {({loading, error, data}) =>{
+                    if (loading) return 'Loading...';
+                    if (error) return `Error! ${error.message}`;
+                    let numberOfMusics = data.musicList.musics.length;
+                    if (props.userId === data.musicList.owner._id) {
+                        deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
+                                {(removePlaylist, { loading, error }) => 
+                                <Mutation mutation={REMOVE_MUSICLIST}>
+                                        {(removeMusicList, { loading, error }) => 
+                                            <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                                </Mutation>}
+                        </Mutation>                            
+                    }
+                    return(
+                        <div>
+                            <Row>
+                                <img src={Image} width={175} height={175} alt="">
+                                </img>
+                                <Col>
+                                    <Col xs={10} className="content-left">
+                                        <h3>Playlists</h3>
+                                        <h1 style={{fontWeight: "bold"}} >{data.musicList.musicListName} </h1> 
+                                    </Col>
+                                    <Col xs={10} className="content-center">
+                                        <Query query={GET_PLAYLIST} variables={{userId: data.musicList.owner._id}}>
+                                            {({loading, error, data}) => 
+                                                {                                                    
+                                                    if (loading) return 'Loading...';
+                                                    if (error) return `Error! ${error.message}`;
+                                                    console.log(data);
+                                                    return(
+                                                        <div>
+                                                            <h5>Artirst</h5>                    
+                                                            <h3 style={{fontWeight: "bold"}} >{data.user.nickName}|{numberOfMusics} Song|0 second</h3>
+                                                        </div>
+                                                    )
+                                                }
+                                            }
+                                        </Query>                                            
+                                    </Col>
+                                </Col>
+                            </Row>
+                            <Row xs={10}>
+                                <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
+                                    <MdPauseCircleOutline/>
+                                    <AiOutlinePlusCircle/>
+                                    {deleteButton}
+                                    <IconButton
+                                    aria-label="more"
+                                    aria-controls="menu"
+                                    aria-haspopup="true"
+                                    onClick={handleClick}
+                                >
+                                    
+                                        <MdMoreHoriz/>
+                                    </IconButton>
+                                    <Menu
+                                        id="menu"
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        {options.map((option, index) => (
+                                        <MenuItem
+                                            key={option}
+                                            onClick={(event) => handleMenuItemClick(event, index)}
+                                        >
+                                            {option}
+                                        </MenuItem>
+                                        ))}
+                                    </Menu>
+                                </IconContext.Provider>
+                            </Row>   
+                                                        
+                            <MusicCard musics={data.musicList.musics}/>
+                        </div>
+                    )
+                }                                   
+                }
+            </Query>              
+        </div>
+        
+    )
 }
 
-export default DisplayPlaylistScreen;
+
