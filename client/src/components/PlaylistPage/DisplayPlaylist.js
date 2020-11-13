@@ -101,10 +101,10 @@ export default function DisplayPlaylistScreen(props){
         setAnchorEl(null);
         if(index === 0){  // add to queue
             if(isOwner){
-                if(isPublic){
-                    options[0] = "Make Private";
-                }else{
+                if(isPublic){ // currently is public, once click, it'll become private, so next display text will be make public
                     options[0] = "Make Public";
+                }else{
+                    options[0] = "Make Private";
                 }
                 updateMusicList({
                     variables: {
@@ -159,6 +159,7 @@ export default function DisplayPlaylistScreen(props){
 
     console.log(props.match.params.id);
     let deleteButton = null;
+
     return(
         <div>
             <Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: props.match.params.id}}>
@@ -227,8 +228,13 @@ export default function DisplayPlaylistScreen(props){
                                     >
                                         {options.map((option, index) => (
                                         <Mutation mutation={UPDATE_MUSICLIST}>
-                                           {(updateMusicList,{loading, error})=>
-                                            <MenuItem
+                                           {(updateMusicList,{loading, error})=>{
+                                            if(data.musicList.isPublic){
+                                                options[0] = "Make Private";
+                                            }else{
+                                                options[0] = "Make Public";
+                                            }
+                                            return(<MenuItem
                                                 key={option}
                                                 onClick={(event) => handleMenuItemClick(event, index, 
                                                     data.musicList.isPublic, (props.userId === data.musicList.owner._id),
@@ -236,7 +242,9 @@ export default function DisplayPlaylistScreen(props){
                                                 )}
                                             >
                                                 {option}
-                                            </MenuItem>}
+                                            </MenuItem>);
+                                            }
+                                            }
                                         </Mutation>
                                         ))}
                                     </Menu>
