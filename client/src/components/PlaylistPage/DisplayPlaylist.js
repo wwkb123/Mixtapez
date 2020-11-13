@@ -28,6 +28,7 @@ const GET_LIST_DETAIL = gql`
             owner{
                 _id
             }
+            isPublic
         }
     }
 `;
@@ -60,6 +61,22 @@ const REMOVE_MUSICLIST = gql`
     }
 `;
 
+const UPDATE_MUSICLIST = gql`
+    mutation updateMusicList(
+        $playlistId: String!
+        $musicListName: String!
+        $isPublic: Boolean!
+        ) {
+            updateMusicList(
+                id: $playlistId
+                musicListName: $musicListName
+                isPublic: $isPublic
+            ){
+                _id
+            }
+    }
+`;
+
 const options = [
     'Make Private',  // should toggle with Make Public
     'Edit Details',
@@ -79,14 +96,25 @@ export default function DisplayPlaylistScreen(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index) => {
+    const handleMenuItemClick = (event, index, isPublic, isOwner, updateMusicList, musicListName) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
-            if(options[0] === "Make Private"){
-                options[0] = "Make Public";
+            if(isOwner){
+                if(isPublic){
+                    options[0] = "Make Private";
+                }else{
+                    options[0] = "Make Public";
+                }
+                updateMusicList({
+                    variables: {
+                        playlistId: props.match.params.id,
+                        musicListName: musicListName,
+                        isPublic: !isPublic
+                    }
+                });
             }else{
-                options[0] = "Make Private";
+                alert("you do not own the playlist")
             }
         }else if(index === 1){ // add to liked songs
 
@@ -199,12 +227,18 @@ export default function DisplayPlaylistScreen(props){
                                         onClose={handleClose}
                                     >
                                         {options.map((option, index) => (
-                                        <MenuItem
-                                            key={option}
-                                            onClick={(event) => handleMenuItemClick(event, index)}
-                                        >
-                                            {option}
-                                        </MenuItem>
+                                        <Mutation mutation={UPDATE_MUSICLIST}>
+                                           {(updateMusicList,{loading, error})=>
+                                            <MenuItem
+                                                key={option}
+                                                onClick={(event) => handleMenuItemClick(event, index, 
+                                                    data.musicList.isPublic, (props.userId === data.musicList.owner._id),
+                                                    updateMusicList, data.musicList.musicListName
+                                                )}
+                                            >
+                                                {option}
+                                            </MenuItem>}
+                                        </Mutation>
                                         ))}
                                     </Menu>
                                     </IconContext.Provider>

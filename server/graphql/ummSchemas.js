@@ -338,10 +338,14 @@ var mutation = new GraphQLObjectType({
                     },
                     musicListName: {
                         type: new GraphQLNonNull(GraphQLString)
+                    },
+                    isPublic:{
+                        type: new GraphQLNonNull(GraphQLBoolean)
                     }
                 },
                 resolve(root, params) {
-                    return MusicListModel.findByIdAndUpdate(params.id, { musicListName: params.musicListName, 
+                    return MusicListModel.findByIdAndUpdate(params.id, { musicListName: params.musicListName,
+                                                                    isPublic: params.isPublic, 
                                                                     lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });
