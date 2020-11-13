@@ -11,7 +11,7 @@ class ChangePasswordScreen extends Component{
     constructor(props){
         super(props);
         this.state = {
-            oldPassword: "",
+            // oldPassword: "",
             newPassword: "",
             newPasswordConfirm: ""
         }
@@ -30,24 +30,24 @@ class ChangePasswordScreen extends Component{
     onSubmit = async (e) => {
         
         e.preventDefault();
-        var oldPassword = this.state.oldPassword;
+        // var oldPassword = this.state.oldPassword;
         var newPassword = this.state.newPassword;
         var newPasswordConfirm = this.state.newPasswordConfirm;
 
-        if(oldPassword !== "" && newPassword !== "" && newPasswordConfirm !== ""){
+        if(newPassword !== "" && newPasswordConfirm !== ""){  //oldPassword !== "" && 
             if(newPassword == newPasswordConfirm){
                 try {
                     const response = await UserAPI.post("/changePassword", {
                         id: this.props.match.params.id,
-                        oldPassword,
+                        // oldPassword,
                         newPassword
                     });
                     if(response.data.status == "success"){ // change password successfully
                         console.log("success");
                         alert("Password has changed successfully");
                         this.props.history.push('/');
-                    }else if(response.data.status == "failed"){  // old password wrong
-                        alert("Old password is incorrect. Please try again.");
+                    // }else if(response.data.status == "failed"){  // old password wrong
+                    //     alert("Old password is incorrect. Please try again.");
                     }else{
                         this.props.history.push('/error');
                     }
