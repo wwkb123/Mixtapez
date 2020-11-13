@@ -40,6 +40,14 @@ const EDIT_MUSICLIST = gql`
   }
 `;
 
+const REMOVE_MUSICLIST = gql`
+    mutation removeMusicList($playlistId: String!
+        ) {
+            removeMusicList(id: $playlistId){
+                _id
+            }
+    }
+`;
 
 class PlaylistCard extends Component {
     constructor(props){
@@ -49,7 +57,7 @@ class PlaylistCard extends Component {
         }
     }
 
-    handleDeleteOnClick = async (e, removePlaylist) =>{
+    handleDeleteOnClick = async (e, removePlaylist, removeMusicList)=>{
         e.preventDefault();
         console.log('click to remove');
         if(true){
@@ -58,6 +66,11 @@ class PlaylistCard extends Component {
             removePlaylist({
                 variables:{
                     userId: this.props.userId,
+                    playlistId: this.props.musicListId
+                }
+            });
+            removeMusicList({
+                variables:{
                     playlistId: this.props.musicListId
                 }
             });
@@ -84,8 +97,11 @@ class PlaylistCard extends Component {
         var link = "/playlist/"+playlistID;
         let deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                                 {(removePlaylist, { loading, error }) => 
-                                    <BsTrashFill onClick={(e) => this.handleDeleteOnClick(e,removePlaylist)}/> }
-                            </Mutation>
+                                <Mutation mutation={REMOVE_MUSICLIST}>
+                                        {(removeMusicList, { loading, error }) => 
+                                            <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                                </Mutation>}
+                        </Mutation>    
         let editButton = null;
         if(this.props.userId === this.props.ownerId){
             editButton = <AiFillEdit onClick={this.handleEditOnClick}/>
