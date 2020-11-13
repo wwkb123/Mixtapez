@@ -45,6 +45,7 @@ class SignUpScreen extends Component{
         super(props);
         this.state = {
             email: "",
+            nickName: "New User",
             password: "",
             passwordConfirm: "",
             status: ""
@@ -90,7 +91,7 @@ class SignUpScreen extends Component{
         var email = this.state.email;
         // todo: check email format
         console.log(email);
-        if(this.state.email !== "" && this.state.password !== "" && this.state.passwordConfirm !== ""){
+        if(this.state.email !== "" && this.state.nickName && this.state.password !== "" && this.state.passwordConfirm !== ""){
             if(this.state.password === this.state.passwordConfirm){
                 // check email exists
                 try {
@@ -102,7 +103,7 @@ class SignUpScreen extends Component{
                             variables: {
                                 userName: this.state.email,
                                 password: this.state.password,
-                                nickName: "New User",
+                                nickName: this.state.nickName,
                                 verified: false
                             }
                         })
@@ -149,6 +150,11 @@ class SignUpScreen extends Component{
                         <h6>Email Address:</h6>
                         <div style={{"padding":"5px"}}>
                             <TextField size="small" placeholder="email address" variant="outlined" id="email"
+                             onChange={this.handleChange} />
+                        </div>
+                        <h6>Nickname:</h6>
+                        <div style={{"padding":"5px"}}>
+                            <TextField size="small" placeholder="nickname" variant="outlined" id="nickName"
                              onChange={this.handleChange} />
                         </div>
                         <h6>Password:</h6>

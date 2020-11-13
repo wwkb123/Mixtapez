@@ -393,7 +393,7 @@ app.post('/api/search/playlist', async (req, res) => {
   });
 });
 
-app.get('/api/user', async (req, res) => {
+app.post('/api/user', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, function (err, user) {
     if(user){
       res.status(200).json({
