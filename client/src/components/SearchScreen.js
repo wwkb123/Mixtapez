@@ -34,6 +34,9 @@ const GET_LIST_DETAIL = gql`
             owner{
                 _id
             }
+            musics{
+                _id
+            }
         }
     }
 `;
@@ -107,7 +110,7 @@ class SearchScreen extends Component{
         modal.style.display = "none";
     }
 
-    onAddPlaylistClick = async (e, musicListId, addMusicToMusicList) => {
+    onAddPlaylistClick = async (e, musicListId, addMusicToMusicList, musics) => {
         e.preventDefault();
         var songID = this.state.songID;
         if(songID !== ""){
@@ -126,12 +129,20 @@ class SearchScreen extends Component{
             if (create_response.data.status == "success") {
                console.log(this.props.userId)
                console.log(create_response.data.musicId)
-               addMusicToMusicList({
-                variables:{
-                        musicId: create_response.data.musicId,
-                        musicListId: musicListId
-                    }
-                });           
+               let control = true;
+               musics.forEach(mus => {
+                   if(mus._id === create_response.data.musicId){
+                       control = false;
+                   }
+               });
+               if (control) {
+                addMusicToMusicList({
+                    variables:{
+                            musicId: create_response.data.musicId,
+                            musicListId: musicListId
+                        }
+                    });
+               }           
                 this.onClose();
            }else{
                alert("Playlist creation failed")
@@ -236,7 +247,7 @@ class SearchScreen extends Component{
                                                 return(
                                                 <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
                                                     {(addMusicToMusicList, { loading, error }) => 
-                                                    <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList)} className="playlist-card">
+                                                    <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList, data.musicList.musics)} className="playlist-card">
                                                         <div>{data.musicList.musicListName}</div>
                                                     </div>}
                                                 </Mutation>

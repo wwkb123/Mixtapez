@@ -88,7 +88,7 @@ class DisplayPlaylistScreen extends Component{
         let deleteButton = null;
         return(
             <div>
-                <Query query={GET_LIST_DETAIL} variables={{musicListId: this.props.match.params.id}}>
+                <Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: this.props.match.params.id}}>
                     {({loading, error, data}) =>{
                         if (loading) return 'Loading...';
                         if (error) return `Error! ${error.message}`;

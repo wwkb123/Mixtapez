@@ -286,25 +286,38 @@ app.post('/api/createMusicList', async (req, res) => {
 
 // create a new music and return its Id
 app.post('/api/createMusic', async (req, res) => {
-  const musicModel = new MusicModel({
-                                    musicName: req.body.musicName,
-                                    URI: req.body.URI,
-                                    album: req.body.album,
-                                    artist: req.body.artist,
-                                    lastUpdate: new Date()});
-  console.log(musicModel)
-  musicModel.save((err)=>{
-    if (err) return handleError(err);
-  });
-  if (!musicModel) {
-      res.status(200).json({
-        status: "failed"
-      });
+  const music = await MusicModel.find({musicName: req.body.musicName,
+                                  URI: req.body.URI,
+                                  album: req.body.album,
+                                  artist: req.body.artist}).exec();
+  console.log(music);
+  if(music){
+    res.status(200).json({
+      status: "success",
+      musicId: music[0]._id
+    });
   }
-  res.status(200).json({
-    status: "success",
-    musicId: musicModel._id
-  });
+  else{
+    const musicModel = new MusicModel({
+                                      musicName: req.body.musicName,
+                                      URI: req.body.URI,
+                                      album: req.body.album,
+                                      artist: req.body.artist,
+                                      lastUpdate: new Date()});
+    console.log(musicModel)
+    musicModel.save((err)=>{
+      if (err) return handleError(err);
+    });
+    if (!musicModel) {
+        res.status(200).json({
+          status: "failed"
+        });
+    }
+    res.status(200).json({
+      status: "success",
+      musicId: musicModel._id
+    });
+  }
 });
 
 app.post('/api/search/song', async (req, res) => {
