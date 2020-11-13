@@ -291,7 +291,7 @@ app.post('/api/createMusic', async (req, res) => {
                                   album: req.body.album,
                                   artist: req.body.artist}).exec();
   console.log(music);
-  if(music){
+  if(music.length > 0){
     res.status(200).json({
       status: "success",
       musicId: music[0]._id
