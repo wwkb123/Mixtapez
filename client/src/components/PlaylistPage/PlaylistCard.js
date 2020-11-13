@@ -99,7 +99,7 @@ class PlaylistCard extends Component {
                                 {(removePlaylist, { loading, error }) => 
                                 <Mutation mutation={REMOVE_MUSICLIST}>
                                         {(removeMusicList, { loading, error }) => 
-                                            <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                                            <BsTrashFill onClick={(e) => this.handleDeleteOnClick(e,removePlaylist, removeMusicList )}/> }
                                 </Mutation>}
                         </Mutation>    
         let editButton = null;
