@@ -7,6 +7,7 @@ import Col from 'react-bootstrap/Col'
 import data from './Mixtapez_data.json'
 import {MdMoreHoriz} from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
+import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -102,7 +103,9 @@ export default function SongCard(props){
                             aria-haspopup="true"
                             onClick={handleClick}
                         >
-                            <MdMoreHoriz/>
+                            <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
+                                <MdMoreHoriz/>
+                            </IconContext.Provider>
                         </IconButton>
                             <Menu
                                 id="menu"

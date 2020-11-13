@@ -167,7 +167,7 @@ class SearchScreen extends Component{
         var select = this.state.search_results_mode;
         var result_title_card = "";
         var result_cards = "";
-        if(search_results && search_results.length > 0){
+        if(search_results ){  // && search_results.length > 0
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
                 result_cards = search_results.map(result => {
