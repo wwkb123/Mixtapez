@@ -83,7 +83,11 @@ export default function DisplayPlaylistScreen(props){
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
-            
+            if(options[0] === "Make Private"){
+                options[0] = "Make Public";
+            }else{
+                options[0] = "Make Private";
+            }
         }else if(index === 1){ // add to liked songs
 
         }else if(index === 2){ // add to playlist
