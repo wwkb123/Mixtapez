@@ -21,6 +21,9 @@ const GET_LIST_DETAIL = gql`
     query musicList($musicListId: String) {
         musicList(id: $musicListId) {
             musicListName
+            owner{
+                _id
+            }
         }
     }
 `;
@@ -49,18 +52,20 @@ class PlaylistsScreen extends Component {
                         return(<div>
                             {
                             data.user.musicLists.map( (musicList) => 
-                                    (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                    (<Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
                                     key={musicList}>
                                     {({loading, error, data}) =>{
                                         if (loading) return 'Loading...';
                                         if (error) return `Error! ${error.message}`;
-                                        //console.log(data);
+                                        console.log(data.musicList.owner);
                                         //return(<div></div>)
-                                        if(data.musicList){
+                                        if(data.musicList && data.musicList.owner){
                                             return(
                                                 <PlaylistCard
+                                                userId={this.props.userId}
                                                 musicListId={musicList._id}
-                                                musicListName={data.musicList.musicListName}/>
+                                                musicListName={data.musicList.musicListName}
+                                                ownerId={data.musicList.owner._id}/>
                                             )
                                         }else{
                                             return <></>
