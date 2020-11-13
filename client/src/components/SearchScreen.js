@@ -15,7 +15,7 @@ import UserTitleCard from "./UserTitleCard.js";
 import PlaylistTitleCard from "./PlaylistTitleCard.js";
 import './modal.css';
 import gql from 'graphql-tag'
-import {Query} from 'react-apollo'
+import {Query, Mutation} from 'react-apollo'
 
 const GET_PLAYLIST = gql`
     query user($userId: String) {
@@ -38,6 +38,20 @@ const GET_LIST_DETAIL = gql`
     }
 `;
 
+const ADD_MUSIC_TO_MUSICLIST = gql`
+    mutation addMusicToMusicList(
+        $musicListId: String!
+        $musicId: String!
+    ) {
+        addMusicToMusicList(
+        id: $musicListId
+        musicId: $musicId
+    ){
+    _id
+    }
+    }
+`;
+
 class SearchScreen extends Component{
     constructor(props){
         super(props);
@@ -46,7 +60,8 @@ class SearchScreen extends Component{
             search_text: "",
             search_results: [],
             search_results_mode: "song",
-            songID: ""
+            songID: "",
+            songInfo: {}
         }
         this.childSongIdHandler = this.childSongIdHandler.bind(this)
     }
@@ -92,19 +107,46 @@ class SearchScreen extends Component{
         modal.style.display = "none";
     }
 
-    onAddPlaylistClick = (e, musicList) => {
+    onAddPlaylistClick = async (e, musicListId, addMusicToMusicList) => {
+        e.preventDefault();
         var songID = this.state.songID;
         if(songID !== ""){
-            console.log(musicList, songID);
+            console.log(musicListId, songID);
         }
-       
-        this.onClose();
+        try {
+            let musicName = this.state.songInfo.name;
+            let artist = this.state.songInfo.artists[0].name;
+            let URI = this.state.songID;
+            let album = this.state.songInfo.album.name;
+            
+            const create_response = await UserAPI.post("/createMusic", {musicName,
+                                                                    URI,
+                                                                    album,
+                                                                    artist});
+            if (create_response.data.status == "success") {
+               console.log(this.props.userId)
+               console.log(create_response.data.musicId)
+               addMusicToMusicList({
+                variables:{
+                        musicId: create_response.data.musicId,
+                        musicListId: musicListId
+                    }
+                });           
+                this.onClose();
+           }else{
+               alert("Playlist creation failed")
+           }
+        } catch (err) {
+            console.log(err);
+        }
     }
 
-    childSongIdHandler(songID) {
+    childSongIdHandler(songID, songInfo) {
         console.log(songID);
+        console.log(songInfo);
         this.setState({
-            songID: songID
+            songID: songID,
+            songInfo: songInfo
           })
     }
 
@@ -192,9 +234,15 @@ class SearchScreen extends Component{
                                             //return(<div></div>)
                                             if(data.musicList && data.musicList.owner){
                                                 return(
-                                                <div onClick={(e) => this.onAddPlaylistClick(e, data.musicList)} className="playlist-card">
-                                                    <div>{data.musicList.musicListName}</div>
-                                                </div>
+                                                <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
+                                                    {(addMusicToMusicList, { loading, error }) => 
+                                                    <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList)} className="playlist-card">
+                                                        <div>{data.musicList.musicListName}</div>
+                                                    </div>}
+                                                </Mutation>
+                                                
+                                                
+                                                
                                                 )
                                             }else{
                                                 return <></>

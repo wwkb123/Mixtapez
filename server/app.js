@@ -36,6 +36,7 @@ spotifyApi.clientCredentialsGrant().then(
 
 var UserModel = require('./models/user');
 var MusicListModel = require('./models/musicList');
+var MusicModel = require('./models/music');
 const { use } = require('./routes/index');
 var app = express();
 
@@ -157,6 +158,9 @@ app.post('/api/signin', async (req, res) => {
       // todo: make password hashed
       if(result[0].password == req.body.password){ // correct password
         if(result[0].verified){ // correct password and verified
+          // const {password, ...rest} = result[0];
+          // const userInfo = Object.assign({}, {...rest});
+          // req.session.user = userInfo;
           res.status(200).json({
             status: "success",
             nickName: result[0].nickName,
@@ -263,7 +267,8 @@ app.post('/api/changePassword', async (req, res) => {
 app.post('/api/createMusicList', async (req, res) => {
   const musicListModel = new MusicListModel({musicListName: "New List",
                                              owner: req.body.userId,
-                                             isPublic: true});
+                                             isPublic: true,
+                                             lastUpdate: new Date()});
   console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
@@ -276,6 +281,29 @@ app.post('/api/createMusicList', async (req, res) => {
   res.status(200).json({
     status: "success",
     musicListId: musicListModel._id
+  });
+});
+
+// create a new music and return its Id
+app.post('/api/createMusic', async (req, res) => {
+  const musicModel = new MusicModel({
+                                    musicName: req.body.musicName,
+                                    URI: req.body.URI,
+                                    album: req.body.album,
+                                    artist: req.body.artist,
+                                    lastUpdate: new Date()});
+  console.log(musicModel)
+  musicModel.save((err)=>{
+    if (err) return handleError(err);
+  });
+  if (!musicModel) {
+      res.status(200).json({
+        status: "failed"
+      });
+  }
+  res.status(200).json({
+    status: "success",
+    musicId: musicModel._id
   });
 });
 

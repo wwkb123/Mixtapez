@@ -24,34 +24,8 @@ class MusicCard extends Component {
     }
     render() {
         let itr = this.makeRangeIterator();
-        let listblock = this.props.musics.map(musicId => <Query query={GET_MUSIC_DETAIL} variables={{musicId: musicId}}>
-            {({loading, error, data}) =>{
-                if (loading) return 'Loading...';
-                if (error) return `Error! ${error.message}`;
-                console.log(data);
-                return(
-                    <Grid container spacing={0}>
-                        <Grid item xs ={1}>
-                            <div className='music-list-header'>{itr.next()}</div>
-                        </Grid>
-                        <Grid item xs ={5}>
-                            <div className='music-list-header'>{data.music.musicName} </div>
-                        </Grid>
-                        <Grid item xs ={2}>
-                            <div className='music-list-header'>{data.music.artist}</div>
-                        </Grid>
-                        <Grid item xs ={2}>
-                            <div className='music-list-header'>Length</div>
-                        </Grid>
-                        <Grid item xs ={1}>
-                            <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
-                                <MdMoreHoriz/>
-                            </IconContext.Provider>
-                        </Grid>
-                    </Grid> 
-                )
-            }}
-        </Query>);
+        console.log(this.props.musics);
+        let listblock = null;
         if(this.props.musics.length == 0){
             listblock = <div>
                 <Link to='/search'>
@@ -81,11 +55,44 @@ class MusicCard extends Component {
                     </Grid>
                 </Grid>
                 {listblock}
+                {
+                this.props.musics.map((music) => 
+                <Query query={GET_MUSIC_DETAIL} variables={{musicId: music._id}} key={music._id}>
+                    {({loading, error, data}) =>{
+                        if (loading) return 'Loading...';
+                        if (error) return `Error! ${error.message}`;
+                        console.log(data);
+                        let number = itr.next().value;
+                        return(
+                            <Container>
+                                <Row spacing={0}>
+                                    <Col xs={1}>
+                                        <div className='music-list-header'>{number}</div>
+                                    </Col>
+                                    <Col xs ={5}>
+                                        <div className='music-list-header'>{data.music.musicName} </div>
+                                    </Col>
+                                    <Col xs ={2}>
+                                        <div className='music-list-header'>{data.music.artist}</div>
+                                    </Col>
+                                    <Col xs ={2}>
+                                        <div className='music-list-header'>Length</div>
+                                    </Col>
+                                    <Col xs ={1}>
+                                        <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
+                                            <MdMoreHoriz/>
+                                        </IconContext.Provider>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        )
+                    }}
+                </Query>)}
             </Col>
         );
     }
 
-    makeRangeIterator = (start = 0, end = Infinity, step = 1) => {
+    makeRangeIterator = (start = 1, end = Infinity, step = 1) => {
         let nextIndex = start;
         let iterationCount = 0;
     

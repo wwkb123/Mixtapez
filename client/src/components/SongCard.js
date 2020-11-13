@@ -49,7 +49,7 @@ export default function SongCard(props){
                     var handler = props.childSongIdHandler;
                     // console.log(handler)
                     modal.style.display = "block";
-                    handler(song.id);
+                    handler(song.id,song);
                 }
                     
             }
