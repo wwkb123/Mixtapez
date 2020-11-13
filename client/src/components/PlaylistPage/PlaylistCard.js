@@ -83,10 +83,10 @@ class PlaylistCard extends Component {
         let deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                                 {(removePlaylist, { loading, error }) => 
                                     <BsTrashFill onClick={(e) => this.handleDeleteOnClick(e,removePlaylist)}/> }
-                            </Mutation>;
+                            </Mutation>
         let editButton = null;
         if(this.props.userId === this.props.ownerId){
-            editButton = <AiFillEdit onClick={this.handleEditOnClick}/>;
+            editButton = <AiFillEdit onClick={this.handleEditOnClick}/>
         }
         return (
             <Row>
@@ -108,10 +108,10 @@ class PlaylistCard extends Component {
                                     ownerId = {this.props.ownerId}
                                     handleClose = {this.handleCloseOnClick}
                                     />}
-                </Mutation>;
+                </Mutation>
             </Row>
         );
     }
 }
 
-export default PlaylistCard;
+export default PlaylistCard
