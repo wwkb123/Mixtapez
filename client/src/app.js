@@ -79,7 +79,7 @@ class App extends Component{
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' component={QueueScreen} />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
-                                <Route path='/search' component={SearchScreen} />
+                                <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/popup' component={Popup} />
                                 <Route path='/signin'  render={(props) => <SignInScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />

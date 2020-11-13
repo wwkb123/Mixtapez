@@ -191,6 +191,7 @@ body {
   padding: 7px;
   color: #ed4e85;
   margin: 10px;
+  cursor: pointer;
 }
 
 .border-bottom-accent{

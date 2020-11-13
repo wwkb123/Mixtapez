@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 
+import Modal from 'react-bootstrap/Modal'
 
 const options = [
     'Add to Queue',
@@ -19,6 +20,8 @@ const options = [
   ];
 
 export default function SongCard(props){
+    var song = props.song;
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -38,13 +41,19 @@ export default function SongCard(props){
         }else if(index === 1){ // add to liked songs
 
         }else if(index === 2){ // add to playlist
-
+            if(song){
+                // alert("hi" + song.name);
+                // console.log(song.name, "asdad");
+                var modal = document.getElementById("search_modal");
+                if(modal)
+                    modal.style.display = "block";
+            }
         }else if(index === 3){ // share
 
         }
     };
 
-    var song = props.song;
+    
     if(song){
         var minutes = 0;
         minutes = Math.round((song.duration_ms/1000) / 60);
@@ -111,6 +120,7 @@ export default function SongCard(props){
                         </Col>
                     </Row>
                 </Container>
+                
             </div>
         );
     }else{

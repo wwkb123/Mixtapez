@@ -57,7 +57,8 @@ class PlaylistsScreen extends Component {
                                     {({loading, error, data}) =>{
                                         if (loading) return 'Loading...';
                                         if (error) return `Error! ${error.message}`;
-                                        console.log(data.musicList.owner);
+                                        if(data.musicList)
+                                            console.log(data.musicList.owner);
                                         //return(<div></div>)
                                         if(data.musicList && data.musicList.owner){
                                             return(

@@ -13,6 +13,30 @@ import UserCard from "./UserCard.js";
 import PlaylistCard from "./PlaylistCard.js";
 import UserTitleCard from "./UserTitleCard.js";
 import PlaylistTitleCard from "./PlaylistTitleCard.js";
+import './modal.css';
+import gql from 'graphql-tag'
+import {Query} from 'react-apollo'
+
+const GET_PLAYLIST = gql`
+    query user($userId: String) {
+        user(id: $userId) {
+            musicLists{
+                _id
+            }
+        }
+    }
+`;
+
+const GET_LIST_DETAIL = gql`
+    query musicList($musicListId: String) {
+        musicList(id: $musicListId) {
+            musicListName
+            owner{
+                _id
+            }
+        }
+    }
+`;
 
 class SearchScreen extends Component{
     constructor(props){
@@ -61,7 +85,18 @@ class SearchScreen extends Component{
         }
     }
 
+    onClose = () =>{
+        var modal = document.getElementById("search_modal");
+        modal.style.display = "none";
+    }
+
+    onAddPlaylistClick = (e, musicList) => {
+        console.log(musicList);
+        this.onClose();
+    }
+
     render() {
+        
         var search_results = this.state.search_results;
         var select = this.state.search_results_mode;
         var result_title_card = "";
@@ -117,6 +152,54 @@ class SearchScreen extends Component{
                 </form>
                 { result_title_card }
                 { result_cards }
+                
+
+
+                <div id="search_modal" className="modal">
+
+                <div className="modal-content">
+                    <span onClick={this.onClose} className="close">&times;</span>
+                    <Query query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                    {({loading, error, data}) => 
+                    {
+                        if (loading) return 'Loading...';
+                        if (error) return `Error! ${error.message}`;
+                        if(data.user){  // check if user has signed in
+                            return(<div>
+                                {
+                                
+                                data.user.musicLists.map( (musicList) => 
+                                        (<Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                        key={musicList}>
+                                        {({loading, error, data}) =>{
+                                            if (loading) return 'Loading...';
+                                            if (error) return `Error! ${error.message}`;
+                                            if(data.musicList)
+                                                console.log(data.musicList.owner);
+                                            //return(<div></div>)
+                                            if(data.musicList && data.musicList.owner){
+                                                return(
+                                                <div onClick={(e) => this.onAddPlaylistClick(e, data.musicList)} className="playlist-card">
+                                                    <div>{data.musicList.musicListName}</div>
+                                                </div>
+                                                )
+                                            }else{
+                                                return <></>
+                                            }
+                                        }                                   
+                                    }
+                                    </Query>))
+                            }</div>)
+                        }else{
+                            return <></>
+                        }
+                        
+                        }}</Query>
+                </div>
+
+                </div>
+                
+
             </div>
 
         );
