@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -17,6 +17,8 @@ import {Query, Mutation} from 'react-apollo'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import UserAPI from "../../apis/UserAPI";
+
 
 const GET_LIST_DETAIL = gql`
     query musicList($musicListId: String) {
@@ -86,7 +88,8 @@ const options = [
 
 export default function DisplayPlaylistScreen(props){
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [selectedIndex, setSelectedIndex] = React.useState(1);
+    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [musicList, setMusicList] = React.useState([]);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -157,6 +160,32 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
+    // const getMusic = async (id)=>{
+    //     try {
+    //         const response = await UserAPI.get("/music/"+id);
+    //         if(response.data.status == "success"){ // search success
+    //             console.log("success");
+    //             console.log("music is", response.data.music);
+    //             return response.data.music;
+    //         }else{ // somehow failed
+    //             return null;
+    //         }
+    //     }catch (err) {
+    //         console.log(err);
+    //     }
+    // }
+    // useEffect(() => {
+    //     // Update the document title using the browser API
+    //     console.log(musicList);
+    //     var musicObjectList = [];
+    //     for(let i = 0; i < musicList.length; i++){
+    //         musicObjectList.push(getMusic(musicList[i]._id));
+    //         console.log('hi');
+    //     }
+    //     setMusicList(musicObjectList);
+    //     console.log("new list is", musicList);
+    //   });
+
     console.log(props.match.params.id);
     let deleteButton = null;
 
@@ -167,6 +196,14 @@ export default function DisplayPlaylistScreen(props){
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     let numberOfMusics = data.musicList.musics.length;
+                    // var musicObjectList = [];
+                    // setMusicList([]);
+                    // for(let i = 0; i < numberOfMusics; i++){
+                    //     musicObjectList.push(getMusic(data.musicList.musics[i]._id));
+                    //     console.log('hi');
+                    // }
+                    // setMusicList(data.musicList.musics);
+                    // console.log("list is", musicList);
                     if (props.userId === data.musicList.owner._id) {
                         deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                                 {(removePlaylist, { loading, error }) => 
@@ -234,6 +271,7 @@ export default function DisplayPlaylistScreen(props){
                                             }else{
                                                 options[0] = "Make Public";
                                             }
+                                            
                                             return(<MenuItem
                                                 key={option}
                                                 onClick={(event) => handleMenuItemClick(event, index, 

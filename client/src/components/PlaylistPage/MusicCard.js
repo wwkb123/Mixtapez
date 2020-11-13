@@ -60,6 +60,7 @@ export default function MusicCard(props){
     const handleMenuItemClick = (event, index, musicId, removeMusicFromMusicList) => {
         setSelectedIndex(index);
         setAnchorEl(null);
+        console.log('id is', musicId);
         if(index === 0){  // add to queue
             
         }else if(index === 1){ // add to liked songs
