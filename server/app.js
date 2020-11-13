@@ -237,7 +237,7 @@ app.post('/api/forgetPassword', async (req, res) => {
 app.post('/api/changePassword', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, function (err, user) {
     if(user){
-      if(user.password === req.body.oldPassword){  // old password match
+      // if(user.password === req.body.oldPassword){  // old password match
         user.password = req.body.newPassword;
         user.save(function (err) {
           if(err) {
@@ -247,11 +247,12 @@ app.post('/api/changePassword', async (req, res) => {
         res.status(200).json({
           status: "success"
         });
-      }else{  // wrong old password, don't update
-        res.status(200).json({
-          status: "failed"
-        });
-      }
+      // }
+      // else{  // wrong old password, don't update
+      //   res.status(200).json({
+      //     status: "failed"
+      //   });
+      // }
       if (err) {
           console.log("Something wrong when updating password!");
       }
