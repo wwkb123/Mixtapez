@@ -74,7 +74,7 @@ var transporter = nodemailer.createTransport({
 
 // check if an email is already registered
 app.post('/api/register', async (req, res) => {
-  UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
+  await UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
     if(result.length > 0){  // email exists
       res.status(200).json({
         status: "failed"
@@ -95,42 +95,41 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
     console.log("send email result is ", result);
     if(result.length > 0){ // email found
       userID = result[0]._id
+      var link = `http://localhost:3000/verification/${userID}`;
+      console.log("preparing email...");
+      var mailOptions = {
+        from: 'mixtapez416@gmail.com',
+        to: req.body.email,
+        subject: 'Welcome to Mixtapez, please verify your email address',
+        // text: 'That was easy!\nasdasd'
+        html: `<h1>Thanks for registering on Mixtapez!</h1>\
+        <p>To complete creating your account, please click the link below to verify your email address:</p><br>\
+        <a href="${link}">Verify</a>`
+      };
+      
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+          res.status(200).json({
+                  status: "failed"
+              });
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.status(200).json({
+              status: "success",
+          });
+        }
+      });
     }else{
       console.log("not found");
+      res.status(200).json({
+          status: "failed"
+      });
     }
     if (err) return handleError(err);
   });
-  if(userID !== ""){
-    var link = `http://localhost:3001/verification/${userID}`;
-    var mailOptions = {
-      from: 'mixtapez416@gmail.com',
-      to: req.body.email,
-      subject: 'Welcome to Mixtapez, please verify your email address',
-      // text: 'That was easy!\nasdasd'
-      html: `<h1>Thanks for registering on Mixtapez!</h1>\
-      <p>To complete creating your account, please click the link below to verify your email address:</p><br>\
-      <a href="${link}">Verify</a>`
-    };
+  
     
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-        res.status(200).json({
-                status: "failed"
-            });
-      } else {
-        console.log('Email sent: ' + info.response);
-        res.status(200).json({
-            status: "success",
-        });
-      }
-    });
-  }else{ // empty ID, something is wrong
-    console.log("error");
-    res.status(200).json({
-      status: "failed"
-    });
-  }
 });
 
 

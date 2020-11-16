@@ -99,7 +99,7 @@ class SignUpScreen extends Component{
                         email
                     });
                     if(register_response.data.status == "success"){  // email can be used
-                        addUser({
+                        await addUser({
                             variables: {
                                 userName: this.state.email,
                                 password: this.state.password,
