@@ -9,9 +9,13 @@ var schema = require('./graphql/ummSchemas');
 var cors = require("cors");
 var nodemailer = require('nodemailer');  // to send emails
 
-mongoose.connect('mongodb://localhost/node-graphql', { promiseLibrary: require('bluebird'), useNewUrlParser: true })
+const uri = "mongodb+srv://admin:admin@cluster0.wknfy.mongodb.net/db?retryWrites=true&w=majority";
+// 'mongodb://localhost/node-graphql'
+mongoose.connect(uri, { promiseLibrary: require('bluebird'), useNewUrlParser: true })
   .then(() =>  console.log('connection successful'))
   .catch((err) => console.error(err));
+
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -138,7 +142,8 @@ app.post('/api/verify', async (req, res) => {
       console.log("user", result);
       res.status(200).json({
           status: "success",
-          nickName: result.nickName
+          nickName: result.nickName,
+          userId: result._id
       });
     }else{
       console.log("not found");

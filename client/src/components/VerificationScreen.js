@@ -16,7 +16,7 @@ class VerificationScreen extends Component{
             });
             if(response.data.status == "success"){
                 console.log("success");
-                this.props.signedIn(response.data.nickName);
+                this.props.signedIn(response.data.nickName, response.data.userId);
                 this.props.history.push('/');
             }else{
                 this.props.history.push('/error');
