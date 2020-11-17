@@ -18,6 +18,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
+// import music from '../../../../server/models/music';
+import axios from "axios";
 
 
 const GET_LIST_DETAIL = gql`
@@ -90,6 +92,7 @@ export default function DisplayPlaylistScreen(props){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [musicList, setMusicList] = React.useState([]);
+    const [musicObjectList, setMusicObjectList] = React.useState([]);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -174,24 +177,36 @@ export default function DisplayPlaylistScreen(props){
     //         console.log(err);
     //     }
     // }
-    // useEffect(() => {
+    useEffect(() => {
     //     // Update the document title using the browser API
     //     console.log(musicList);
-    //     var musicObjectList = [];
+        var objectList = [];
     //     for(let i = 0; i < musicList.length; i++){
     //         musicObjectList.push(getMusic(musicList[i]._id));
     //         console.log('hi');
     //     }
     //     setMusicList(musicObjectList);
     //     console.log("new list is", musicList);
-    //   });
+        for(let id in musicList){
+            axios.get('http://localhost:3001/api/music?id='+id)
+            .then(function (response) {
+                console.log(response);
+                objectList.push(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+        setMusicObjectList(objectList);
+        console.log('list is', musicObjectList);
+      });
 
     console.log(props.match.params.id);
     let deleteButton = null;
 
     return(
         <div>
-            <Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: props.match.params.id}}>
+            <Query query={GET_LIST_DETAIL} variables={{musicListId: props.match.params.id}}>
                 {({loading, error, data}) =>{
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
@@ -202,7 +217,7 @@ export default function DisplayPlaylistScreen(props){
                     //     musicObjectList.push(getMusic(data.musicList.musics[i]._id));
                     //     console.log('hi');
                     // }
-                    // setMusicList(data.musicList.musics);
+                    setMusicList(data.musicList.musics);
                     // console.log("list is", musicList);
                     if (props.userId === data.musicList.owner._id) {
                         deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
