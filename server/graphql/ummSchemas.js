@@ -35,6 +35,9 @@ var musicType = new GraphQLObjectType({
             image:{
                 type: GraphQLString
             },
+            length:{
+                type: GraphQLInt
+            },
             likes:{
                 type: GraphQLInt
             },
@@ -244,6 +247,9 @@ var mutation = new GraphQLObjectType({
                     artist:{
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    length:{
+                        rtpe: new GraphQLNonNull(GraphQLInt)
+                    },
                     image:{
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -282,6 +288,9 @@ var mutation = new GraphQLObjectType({
                     image:{
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    length:{
+                        type: new GraphQLNonNull(GraphQLInt)
+                    },
                     likes:{
                         type: new GraphQLNonNull(GraphQLInt)
                     }
@@ -291,6 +300,7 @@ var mutation = new GraphQLObjectType({
                                                                     URI: params.URI, 
                                                                     album: params.album, 
                                                                     artist: params.artist,
+                                                                    length: params.length,
                                                                     image: params.image,
                                                                     likes: params.likes,                        
                                                                     lastUpdate: new Date() }, function (err) {
@@ -461,7 +471,7 @@ var mutation = new GraphQLObjectType({
                     }
                 },
                 resolve(root, params) {
-                    return MusicModel.findByIdAndUpdate(params.id, { userName: params.userName, 
+                    return UserModel.findByIdAndUpdate(params.id, { userName: params.userName, 
                                                                     password: params.password, 
                                                                     nickName: params.nickName,
                                                                     verified: params.verified,                       
@@ -486,7 +496,7 @@ var mutation = new GraphQLObjectType({
                     if(!nowListeningMusic){
                         throw new Error('error')
                     }
-                    return MusicModel.findByIdAndUpdate(params.id, { nowListening: nowListeningMusic,                      
+                    return UserModel.findByIdAndUpdate(params.id, { nowListening: nowListeningMusic,                      
                                                                     lastUpdate: new Date() }, function (err) {
                         if (err) return next(err);
                     });

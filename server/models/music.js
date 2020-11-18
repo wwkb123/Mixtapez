@@ -7,6 +7,7 @@ var MusicSchema = new mongoose.Schema({
   album: String,
   artist: String,
   image: String,
+  length:{type: Number, default: 0},
   likes: {type: Number, default: 0},
   lastUpdate: { type: Date, default: Date.now },
 });
