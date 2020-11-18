@@ -19,6 +19,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 import axios from "axios";
+import SongCard from "./SongCard.js";
 
 import Reorder, {
     reorder,
@@ -212,17 +213,18 @@ export default function DisplayPlaylistScreen(props){
                 <Reorder
                     reorderId="my-list" // Unique ID that is used internally to track this list (required)
                     reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
+                    component="div"
                     placeholderClassName="placeholder" // Class name to be applied to placeholder elements (optional), defaults to 'placeholder'
                     draggedClassName="dragged" // Class name to be applied to dragged elements (optional), defaults to 'dragged'
                     lock="horizontal" // Lock the dragging direction (optional): vertical, horizontal (do not use with groups)
-                    holdTime={0} // Default hold time before dragging begins (mouse & touch) (optional), defaults to 0
+                    holdTime={100} // Default hold time before dragging begins (mouse & touch) (optional), defaults to 0
                     onReorder={onReorder} // Callback when an item is dropped (you will need this to update your state)
                     autoScroll={true} // Enable auto-scrolling when the pointer is close to the edge of the Reorder component (optional), defaults to true
                     disabled={false} // Disable reordering (optional), defaults to false
                     disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
                 >
                     {musics.map((music, index) => (
-                        <div key={index}>{music.musicName}</div>
+                        <div key={music._id}><SongCard song={music}></SongCard></div>
                     ))}
                 </Reorder>
                 
