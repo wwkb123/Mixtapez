@@ -413,6 +413,21 @@ app.post('/api/user', async (req, res) => {
   });
 });
 
+app.get('/api/user/:id', async (req, res) => {
+  await UserModel.findOne({'_id': req.params.id }, function (err, user) {
+    if(user){
+      res.status(200).json({
+        status: "success",
+        user: user
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });
+});
+
 app.post('/api/user/nickName', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, 'nickName', function (err, user) {
     console.log(user);

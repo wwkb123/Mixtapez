@@ -20,6 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 import axios from "axios";
 import SongCard from "./SongCard.js";
+import SongTitleCard from './SongTitleCard';
 
 import Reorder, {
     reorder,
@@ -27,6 +28,7 @@ import Reorder, {
     reorderFromTo,
     reorderFromToImmutable
   } from 'react-reorder';
+
 
 
 const GET_LIST_DETAIL = gql`
@@ -100,6 +102,7 @@ export default function DisplayPlaylistScreen(props){
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [musicList, setMusicList] = React.useState(null);
     const [musics, setMusics] = React.useState([]);
+    const [owner, setOwner] = React.useState(null);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -109,7 +112,7 @@ export default function DisplayPlaylistScreen(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index, isPublic, isOwner, updateMusicList, musicListName) => {
+    const handleMenuItemClick = (event, index, isPublic, isOwner) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
@@ -119,13 +122,13 @@ export default function DisplayPlaylistScreen(props){
                 }else{
                     options[0] = "Make Private";
                 }
-                updateMusicList({
-                    variables: {
-                        playlistId: props.match.params.id,
-                        musicListName: musicListName,
-                        isPublic: !isPublic
-                    }
-                });
+                // updateMusicList({
+                //     variables: {
+                //         playlistId: props.match.params.id,
+                //         musicListName: musicListName,
+                //         isPublic: !isPublic
+                //     }
+                // });
             }else{
                 alert("you do not own the playlist")
             }
@@ -190,6 +193,11 @@ export default function DisplayPlaylistScreen(props){
                     }
                     console.log(musics);
                     setMusics(Array.from(musics)); // deep copy
+                    const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                    if(owner_response.data.status == "success"){ // search success
+                        setOwner(owner_response.data.user);
+                    }
+                    console.log(owner_response.data.user);
                 }else{ // somehow failed
     
                 }
@@ -207,9 +215,62 @@ export default function DisplayPlaylistScreen(props){
     console.log(props.match.params.id);
     let deleteButton = null;
     
-    if(musicList){
+    if(musicList && owner){
+        if (props.userId === musicList.owner) {
+            deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
+                    {(removePlaylist, { loading, error }) => 
+                    <Mutation mutation={REMOVE_MUSICLIST}>
+                            {(removeMusicList, { loading, error }) => 
+                                <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                    </Mutation>}
+            </Mutation>                            
+        }
         return(
             <div>
+                <Row>
+                    <img src={Image} width={175} height={175} alt="">
+                    </img>
+                    <Col>
+                        <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
+                        <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | 0 second</h4>
+                    </Col>
+                </Row>
+                <Row xs={10}>
+                    <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
+                        <MdPauseCircleOutline/>
+                        {/* <AiOutlinePlusCircle/> */}
+                        {deleteButton}
+                        <IconButton
+                        aria-label="more"
+                        aria-controls="menu"
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                    >
+                        
+                            <MdMoreHoriz/>
+                        </IconButton>
+                        <Menu
+                            id="menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            {options.map((option, index) => (
+                                <MenuItem
+                                    key={option}
+                                    onClick={(event) => handleMenuItemClick(event, index, 
+                                        musicList.isPublic, (props.userId === musicList.owner)
+                                    )}
+                                >
+                                    {option}
+                                </MenuItem>)
+                            )}
+                        </Menu>
+                    </IconContext.Provider>
+                </Row>
+                
+                <SongTitleCard></SongTitleCard>
                 <Reorder
                     reorderId="my-list" // Unique ID that is used internally to track this list (required)
                     reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
