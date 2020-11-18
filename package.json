@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/wwkb123/416_Mixtapez#readme",
   "dependencies": {
-    "concurrently": "^5.3.0"
+    "concurrently": "^5.3.0",
+    "react-reorder": "^3.0.0-alpha.7"
   }
 }

@@ -429,6 +429,22 @@ app.post('/api/user/nickName', async (req, res) => {
   });
 });
 
+app.get('/api/musicList/:id', async (req, res) => {
+  await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
+    console.log("musicList is", musicList);
+    if(musicList){
+      res.status(200).json({
+        status: "success",
+        musicList: musicList
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });
+});
+
 app.get('/api/music/:id', async (req, res) => {
   await MusicModel.findOne({_id: req.params.id}, function (err, music) {
     console.log(music);
@@ -444,6 +460,7 @@ app.get('/api/music/:id', async (req, res) => {
     }
   });
 });
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

@@ -18,8 +18,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
-// import music from '../../../../server/models/music';
 import axios from "axios";
+
+import Reorder, {
+    reorder,
+    reorderImmutable,
+    reorderFromTo,
+    reorderFromToImmutable
+  } from 'react-reorder';
 
 
 const GET_LIST_DETAIL = gql`
@@ -91,8 +97,8 @@ const options = [
 export default function DisplayPlaylistScreen(props){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
-    const [musicList, setMusicList] = React.useState([]);
-    const [musicObjectList, setMusicObjectList] = React.useState([]);
+    const [musicList, setMusicList] = React.useState(null);
+    const [musics, setMusics] = React.useState([]);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -163,159 +169,72 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
-    // const getMusic = async (id)=>{
-    //     try {
-    //         const response = await UserAPI.get("/music/"+id);
-    //         if(response.data.status == "success"){ // search success
-    //             console.log("success");
-    //             console.log("music is", response.data.music);
-    //             return response.data.music;
-    //         }else{ // somehow failed
-    //             return null;
-    //         }
-    //     }catch (err) {
-    //         console.log(err);
-    //     }
-    // }
     useEffect(() => {
-    //     // Update the document title using the browser API
-    //     console.log(musicList);
-        var objectList = [];
-    //     for(let i = 0; i < musicList.length; i++){
-    //         musicObjectList.push(getMusic(musicList[i]._id));
-    //         console.log('hi');
-    //     }
-    //     setMusicList(musicObjectList);
-    //     console.log("new list is", musicList);
-        for(let id in musicList){
-            axios.get('http://localhost:3001/api/music?id='+id)
-            .then(function (response) {
-                console.log(response);
-                objectList.push(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        async function fetchData() {
+            try {
+                const response = await UserAPI.get("/musicList/"+props.match.params.id);
+                if(response.data.status == "success"){ // search success
+                    console.log("success");
+                    console.log("musiclist is", response.data.musicList);
+                    setMusicList(response.data.musicList);
+                    var musics = [];
+                    for(let i = 0; i < response.data.musicList.musics.length; i++){
+                        let id = response.data.musicList.musics[i];
+                        const song_response = await UserAPI.get("/music/"+id);
+                        if(song_response.data.status == "success"){ // search success
+                            musics.push(song_response.data.music);
+                        }else{
+                            console.log("error searching song", id);
+                        }
+                    }
+                    console.log(musics);
+                    setMusics(Array.from(musics)); // deep copy
+                }else{ // somehow failed
+    
+                }
+            }catch (err) {
+                console.log(err);
+            }
         }
-        setMusicObjectList(objectList);
-        console.log('list is', musicObjectList);
-      });
+        fetchData();
+      }, []);
+    
+    function onReorder (event, previousIndex, nextIndex, fromId, toId) {
+        setMusics(reorder(musics, previousIndex, nextIndex));
+    }
 
     console.log(props.match.params.id);
     let deleteButton = null;
-
-    return(
-        <div>
-            <Query query={GET_LIST_DETAIL} variables={{musicListId: props.match.params.id}}>
-                {({loading, error, data}) =>{
-                    if (loading) return 'Loading...';
-                    if (error) return `Error! ${error.message}`;
-                    let numberOfMusics = data.musicList.musics.length;
-                    // var musicObjectList = [];
-                    // setMusicList([]);
-                    // for(let i = 0; i < numberOfMusics; i++){
-                    //     musicObjectList.push(getMusic(data.musicList.musics[i]._id));
-                    //     console.log('hi');
-                    // }
-                    setMusicList(data.musicList.musics);
-                    // console.log("list is", musicList);
-                    if (props.userId === data.musicList.owner._id) {
-                        deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
-                                {(removePlaylist, { loading, error }) => 
-                                <Mutation mutation={REMOVE_MUSICLIST}>
-                                        {(removeMusicList, { loading, error }) => 
-                                            <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
-                                </Mutation>}
-                        </Mutation>                            
-                    }
-                    return(
-                        <div>
-                            <Row>
-                                <img src={Image} width={175} height={175} alt="">
-                                </img>
-                                <Col>
-                                    <Col xs={10} className="content-left">
-                                        <h3>Playlists</h3>
-                                        <h1 style={{fontWeight: "bold"}} >{data.musicList.musicListName} </h1> 
-                                    </Col>
-                                    <Col xs={10} className="content-center">
-                                        <Query query={GET_PLAYLIST} variables={{userId: data.musicList.owner._id}}>
-                                            {({loading, error, data}) => 
-                                                {                                                    
-                                                    if (loading) return 'Loading...';
-                                                    if (error) return `Error! ${error.message}`;
-                                                    console.log(data);
-                                                    return(
-                                                        <div>
-                                                            <h5>Artirst</h5>                    
-                                                            <h3 style={{fontWeight: "bold"}} >{data.user.nickName}|{numberOfMusics} Song|0 second</h3>
-                                                        </div>
-                                                    )
-                                                }
-                                            }
-                                        </Query>                                            
-                                    </Col>
-                                </Col>
-                            </Row>
-                            <Row xs={10}>
-                                <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                                    <MdPauseCircleOutline/>
-                                    {/* <AiOutlinePlusCircle/> */}
-                                    {deleteButton}
-                                    <IconButton
-                                    aria-label="more"
-                                    aria-controls="menu"
-                                    aria-haspopup="true"
-                                    onClick={handleClick}
-                                >
-                                    
-                                        <MdMoreHoriz/>
-                                    </IconButton>
-                                    <Menu
-                                        id="menu"
-                                        anchorEl={anchorEl}
-                                        keepMounted
-                                        open={Boolean(anchorEl)}
-                                        onClose={handleClose}
-                                    >
-                                        {options.map((option, index) => (
-                                        <Mutation mutation={UPDATE_MUSICLIST}>
-                                           {(updateMusicList,{loading, error})=>{
-                                            if(data.musicList.isPublic){
-                                                options[0] = "Make Private";
-                                            }else{
-                                                options[0] = "Make Public";
-                                            }
-                                            
-                                            return(<MenuItem
-                                                key={option}
-                                                onClick={(event) => handleMenuItemClick(event, index, 
-                                                    data.musicList.isPublic, (props.userId === data.musicList.owner._id),
-                                                    updateMusicList, data.musicList.musicListName
-                                                )}
-                                            >
-                                                {option}
-                                            </MenuItem>);
-                                            }
-                                            }
-                                        </Mutation>
-                                        ))}
-                                    </Menu>
-                                    </IconContext.Provider>
-                                </Row>   
-                                                         
-                                <MusicCard 
-                                musics={data.musicList.musics} 
-                                isOwner={props.userId === data.musicList.owner._id} 
-                                musicListId={props.match.params.id}/>
-                            </div>
-                        )
-                    }                                   
-                    }
-                </Query>              
+    
+    if(musicList){
+        return(
+            <div>
+                <Reorder
+                    reorderId="my-list" // Unique ID that is used internally to track this list (required)
+                    reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
+                    placeholderClassName="placeholder" // Class name to be applied to placeholder elements (optional), defaults to 'placeholder'
+                    draggedClassName="dragged" // Class name to be applied to dragged elements (optional), defaults to 'dragged'
+                    lock="horizontal" // Lock the dragging direction (optional): vertical, horizontal (do not use with groups)
+                    holdTime={0} // Default hold time before dragging begins (mouse & touch) (optional), defaults to 0
+                    onReorder={onReorder} // Callback when an item is dropped (you will need this to update your state)
+                    autoScroll={true} // Enable auto-scrolling when the pointer is close to the edge of the Reorder component (optional), defaults to true
+                    disabled={false} // Disable reordering (optional), defaults to false
+                    disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
+                >
+                    {musics.map((music, index) => (
+                        <div key={index}>{music.musicName}</div>
+                    ))}
+                </Reorder>
+                
             </div>
-
+    
         );
+    }else{
+        return(
+            <div>Loading...</div>
+        );
+    }
+    
 
 }
 
