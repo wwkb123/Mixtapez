@@ -36,7 +36,7 @@ import './App.css';
 // import ErrorScreen from './components/ErrorScreen';
 import App from './app';
 
-const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
+const client = new ApolloClient({ uri: 'http://localhost:3001/graphql' });
 
 ReactDOM.render(
     <ApolloProvider client={client}>

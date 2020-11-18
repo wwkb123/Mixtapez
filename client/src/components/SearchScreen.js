@@ -227,7 +227,7 @@ class SearchScreen extends Component{
 
                 <div className="modal-content">
                     <span onClick={this.onClose} className="close">&times;</span>
-                    <Query pollInterval={1000} query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                    <Query query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
                     {({loading, error, data}) => 
                     {
                         if (loading) return 'Loading...';
@@ -237,7 +237,7 @@ class SearchScreen extends Component{
                                 {
                                 
                                 data.user.musicLists.map( (musicList) => 
-                                        (<Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                        (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
                                         key={musicList}>
                                         {({loading, error, data}) =>{
                                             if (loading) return 'Loading...';
