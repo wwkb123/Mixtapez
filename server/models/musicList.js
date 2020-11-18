@@ -6,6 +6,7 @@ var MusicListSchema = new mongoose.Schema({
   owner:{type: mongoose.Schema.Types.ObjectId,
       ref: 'user' },
   isPublic: Boolean,
+  image: String,
   musics: [{
           type: mongoose.Schema.Types.ObjectId,
           ref: 'music'

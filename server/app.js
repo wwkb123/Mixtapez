@@ -307,6 +307,7 @@ app.post('/api/createMusic', async (req, res) => {
                                       musicName: req.body.musicName,
                                       URI: req.body.URI,
                                       album: req.body.album,
+                                      length: req.body.length,
                                       artist: req.body.artist,
                                       lastUpdate: new Date()});
     console.log(musicModel)
