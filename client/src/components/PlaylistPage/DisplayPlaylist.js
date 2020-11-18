@@ -158,13 +158,13 @@ export default function DisplayPlaylistScreen(props){
         if(true){
             console.log(props.userId);
             console.log(props.match.params.id);
-            removePlaylist({
+            await removePlaylist({
                 variables:{
                     userId: props.userId,
                     playlistId: props.match.params.id
                 }
             });
-            removeMusicList({
+            await removeMusicList({
                 variables:{
                     playlistId: props.match.params.id
                 }

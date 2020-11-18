@@ -248,7 +248,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     length:{
-                        rtpe: new GraphQLNonNull(GraphQLInt)
+                        type: new GraphQLNonNull(GraphQLInt)
                     },
                     image:{
                         type: new GraphQLNonNull(GraphQLString)

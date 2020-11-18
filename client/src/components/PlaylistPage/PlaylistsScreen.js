@@ -32,21 +32,22 @@ const GET_LIST_DETAIL = gql`
 
 export default function PlaylistsScreen(props){
     const [playlists, setPlaylists] = React.useState(null);
-
+    var userId = props.userId;
+    
     useEffect(() => {
-        var userId = props.userId;
+        
         async function fetchData() {
             if(userId){
                 try {
                     const response = await UserAPI.get("/user/musicLists/"+userId);
-                    if(response.data.status == "success"){ // search success
+                    if(response.data.status === "success"){ // search success
                         console.log("success");
                         console.log("musiclists is", response.data.musicLists);
                         var musicLists = [];
                         for(let i = 0; i < response.data.musicLists.length; i++){
                             let id = response.data.musicLists[i];
                             const playlist_response = await UserAPI.get("/musicList/"+id);
-                            if(playlist_response.data.status == "success"){ // search success
+                            if(playlist_response.data.status === "success"){ // search success
                                 musicLists.push(playlist_response.data.musicList);
                             }else{
                                 console.log("error searching playlist", id);
@@ -65,7 +66,7 @@ export default function PlaylistsScreen(props){
         fetchData();
     }, []);
 
-    if(!props.userId){  // or current logged in id is not equal to this id
+    if(!userId){  // or current logged in id is not equal to this id
         props.history.push('/signin');
     }
     if(playlists){
@@ -75,7 +76,7 @@ export default function PlaylistsScreen(props){
                 {playlists.map( (musicList) => 
                     <PlaylistCard
                     key={musicList._id}
-                    userId={props.userId}
+                    userId={userId}
                     musicListId={musicList._id}
                     musicListName={musicList.musicListName}
                     ownerId={musicList.owner}/>
