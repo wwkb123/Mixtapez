@@ -121,10 +121,12 @@ class SearchScreen extends Component{
             let artist = this.state.songInfo.artists[0].name;
             let URI = this.state.songID;
             let album = this.state.songInfo.album.name;
+            let length = Math.round(this.state.songInfo.duration_ms/1000);
             
             const create_response = await UserAPI.post("/createMusic", {musicName,
                                                                     URI,
                                                                     album,
+                                                                    length,
                                                                     artist});
             if (create_response.data.status == "success") {
                console.log(this.props.userId)
