@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import PlaylistCard from './PlaylistCard';
 import gql from 'graphql-tag'
 import {Query} from 'react-apollo'
+import UserAPI from "../../apis/UserAPI";
 
 const GET_PLAYLIST = gql`
     query user($userId: String) {
@@ -29,85 +30,61 @@ const GET_LIST_DETAIL = gql`
     }
 `;
 
-class PlaylistsScreen extends Component {
-    constructor(props){
-        super(props)
-    }
-    render() {
-        if(!this.props.userId){
-            this.props.history.push('/signin');
+export default function PlaylistsScreen(props){
+    const [playlists, setPlaylists] = React.useState(null);
+
+    useEffect(() => {
+        var userId = props.userId;
+        async function fetchData() {
+            if(userId){
+                try {
+                    const response = await UserAPI.get("/user/musicLists/"+userId);
+                    if(response.data.status == "success"){ // search success
+                        console.log("success");
+                        console.log("musiclists is", response.data.musicLists);
+                        var musicLists = [];
+                        for(let i = 0; i < response.data.musicLists.length; i++){
+                            let id = response.data.musicLists[i];
+                            const playlist_response = await UserAPI.get("/musicList/"+id);
+                            if(playlist_response.data.status == "success"){ // search success
+                                musicLists.push(playlist_response.data.musicList);
+                            }else{
+                                console.log("error searching playlist", id);
+                            }
+                        }
+                        setPlaylists(Array.from(musicLists));
+                    }else{ // somehow failed
+        
+                    }
+                }catch (err) {
+                    console.log(err);
+                }
+            }
+            
         }
+        fetchData();
+    }, []);
+
+    if(!props.userId){  // or current logged in id is not equal to this id
+        props.history.push('/signin');
+    }
+    if(playlists){
         return (
             <div>
                 <br/><h1>All Playlists</h1>
-                <Query pollInterval={1000} query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
-                    {({loading, error, data}) => 
-                    {
-                        
-                        if (loading) return 'Loading...';
-                        if (error) return `Error! ${error.message}`;
-                        
-                        //console.log(data.user);
-                        //console.log(data.user.musicLists);
-                        // data.user.musicLists.map( musiclist => console.log(musiclist._id));
-                        return(<div>
-                            {
-                            data.user.musicLists.map( (musicList) => 
-                                    (<Query pollInterval={1000} query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
-                                    key={musicList}>
-                                    {({loading, error, data}) =>{
-                                        if (loading) return 'Loading...';
-                                        if (error) return `Error! ${error.message}`;
-
-                                        if(data.musicList)
-                                            console.log(data.musicList.owner);
-
-                                        //return(<div></div>)
-                                        if(data.musicList && data.musicList.owner){
-                                            return(
-                                                <PlaylistCard
-                                                userId={this.props.userId}
-                                                musicListId={musicList._id}
-                                                musicListName={data.musicList.musicListName}
-                                                ownerId={data.musicList.owner._id}
-                                                isPublic={data.musicList.isPublic}/>
-                                            )
-                                        }else{
-                                            return <></>
-                                        }
-                                        
-                                    }                                   
-                                    }
-                                    </Query>)
-                            )}
-                        </div>)
-                    }
-                        // {
-                        //     console.log(data.musicLists);
-                        //     if (loading) return 'Loading...';
-                        //     if (error) return `Error! ${error.message}`;
-                        //     return(<div>
-                        //         {/* {data.musicLists.map( (musicList) => 
-                        //             (<Query pollInterval={500} query={GET_LIST_DETAIL} variables={{musicListId: musicList.id}}>
-                        //             {({loading, error, data}) =>{
-                        //                 if (loading) return 'Loading...';
-                        //                 if (error) return `Error! ${error.message}`;
-                        //                 return(<PlaylistCard
-                        //                     musicListId={musicList.id}
-                        //                     musicListName={data.musicList.musicListName}
-                        //                 />)
-                        //             }                                   
-                        //             }
-                        //             </Query>)
-                        //         )} */}
-                        //     </div>
-                        //     )
-                        // }
-                    }
-                </Query>
+                {playlists.map( (musicList) => 
+                    <PlaylistCard
+                    key={musicList._id}
+                    userId={props.userId}
+                    musicListId={musicList._id}
+                    musicListName={musicList.musicListName}
+                    ownerId={musicList.owner}/>
+                )}   
             </div>
+        );
+    }else{
+        return(
+            <div>Loading...</div>
         );
     }
 }
-
-export default PlaylistsScreen;
