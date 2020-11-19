@@ -467,7 +467,7 @@ var mutation = new GraphQLObjectType({
                         type: new GraphQLNonNull(GraphQLString)
                     },
                     verified:{
-                        type: new GraphQLNonNull(GraphQLString)
+                        type: new GraphQLNonNull(GraphQLBoolean)
                     }
                 },
                 resolve(root, params) {

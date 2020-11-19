@@ -76,6 +76,7 @@ export default function PlaylistsScreen(props){
                 {playlists.map( (musicList) => 
                     <PlaylistCard
                     key={musicList._id}
+                    isPublic={musicList.isPublic}
                     userId={userId}
                     musicListId={musicList._id}
                     musicListName={musicList.musicListName}
