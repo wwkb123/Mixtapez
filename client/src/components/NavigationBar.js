@@ -30,7 +30,21 @@ class NavigationBar extends Component{
 
     selectButtons = () =>{
         if(localStorage.getItem('isSignedIn')){
-            return(<Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>Sign Out</Button>)
+            return(<div>
+                <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
+                <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
+                <Mutation mutation={ADD_PLAYLIST}>
+                    {(addNewPlaylist,{loading, error})=>(
+                        //<Link to={'/playlist/${this.state.playlist}'}>
+                            <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
+                                Create Playlist
+                            </Button>
+                        //</Link>
+                    )}
+                </Mutation>
+                <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
+                <Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>Sign Out</Button>
+                </div>)
         }
         else{
             return(<div>
@@ -74,18 +88,6 @@ class NavigationBar extends Component{
             <div>
                 <Link to="/"><Button className="nav-btn" size="lg">Home</Button></Link>
                 <Link to="/search"><Button className="nav-btn" size="lg">Search</Button></Link>
-                <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
-                <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
-                <Mutation mutation={ADD_PLAYLIST}>
-                    {(addNewPlaylist,{loading, error})=>(
-                        //<Link to={'/playlist/${this.state.playlist}'}>
-                            <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
-                                Create Playlist
-                            </Button>
-                        //</Link>
-                    )}
-                </Mutation>
-                <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
                 {this.selectButtons()}
                 {/* <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
                 <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link> */}
