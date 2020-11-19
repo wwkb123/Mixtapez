@@ -113,7 +113,35 @@ export default function DisplayPlaylistScreen(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index, isPublic, isOwner) => {
+    const updatePlaylist = async () => {  // use setstate to trigger re-render
+        try{
+            const response = await UserAPI.get("/musicList/"+props.match.params.id);
+            if(response.data.status === "success"){ // search success
+                setMusicList(response.data.musicList);
+                console.log("updatePlaylist", response.data.musicList);
+                var musics = [];
+                for(let i = 0; i < response.data.musicList.musics.length; i++){
+                    let id = response.data.musicList.musics[i];
+                    const song_response = await UserAPI.get("/music/"+id);
+                    if(song_response.data.status == "success"){ // search success
+                        musics.push(song_response.data.music);
+                    }else{
+                        console.log("error searching song", id);
+                    }
+                }
+                setMusics(Array.from(musics)); // deep copy
+                const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                if(owner_response.data.status == "success"){ // search success
+                    setOwner(owner_response.data.user);
+                }
+                console.log("owner", owner_response.data.user);
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+
+    const handleMenuItemClick = async (event, index, isPublic, isOwner) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
@@ -123,13 +151,18 @@ export default function DisplayPlaylistScreen(props){
                 }else{
                     options[0] = "Make Private";
                 }
-                // updateMusicList({
-                //     variables: {
-                //         playlistId: props.match.params.id,
-                //         musicListName: musicListName,
-                //         isPublic: !isPublic
-                //     }
-                // });
+                try{
+                    const response = await UserAPI.post("/setIsPublic", {
+                        id: musicList._id,
+                        isPublic: !isPublic
+                    });
+                    if(response.data.status === "success"){ // search success
+                        console.log("update isPublic success");
+                        updatePlaylist();
+                    }
+                }catch(err){
+                    console.log(err);
+                }
             }else{
                 alert("you do not own the playlist")
             }
@@ -228,7 +261,7 @@ export default function DisplayPlaylistScreen(props){
     let deleteButton = null;
     let reorderButtons = null;
     if(musicList && owner){
-        if (props.userId === musicList.owner) {
+        if (props.userId === owner._id) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                     {(removePlaylist, { loading, error }) => 
                     <Mutation mutation={REMOVE_MUSICLIST}>
@@ -265,10 +298,15 @@ export default function DisplayPlaylistScreen(props){
                 <div key={music._id}><SongCard song={music}></SongCard></div>
             ))}</div>
         }
-        var playlist_type = "Public Playlist";
+        var playlist_type = "";
         if(!musicList.isPublic){
             playlist_type = "Private Playlist";
+            options[0] = "Make Public";
+        }else{
+            playlist_type = "Public Playlist";
+            options[0] = "Make Private";
         }
+        console.log("changed playlist type", musicList);
         return(
             <div>
                 <Row>
@@ -306,7 +344,7 @@ export default function DisplayPlaylistScreen(props){
                                 <MenuItem
                                     key={option}
                                     onClick={(event) => handleMenuItemClick(event, index, 
-                                        musicList.isPublic, (props.userId === musicList.owner)
+                                        musicList.isPublic, (props.userId === owner._id)
                                     )}
                                 >
                                     {option}

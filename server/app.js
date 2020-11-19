@@ -492,6 +492,30 @@ app.get('/api/music/:id', async (req, res) => {
   });
 });
 
+//change isPublic of a playlist
+app.post('/api/setIsPublic', async (req, res) => {
+  await MusicListModel.findOne({'_id': req.body.id }, function (err, musicList) {
+    if(musicList){
+        musicList.isPublic = req.body.isPublic;
+        musicList.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+            }
+        });
+        res.status(200).json({
+          status: "success"
+        });
+      if (err) {
+          console.log("Something wrong when updating playlist!");
+      }
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });    
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
