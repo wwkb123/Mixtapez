@@ -60,8 +60,17 @@ export default function SongCard(props){
                         let id = create_response.data.musicId
                         const song_response = await UserAPI.get("/music/"+id);
                         if(song_response.data.status == "success"){
-                            queue.push(song_response.data.music);
-                            localStorage.setItem('queue', JSON.stringify(queue))
+                            let contains = queue.map((music)=>{
+                                if (music._id === song_response.data.music._id) {
+                                    return true
+                                }else{
+                                    return false
+                                }
+                            }).reduce((a,b)=>{ return(a||b) }, -Infinity);
+                            if (!contains) {
+                                queue.push(song_response.data.music);
+                                localStorage.setItem('queue', JSON.stringify(queue))
+                            }
                         }
                     }
                 } catch (error) {
