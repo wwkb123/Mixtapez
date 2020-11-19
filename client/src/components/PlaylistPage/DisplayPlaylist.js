@@ -166,7 +166,7 @@ export default function DisplayPlaylistScreen(props){
             }
         }else if(index === 1){ // Edit Details
 
-        }else if(index === 2){ // Delete
+        }else if(index === 2){ // Delete this playlist
             
         }else if(index === 3){ // share
 
@@ -177,11 +177,9 @@ export default function DisplayPlaylistScreen(props){
         e.preventDefault();
         console.log('click to remove');
         if(true){
-            console.log(props.userId);
-            console.log(props.match.params.id);
             await removePlaylist({
                 variables:{
-                    userId: props.userId,
+                    userId: userId,
                     playlistId: props.match.params.id
                 }
             });
@@ -240,8 +238,7 @@ export default function DisplayPlaylistScreen(props){
     const onSaveClick = async () => {
         if(reorder_mode){
             // save changes to backend
-            var musicIDs = []
-            console.log("musics is", musics);
+            var musicIDs = [];
             for(let i = 0; i < musics.length; i++){
                 musicIDs.push(musics[i]._id);
             }
@@ -265,7 +262,7 @@ export default function DisplayPlaylistScreen(props){
             console.log("won't able to save");
         }
     }
-    console.log(props.match.params.id);
+
     let deleteButton = null;
     let reorderButtons = null;
     let reorder_class = ""
