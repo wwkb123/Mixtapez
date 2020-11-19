@@ -242,11 +242,22 @@ export default function DisplayPlaylistScreen(props){
             // save changes to backend
 
             setReOrderMode(false);  // turn off reorder_mode
+        }else{
+            console.log("won't able to save");
         }
     }
     console.log(props.match.params.id);
     let deleteButton = null;
     let reorderButtons = null;
+    let reorder_class = ""
+    let save_class = ""
+    if(reorder_mode){  // if mode is on
+        reorder_class = "search-btn disabled";
+        save_class = "search-btn"
+    }else{
+        reorder_class = "search-btn";
+        save_class = "search-btn disabled"
+    }
     if(musicList && owner){
         if (userId === owner._id) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
@@ -257,8 +268,8 @@ export default function DisplayPlaylistScreen(props){
                     </Mutation>}
             </Mutation>
             reorderButtons =  <div>
-                <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
-                <Button className="search-btn" onClick={onSaveClick}>Save</Button>
+                <Button className={reorder_class} onClick={onReOrderClick}>Re-Order</Button>
+                <Button className={save_class} onClick={onSaveClick}>Save</Button>
                 </div>       
         }
         var songcards = null;

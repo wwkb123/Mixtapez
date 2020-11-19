@@ -228,3 +228,13 @@ body {
   background-color: gray !important;
   margin-left: 15%;
 }
+
+.disabled{
+  background-color: gray !important;
+}
+
+.disabled:hover, .search-btn:active, .search-btn:focus{
+  background-color: gray !important;
+  cursor: default !important;
+  border: none !important;
+}

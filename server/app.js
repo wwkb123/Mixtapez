@@ -537,6 +537,36 @@ app.post('/api/removeSong', async (req, res) => {
   });    
 });
 
+//update a musicList's musics
+app.post('/api/updateMusicList', async (req, res) => {
+  await MusicListModel.findOne({'_id': req.body.id }, function (err, musicList) {
+    if(musicList){
+      if (err) {
+          console.log("Something wrong when updating musiclist "+req.body.id+"!");
+          res.status(200).json({
+            status: "error"
+          });
+          musicList.musics = [...req.body.musics];
+          musicList.save(function (err) {
+            if(err) {
+                console.error('ERROR!');
+              }
+          });
+          res.status(200).json({
+            status: "success"
+          });
+      }
+      res.status(200).json({
+        status: "success"
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });    
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

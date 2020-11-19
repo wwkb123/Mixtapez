@@ -169,6 +169,7 @@ class SearchScreen extends Component{
         var select = this.state.search_results_mode;
         var result_title_card = "";
         var result_cards = "";
+        var userId = localStorage.getItem('userId');
         if(search_results ){  // && search_results.length > 0
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
@@ -227,7 +228,7 @@ class SearchScreen extends Component{
 
                 <div className="modal-content">
                     <span onClick={this.onClose} className="close">&times;</span>
-                    <Query query={GET_PLAYLIST} variables={{userId: this.props.userId}}>
+                    <Query query={GET_PLAYLIST} variables={{userId: userId}}>
                     {({loading, error, data}) => 
                     {
                         if (loading) return 'Loading...';
