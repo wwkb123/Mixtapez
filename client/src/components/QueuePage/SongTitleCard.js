@@ -28,41 +28,31 @@ class SongTitleCard extends Component{
         var handler = this.props.onTimeClickHandler;
         handler();
     }
+
+    placeholder = () => {
+
+    }
     render() {
-        var titles = ""
+        var style_class = "";
+        var onTitleClickHandler = ""
+        var onArtistClickHandler = ""
+        var onAlbumClickHandler = ""
+        var onTimeClickHandler = ""
         if(this.props.reorder_mode){
-            titles = 
-            <>
-                <Col xs={3} style={{'cursor':'pointer'}} onClick={this.onTitleClickHandler}>
-                    Title
-                </Col>
-                <Col xs={2} style={{'cursor':'pointer'}} onClick={this.onArtistClickHandler}>
-                    Artist
-                </Col>
-                <Col xs={3} style={{'cursor':'pointer'}} onClick={this.onAlbumClickHandler}>
-                    Album
-                </Col>
-                <Col xs={2} style={{'cursor':'pointer'}} onClick={this.onTimeClickHandler}>
-                    Time
-                </Col>
-            </>
+            style_class = "reorder-mode-title"
+            onTitleClickHandler = this.onTitleClickHandler
+            onArtistClickHandler = this.onArtistClickHandler
+            onAlbumClickHandler = this.onAlbumClickHandler
+            onTimeClickHandler = this.onTimeClickHandler
         }else{
-            titles = 
-            <>
-                <Col xs={3}>
-                    Title
-                </Col>
-                <Col xs={2}>
-                    Artist
-                </Col>
-                <Col xs={3}>
-                    Album
-                </Col>
-                <Col xs={2}>
-                    Time
-                </Col>
-            </>
+            style_class = "non-reorder-mode-title"
+            onTitleClickHandler = this.placeholder
+            onArtistClickHandler = this.placeholder
+            onAlbumClickHandler = this.placeholder
+            onTimeClickHandler = this.placeholder
         }
+
+        
         return(
             <div>
                 <Container>
@@ -70,7 +60,18 @@ class SongTitleCard extends Component{
                         <Col xs={1}>
                             Like
                         </Col>
-                        {titles}
+                        <Col xs={3} className={style_class} onClick={onTitleClickHandler}>
+                            <span>Title</span>
+                        </Col>
+                        <Col xs={2} className={style_class} onClick={onArtistClickHandler}>
+                            Artist
+                        </Col>
+                        <Col xs={3} className={style_class} onClick={onAlbumClickHandler}>
+                            Album
+                        </Col>
+                        <Col xs={2} className={style_class} onClick={onTimeClickHandler}>
+                            Time
+                        </Col>
                         <Col xs={1}>
                             Options
                         </Col>

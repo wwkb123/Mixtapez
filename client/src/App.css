@@ -238,3 +238,13 @@ body {
   cursor: default !important;
   border: none !important;
 }
+
+.reorder-mode-title{
+  cursor: pointer;
+  font-size: 24px;
+  transition: 0.2s;
+}
+
+.non-reorder-mode-title{
+  transition: 0.2s;
+}

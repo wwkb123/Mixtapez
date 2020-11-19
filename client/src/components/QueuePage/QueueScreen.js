@@ -228,7 +228,7 @@ export default function QueueScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}>
+                    <div style={{'cursor':'move'}} key={music._id}>
                         <QueueSongCard 
                         updateModalContentHandler={updateModalContentHandler}
                         song={music} 

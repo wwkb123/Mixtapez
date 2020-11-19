@@ -55,7 +55,18 @@ export default function PlaylistSongCard(props){
         
 
         if(mode === "add_queue"){  // add to queue
-            
+            let queue = localStorage.getItem('queue');
+            if(queue){
+                queue = JSON.parse(queue);
+            }else{
+                queue = [];
+            }
+            let id = song._id;
+            const song_response = await UserAPI.get("/music/"+id);
+            if(song_response.data.status == "success"){
+                queue.push(song_response.data.music);
+                localStorage.setItem('queue', JSON.stringify(queue))
+            }
         }else if(mode === "add_like"){ // add to liked songs
 
         }else if(mode === "add_playlist"){ // add to playlist

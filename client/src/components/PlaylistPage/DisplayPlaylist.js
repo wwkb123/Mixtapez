@@ -374,7 +374,7 @@ export default function DisplayPlaylistScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
+                    <div style={{'cursor':'move'}} key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
                 ))}
             </Reorder>
         }else{
