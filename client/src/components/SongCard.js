@@ -36,7 +36,19 @@ export default function SongCard(props){
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
-            
+            if(song){
+                let queue = localStorage.getItem('queue');
+                if(queue){
+                    queue = JSON.parse(queue);
+                }else{
+                    queue = [];
+                }
+                console.log('Queue is '+queue);
+                console.log('Song is '+song.id);
+                queue.push(song);
+                console.log(JSON.stringify(queue))
+                localStorage.setItem('queue', JSON.stringify(queue))
+            }
         }else if(index === 1){ // add to liked songs
 
         }else if(index === 2){ // add to playlist

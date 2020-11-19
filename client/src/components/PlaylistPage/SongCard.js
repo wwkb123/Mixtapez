@@ -90,6 +90,7 @@ export default function SongCard(props){
         }
         var album = "N/A";
         if(song.album){
+            console.log(song.album)
             album = song.album
         }
         return(

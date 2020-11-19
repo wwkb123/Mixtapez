@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../apis/UserAPI";
-import SongCard from "./PlaylistPage/SongCard.js";
+import SongCard from "./SongCard.js";
 import SongTitleCard from './PlaylistPage/SongTitleCard';
 
 import Reorder, {
@@ -42,7 +42,7 @@ export default function QueueScreen(props){
 
 
     var userId = localStorage.getItem('userId');
-    var queue = localStorage.getItem('queue');
+    var queue = JSON.parse(localStorage.getItem('queue'));
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -53,6 +53,7 @@ export default function QueueScreen(props){
 
     useEffect(() => {
         async function fetchData() {
+            console.log(queue)
             setMusics(queue);
         }
         fetchData();
@@ -206,12 +207,17 @@ export default function QueueScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}><SongCard musicListId={musicList._id} song={music}></SongCard></div>
+                    <div key={music.id}>
+                        <SongCard musicListId={0} song={music}></SongCard>
+                        </div>
                 ))}
             </Reorder>
         }else if(musics && musics.length > 0){
+            console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
-                <div key={music._id}><SongCard musicListId={musicList._id} song={music}></SongCard></div>
+                <div key={music.id}>
+                    <SongCard musicListId={0} song={music}></SongCard>
+                    </div>
             ))}</div>
         }
         var hours = 0;
@@ -256,5 +262,3 @@ export default function QueueScreen(props){
     
 
 }
-
-
