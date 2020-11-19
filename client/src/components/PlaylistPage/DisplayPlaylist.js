@@ -102,7 +102,7 @@ export default function DisplayPlaylistScreen(props){
     const [musics, setMusics] = React.useState([]);
     const [owner, setOwner] = React.useState(null);
     const [reorder_mode, setReOrderMode] = React.useState(false);
-
+    var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -142,7 +142,7 @@ export default function DisplayPlaylistScreen(props){
     const handleMenuItemClick = async (event, index, isPublic, isOwner) => {
         setSelectedIndex(index);
         setAnchorEl(null);
-        if(index === 0){  // add to queue
+        if(index === 0){  // make public/private
             if(isOwner){
                 if(isPublic){ // currently is public, once click, it'll become private, so next display text will be make public
                     options[0] = "Make Public";
@@ -164,21 +164,10 @@ export default function DisplayPlaylistScreen(props){
             }else{
                 alert("you do not own the playlist")
             }
-        }else if(index === 1){ // add to liked songs
+        }else if(index === 1){ // Edit Details
 
-        }else if(index === 2){ // add to playlist
-            // if(song){
-            //     // alert("hi" + song.name);
-            //     // console.log(song.name, "asdad");
-            //     var modal = document.getElementById("search_modal");
-            //     if(modal){
-            //         var handler = props.childSongIdHandler;
-            //         // console.log(handler)
-            //         modal.style.display = "block";
-            //         handler(song.id,song);
-            //     }
-                    
-            // }
+        }else if(index === 2){ // Delete
+            
         }else if(index === 3){ // share
 
         }
@@ -210,8 +199,8 @@ export default function DisplayPlaylistScreen(props){
             try {
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
                 if(response.data.status == "success"){ // search success
-                    console.log("success");
-                    console.log("musiclist is", response.data.musicList);
+                    // console.log("success");
+                    // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
                     var musics = [];
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
@@ -223,13 +212,13 @@ export default function DisplayPlaylistScreen(props){
                             console.log("error searching song", id);
                         }
                     }
-                    console.log(musics);
+                    // console.log(musics);
                     setMusics(Array.from(musics)); // deep copy
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
                     if(owner_response.data.status == "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
-                    console.log(owner_response.data.user);
+                    // console.log(owner_response.data.user);
                 }else{ // somehow failed
     
                 }
@@ -259,7 +248,7 @@ export default function DisplayPlaylistScreen(props){
     let deleteButton = null;
     let reorderButtons = null;
     if(musicList && owner){
-        if (props.userId === owner._id) {
+        if (userId === owner._id) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                     {(removePlaylist, { loading, error }) => 
                     <Mutation mutation={REMOVE_MUSICLIST}>
@@ -304,7 +293,6 @@ export default function DisplayPlaylistScreen(props){
             playlist_type = "Public Playlist";
             options[0] = "Make Private";
         }
-        console.log("changed playlist type", musicList);
         return(
             <div>
                 <Row>
@@ -342,7 +330,7 @@ export default function DisplayPlaylistScreen(props){
                                 <MenuItem
                                     key={option}
                                     onClick={(event) => handleMenuItemClick(event, index, 
-                                        musicList.isPublic, (props.userId === owner._id)
+                                        musicList.isPublic, (userId === owner._id)
                                     )}
                                 >
                                     {option}

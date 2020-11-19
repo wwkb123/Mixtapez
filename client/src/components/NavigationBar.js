@@ -29,7 +29,7 @@ class NavigationBar extends Component{
     }
 
     selectButtons = () =>{
-        if(this.props.signedUp){
+        if(localStorage.getItem('isSignedIn')){
             return(<Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>Sign Out</Button>)
         }
         else{
@@ -43,16 +43,16 @@ class NavigationBar extends Component{
     handleCreateNewList = async (e, addNewPlaylist) =>{
         e.preventDefault();
         console.log("Button Pressed");
-        if(this.props.signedUp){
+        if(localStorage.getItem('isSignedIn')){
             try {
-                let userId = this.props.userId;
+                let userId = localStorage.getItem('userId');
                const create_response = await UserAPI.post("/createMusicList", {userId});
                if (create_response.data.status == "success") {
-                   console.log(this.props.userId)
-                   console.log(create_response.data.musicListId)
+                //    console.log(this.props.userId)
+                //    console.log(create_response.data.musicListId)
                    addNewPlaylist({
                        variables:{
-                            id: this.props.userId,
+                            id: userId,
                             playlistId: create_response.data.musicListId
                        }
                    });

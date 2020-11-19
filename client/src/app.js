@@ -28,6 +28,7 @@ import FriendRequestsScreen from './components/FriendPage/FriendRequestsScreen';
 import EmailSentScreen from './components/EmailSentScreen';
 import ErrorScreen from './components/ErrorScreen';
 import Banner from './components/Banner'
+import UserAPI from './apis/UserAPI';
 
 class App extends Component{
     constructor(){
@@ -38,9 +39,19 @@ class App extends Component{
                         musicListId: ""};
     }
 
-    signedIn = (name,id) =>{
+    signedIn = async (name,id) =>{
         console.log("signed in");
         console.log(id)
+        localStorage.setItem('isSignedIn', true);  // store to session
+        localStorage.setItem('userId', id);
+        try{
+            const response = await UserAPI.get("/user/"+id);
+            if(response.data.status === "success"){ // search success
+                localStorage.setItem('user', response.data.user);
+            }
+        }catch(err){
+            console.log(err);
+        }
         this.setState({signedUp: true,
                         nickName: name,
                         userId: id});
@@ -49,6 +60,9 @@ class App extends Component{
     signedOut = () =>{
         console.log("signed out");
         window.location.href = '/';
+        localStorage.removeItem('isSignedIn');  // remove from session
+        localStorage.removeItem('userId');
+        localStorage.removeItem('user');
         this.setState({signedUp: false,
                         nickName: "",
                         userId: ""});
