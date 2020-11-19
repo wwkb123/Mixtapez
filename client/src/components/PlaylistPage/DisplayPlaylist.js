@@ -28,30 +28,6 @@ import Reorder, {
   } from 'react-reorder';
 
 
-
-const GET_LIST_DETAIL = gql`
-    query musicList($musicListId: String) {
-        musicList(id: $musicListId) {
-            musicListName
-            musics{
-                _id
-            }
-            owner{
-                _id
-            }
-            isPublic
-        }
-    }
-`;
-
-const GET_PLAYLIST = gql`
-    query user($userId: String) {
-        user(id: $userId) {
-            nickName
-        }
-    }
-`;
-
 const REMOVE_PLAYLIST = gql`
     mutation removePlaylist($userId: String!
                             $playlistId: String!
@@ -67,22 +43,6 @@ const REMOVE_MUSICLIST = gql`
     mutation removeMusicList($playlistId: String!
         ) {
             removeMusicList(id: $playlistId){
-                _id
-            }
-    }
-`;
-
-const UPDATE_MUSICLIST = gql`
-    mutation updateMusicList(
-        $playlistId: String!
-        $musicListName: String!
-        $isPublic: Boolean!
-        ) {
-            updateMusicList(
-                id: $playlistId
-                musicListName: $musicListName
-                isPublic: $isPublic
-            ){
                 _id
             }
     }

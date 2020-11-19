@@ -36,7 +36,8 @@ class App extends Component{
         this.state = {signedUp: false,
                         nickName: "",
                         userId: "",
-                        musicListId: ""};
+                        musicListId: "",
+                        queue: []};
     }
 
     signedIn = async (name,id) =>{
@@ -54,7 +55,8 @@ class App extends Component{
         }
         this.setState({signedUp: true,
                         nickName: name,
-                        userId: id});
+                        userId: id,
+                        queue:[]});
     }
 
     signedOut = () =>{
@@ -65,7 +67,8 @@ class App extends Component{
         localStorage.removeItem('user');
         this.setState({signedUp: false,
                         nickName: "",
-                        userId: ""});
+                        userId: "",
+                        queue:[]});
     }
 
 
@@ -91,7 +94,7 @@ class App extends Component{
                                 <Route path='/create' component={CreateNewList} />
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
-                                <Route path='/queue' component={QueueScreen} />
+                                <Route path='/queue' render={(props) => <QueueScreen queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/popup' component={Popup} />
