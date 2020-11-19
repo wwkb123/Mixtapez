@@ -108,7 +108,8 @@ class SearchScreen extends Component{
 
     onClose = () =>{
         var modal = document.getElementById("search_modal");
-        modal.style.display = "none";
+        if(modal)
+            modal.style.display = "none";
     }
 
     onAddPlaylistClick = async (e, musicListId, addMusicToMusicList, musics) => {

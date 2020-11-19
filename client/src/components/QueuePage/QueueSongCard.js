@@ -21,8 +21,8 @@ var options = [
 
 export default function QueueSongCard(props){
     var song = props.song;
-
     var modal_content = null;
+    var userId = localStorage.getItem('userId');
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -34,6 +34,24 @@ export default function QueueSongCard(props){
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const addSongToMusicList = async (e, songID, musicListID) => {
+        console.log(songID + " " + musicListID);
+        try{
+            const addSong_response = await UserAPI.post("/addSong", {
+                musicListID,
+                songID
+            });
+            if(addSong_response.data.status === "success"){  // close the modal
+                var modal = document.getElementById("modal");
+                if(modal)
+                    modal.style.display = "none";
+            }
+        }catch(err){
+            console.log(err);
+        }
+        
+    }
 
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
@@ -58,16 +76,34 @@ export default function QueueSongCard(props){
                 // console.log(song.name, "asdad");
                 var modal = document.getElementById("modal");
                 if(modal){
-                    // var handler = props.childSongIdHandler;
-                    // console.log(handler)
                     modal.style.display = "block";
                     var updateModalContentHandler = props.updateModalContentHandler;
-                    var test = [1,2,3];
-                    modal_content = test.map((elem, index) => {
-                        return <Button>{elem}, {index}</Button>
-                    })
+                    try{
+                        const musicLists_response = await UserAPI.get("/user/musicLists/"+userId);
+                        if(musicLists_response.data.status === "success"){
+                            var musicListsIDs = musicLists_response.data.musicLists;
+                            var musicLists = [];
+                            for(let i = 0; i < musicListsIDs.length; i++){
+                                const musicList_response = await UserAPI.get("/musicList/"+musicListsIDs[i]);
+                                if(musicList_response.data.status === "success"){
+                                    musicLists.push(musicList_response.data.musicList);
+                                }
+                            }
+                            modal_content = musicLists.map((musicList, index) => {
+                                return(
+                                    <div onClick={(e)=> addSongToMusicList(e, song._id, musicList._id)} className="playlist-card">
+                                        <div>{musicList.musicListName}</div>
+                                    </div>
+                                )
+                                
+                            })
+                            
+                            updateModalContentHandler(modal_content);
+                        }
+                    }catch(err){
+                        console.log(err);
+                    }
                     
-                    updateModalContentHandler(modal_content);
                     // handler(song.id, song);
                     
                 }

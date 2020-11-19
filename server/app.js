@@ -456,7 +456,7 @@ app.post('/api/user/nickName', async (req, res) => {
   });
 });
 
-// return all playlists of a user id
+// return all playlists IDs (not the object, as the objects are not stored in User) of a user id
 app.get('/api/user/musicLists/:id', async (req, res) => {
   await UserModel.findOne({'_id': req.params.id }, function (err, user) {
     if(user){
@@ -473,7 +473,7 @@ app.get('/api/user/musicLists/:id', async (req, res) => {
 });
 
 
-// return a speific playlist of that id
+// return a speific playlist object of that id
 app.get('/api/musicList/:id', async (req, res) => {
   await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
     if(musicList){
@@ -521,6 +521,38 @@ app.post('/api/setIsPublic', async (req, res) => {
       if (err) {
           console.log("Something wrong when updating playlist!");
       }
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });    
+});
+
+//append a song to a specific playlist
+app.post('/api/addSong', async (req, res) => {
+  await MusicListModel.findOne({'_id': req.body.musicListID }, function (err, musicList) {
+    if(musicList){
+      if (err) {
+          console.log("Something wrong when add song "+req.body.songID+"!");
+          res.status(200).json({
+            status: "error"
+          });
+      }
+      var musics = musicList.musics;
+      musics.push(req.body.songID);
+      musicList.musics = [...musics];
+      musicList.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+      res.status(200).json({
+        status: "success"
+      });
     }else{
       res.status(200).json({
         status: "error"
