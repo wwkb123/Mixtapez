@@ -10,6 +10,7 @@ import { IconContext } from "react-icons";
 import gql from 'graphql-tag'
 import {Mutation} from 'react-apollo'
 import EditNamePopup from './EditNamePopup'
+import UserAPI from "../../apis/UserAPI";
 
 const REMOVE_PLAYLIST = gql`
     mutation removePlaylist($userId: String!
@@ -74,6 +75,18 @@ class PlaylistCard extends Component {
                     playlistId: this.props.musicListId
                 }
             });
+            try{
+                const response = await UserAPI.get("/user/musicLists/"+this.props.userId);
+                if(response.data.status === "success"){ // search success
+                    console.log("success");
+                    console.log("musiclists is", response.data.musicLists);
+                    var playlistsChangeHandler = this.props.handler;
+                    playlistsChangeHandler(response.data.musicLists);
+                }
+            }catch(err){
+                console.log(err);
+            }
+            
         }
     }
 
@@ -123,7 +136,9 @@ class PlaylistCard extends Component {
                                     updateMusicList ={updateMusicList}
                                     musicListId = {playlistID}
                                     show = {this.state.popupDisplay}
+                                    userId={this.props.userId}
                                     ownerId = {this.props.ownerId}
+                                    handler={this.props.handler}
                                     handleClose = {this.handleCloseOnClick}
                                     isPublic={this.props.isPublic}
                                     />}

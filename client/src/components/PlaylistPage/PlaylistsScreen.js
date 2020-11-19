@@ -34,6 +34,21 @@ export default function PlaylistsScreen(props){
     const [playlists, setPlaylists] = React.useState(null);
     var userId = props.userId;
     
+    const handler = async (musicLists) => {
+        console.log('hangler triggered');
+        var newMusicLists = [];
+        for(let i = 0; i < musicLists.length; i++){
+            let id = musicLists[i];
+            const playlist_response = await UserAPI.get("/musicList/"+id);
+            if(playlist_response.data.status === "success"){ // search success
+                newMusicLists.push(playlist_response.data.musicList);
+            }else{
+                console.log("error searching playlist", id);
+            }
+        }
+        setPlaylists(Array.from(newMusicLists));
+    }
+
     useEffect(() => {
         
         async function fetchData() {
@@ -79,7 +94,8 @@ export default function PlaylistsScreen(props){
                     userId={userId}
                     musicListId={musicList._id}
                     musicListName={musicList.musicListName}
-                    ownerId={musicList.owner}/>
+                    ownerId={musicList.owner}
+                    handler={handler}/>
                 )}   
             </div>
         );

@@ -103,6 +103,7 @@ export default function DisplayPlaylistScreen(props){
     const [musicList, setMusicList] = React.useState(null);
     const [musics, setMusics] = React.useState([]);
     const [owner, setOwner] = React.useState(null);
+    const [reorder_mode, setReOrderMode] = React.useState(false);
 
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -212,6 +213,17 @@ export default function DisplayPlaylistScreen(props){
         setMusics(reorder(musics, previousIndex, nextIndex));
     }
 
+    const onReOrderClick = () => {
+        setReOrderMode(true);
+    }
+
+    const onSaveClick = () => {
+        if(reorder_mode){
+            // save changes to backend
+
+            setReOrderMode(false);  // turn off reorder_mode
+        }
+    }
     console.log(props.match.params.id);
     let deleteButton = null;
     
@@ -225,6 +237,34 @@ export default function DisplayPlaylistScreen(props){
                     </Mutation>}
             </Mutation>                            
         }
+        var songcards = null;
+        if(reorder_mode){
+            songcards = <Reorder
+                reorderId="my-list" // Unique ID that is used internally to track this list (required)
+                reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
+                component="div"
+                placeholderClassName="placeholder" // Class name to be applied to placeholder elements (optional), defaults to 'placeholder'
+                draggedClassName="dragged" // Class name to be applied to dragged elements (optional), defaults to 'dragged'
+                lock="horizontal" // Lock the dragging direction (optional): vertical, horizontal (do not use with groups)
+                holdTime={0} // Default hold time before dragging begins (mouse & touch) (optional), defaults to 0
+                onReorder={onReorder} // Callback when an item is dropped (you will need this to update your state)
+                autoScroll={true} // Enable auto-scrolling when the pointer is close to the edge of the Reorder component (optional), defaults to true
+                disabled={false} // Disable reordering (optional), defaults to false
+                disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
+            >
+                {musics.map((music, index) => (
+                    <div key={music._id}><SongCard song={music}></SongCard></div>
+                ))}
+            </Reorder>
+        }else{
+            songcards = <div>{musics.map((music, index) => (
+                <div key={music._id}><SongCard song={music}></SongCard></div>
+            ))}</div>
+        }
+        var playlist_type = "Public Playlist";
+        if(!musicList.isPublic){
+            playlist_type = "Private Playlist";
+        }
         return(
             <div>
                 <Row>
@@ -233,11 +273,14 @@ export default function DisplayPlaylistScreen(props){
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
                         <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | 0 second</h4>
+                        <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
                     </Col>
                 </Row>
                 <Row xs={10}>
                     <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                         <MdPauseCircleOutline/>
+                        <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
+                        <Button className="search-btn" onClick={onSaveClick}>Save</Button>
                         {/* <AiOutlinePlusCircle/> */}
                         {deleteButton}
                         <IconButton
@@ -271,23 +314,7 @@ export default function DisplayPlaylistScreen(props){
                 </Row>
                 
                 <SongTitleCard></SongTitleCard>
-                <Reorder
-                    reorderId="my-list" // Unique ID that is used internally to track this list (required)
-                    reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
-                    component="div"
-                    placeholderClassName="placeholder" // Class name to be applied to placeholder elements (optional), defaults to 'placeholder'
-                    draggedClassName="dragged" // Class name to be applied to dragged elements (optional), defaults to 'dragged'
-                    lock="horizontal" // Lock the dragging direction (optional): vertical, horizontal (do not use with groups)
-                    holdTime={100} // Default hold time before dragging begins (mouse & touch) (optional), defaults to 0
-                    onReorder={onReorder} // Callback when an item is dropped (you will need this to update your state)
-                    autoScroll={true} // Enable auto-scrolling when the pointer is close to the edge of the Reorder component (optional), defaults to true
-                    disabled={false} // Disable reordering (optional), defaults to false
-                    disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
-                >
-                    {musics.map((music, index) => (
-                        <div key={music._id}><SongCard song={music}></SongCard></div>
-                    ))}
-                </Reorder>
+                { songcards }
                 
             </div>
     

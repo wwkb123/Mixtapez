@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import { TextField } from '@material-ui/core';
+import UserAPI from "../../apis/UserAPI";
 
 class EditNamePopup extends Component{
     constructor(props){
@@ -34,6 +35,17 @@ class EditNamePopup extends Component{
                     isPublic: this.props.isPublic
                 }
             })
+            try{
+                const response = await UserAPI.get("/user/musicLists/"+this.props.userId);
+                if(response.data.status === "success"){ // search success
+                    console.log("success");
+                    console.log("musiclists is", response.data.musicLists);
+                    var playlistsChangeHandler = this.props.handler;
+                    playlistsChangeHandler(response.data.musicLists);
+                }
+            }catch(err){
+                console.log(err);
+            }
             this.props.handleClose()
         }else{
             alert("cannot be empty")
