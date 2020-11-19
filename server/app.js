@@ -27,16 +27,23 @@ var spotifyApi = new SpotifyWebApi({
   clientSecret: '80205a921f5c4360acc65c72fe03a92f'
   // accessToken: 'BQCgfkvwWeXeJqTifbjqO4Tgj4v-EP_JYoh_w2e7bN5QsCy8jN3moQssUqTHtRC9YgLf8htziHFlWt-XKXs'
 });
-// Get an access token and 'save' it using a setter
-spotifyApi.clientCredentialsGrant().then(
-  function(data) {
-    console.log('The access token is ' + data.body['access_token']);
-    spotifyApi.setAccessToken(data.body['access_token']);
-  },
-  function(err) {
-    console.log('Something went wrong!', err);
-  }
-);
+
+function getNewToken(){
+  // Get an access token 
+  spotifyApi.clientCredentialsGrant().then(
+    function(data) {
+      console.log('The access token is ' + data.body['access_token']);
+      spotifyApi.setAccessToken(data.body['access_token']);
+    },
+    function(err) {
+      console.log('Something went wrong!', err);
+    }
+  );
+}
+
+getNewToken(); // get a new token when server starts
+
+refreshTokenInterval = setInterval(getNewToken, 1000 * 60 * 30);  // refresh it every 30 minutes
 
 var UserModel = require('./models/user');
 var MusicListModel = require('./models/musicList');
@@ -567,11 +574,21 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+// catch 401 and forward to error handler, possibly a spotify token expired error
+app.use(function(req, res, next) {
+  next(createError(401));
+});
+
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  if(res.statusCode === 401){
+    console.log("401 error, refreshing spotify token...");
+  }
 
   // render the error page
   res.status(err.status || 500);
