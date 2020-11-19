@@ -62,6 +62,7 @@ export default function DisplayPlaylistScreen(props){
     const [musics, setMusics] = React.useState([]);
     const [owner, setOwner] = React.useState(null);
     const [reorder_mode, setReOrderMode] = React.useState(false);
+    const [total_length, setTotalLength] = React.useState(0);
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -78,16 +79,19 @@ export default function DisplayPlaylistScreen(props){
                 setMusicList(response.data.musicList);
                 console.log("updatePlaylist", response.data.musicList);
                 var musics = [];
+                var music_length = 0;
                 for(let i = 0; i < response.data.musicList.musics.length; i++){
                     let id = response.data.musicList.musics[i];
                     const song_response = await UserAPI.get("/music/"+id);
                     if(song_response.data.status == "success"){ // search success
                         musics.push(song_response.data.music);
+                        music_length += song_response.data.music.length;
                     }else{
                         console.log("error searching song", id);
                     }
                 }
                 setMusics(Array.from(musics)); // deep copy
+                setTotalLength(music_length);
                 const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
                 if(owner_response.data.status == "success"){ // search success
                     setOwner(owner_response.data.user);
@@ -161,17 +165,20 @@ export default function DisplayPlaylistScreen(props){
                     // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
                     var musics = [];
+                    var music_length = 0;
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
                         let id = response.data.musicList.musics[i];
                         const song_response = await UserAPI.get("/music/"+id);
                         if(song_response.data.status == "success"){ // search success
                             musics.push(song_response.data.music);
+                            music_length += song_response.data.music.length;
                         }else{
                             console.log("error searching song", id);
                         }
                     }
                     // console.log(musics);
                     setMusics(Array.from(musics)); // deep copy
+                    setTotalLength(music_length);
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
                     if(owner_response.data.status == "success"){ // search success
                         setOwner(owner_response.data.user);
@@ -282,6 +289,15 @@ export default function DisplayPlaylistScreen(props){
             playlist_type = "Public Playlist";
             options[0] = "Make Private";
         }
+        var hours = 0;
+        hours = Math.round(total_length / 3600);
+        if(hours < 10) hours = "0"+hours;
+        var minutes = 0;
+        minutes = Math.round(total_length / 60);
+        if(minutes < 10) minutes = "0"+minutes;
+        var seconds = 0;
+        seconds = Math.round(total_length % 60);
+        if(seconds < 10) seconds = "0"+seconds;
         return(
             <div>
                 <Row>
@@ -289,7 +305,7 @@ export default function DisplayPlaylistScreen(props){
                     </img>
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
-                        <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | 0 second</h4>
+                        <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
                     </Col>
                 </Row>
