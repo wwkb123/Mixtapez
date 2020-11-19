@@ -51,6 +51,10 @@ export default function QueueScreen(props){
       setAnchorEl(null);
     };
 
+    const updateMusicsHandler = (musics_new) =>{
+        setMusics([...musics_new]);
+    }
+
     useEffect(() => {
         async function fetchData() {
             console.log(queue)
@@ -70,6 +74,7 @@ export default function QueueScreen(props){
     const onSaveClick = async () => {
         if(reorder_mode){
             // save playlist order
+            localStorage.setItem('queue', JSON.stringify(musics));
             setReOrderMode(false);  // turn off reorder_mode
         }else{
             console.log("won't able to save");
@@ -208,7 +213,7 @@ export default function QueueScreen(props){
             >
                 {musics.map((music, index) => (
                     <div key={music.id}>
-                        <SongCard song={music}></SongCard>
+                        <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
                         </div>
                 ))}
             </Reorder>
@@ -216,7 +221,7 @@ export default function QueueScreen(props){
             console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
                 <div key={music.id}>
-                    <SongCard song={music}></SongCard>
+                    <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
                     </div>
             ))}</div>
         }

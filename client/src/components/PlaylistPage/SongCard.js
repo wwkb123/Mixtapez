@@ -10,7 +10,6 @@ import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
-//import music from '../../../../server/models/music';
 
 const options = [
     'Add to Queue',
@@ -81,7 +80,7 @@ export default function SongCard(props){
                     let index = 0;
                     for (let i = 0; i < queue.length; i++) {
                         const music = queue[i];
-                        if(music.name === song.name && music.artists[0].name === song.artists[0].name && music.duration_ms == song.duration_ms){
+                        if(music.id === song.id){
                             index = i;
                             break;
                         }
@@ -92,6 +91,8 @@ export default function SongCard(props){
                     }
                     console.log("after remove"+queue);
                     localStorage.setItem('queue', JSON.stringify(queue))
+                    var updateMusicsHandler = props.updateMusicsHandler;
+                    updateMusicsHandler(queue);
                 }
             }
         }
