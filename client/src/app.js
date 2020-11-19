@@ -65,7 +65,7 @@ class App extends Component{
         window.location.href = '/';
         localStorage.removeItem('isSignedIn');  // remove from session
         localStorage.removeItem('userId');
-        localStorage.removeItem('user');
+        localStorage.removeItem('userNickName');
         this.setState({signedUp: false,
                         nickName: "",
                         userId: "",
