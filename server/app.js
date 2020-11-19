@@ -406,6 +406,7 @@ app.post('/api/search/playlist', async (req, res) => {
   });
 });
 
+// return the user object with a given id (POST)
 app.post('/api/user', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, function (err, user) {
     if(user){
@@ -421,6 +422,7 @@ app.post('/api/user', async (req, res) => {
   });
 });
 
+// return the user object with a given id (GET)
 app.get('/api/user/:id', async (req, res) => {
   await UserModel.findOne({'_id': req.params.id }, function (err, user) {
     if(user){
@@ -436,6 +438,8 @@ app.get('/api/user/:id', async (req, res) => {
   });
 });
 
+
+// return the nickname with a given id
 app.post('/api/user/nickName', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, 'nickName', function (err, user) {
     console.log(user);
@@ -452,6 +456,7 @@ app.post('/api/user/nickName', async (req, res) => {
   });
 });
 
+// return all playlists of a user id
 app.get('/api/user/musicLists/:id', async (req, res) => {
   await UserModel.findOne({'_id': req.params.id }, function (err, user) {
     if(user){
@@ -467,6 +472,8 @@ app.get('/api/user/musicLists/:id', async (req, res) => {
   });
 });
 
+
+// return a speific playlist of that id
 app.get('/api/musicList/:id', async (req, res) => {
   await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
     if(musicList){
@@ -482,6 +489,7 @@ app.get('/api/musicList/:id', async (req, res) => {
   });
 });
 
+// return a specific music with a given music id
 app.get('/api/music/:id', async (req, res) => {
   await MusicModel.findOne({_id: req.params.id}, function (err, music) {
     if(music){

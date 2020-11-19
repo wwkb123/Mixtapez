@@ -62,7 +62,11 @@ export default function QueueSongCard(props){
                     // console.log(handler)
                     modal.style.display = "block";
                     var updateModalContentHandler = props.updateModalContentHandler;
-                    modal_content = <Button>test</Button>
+                    var test = [1,2,3];
+                    modal_content = test.map((elem, index) => {
+                        return <Button>{elem}, {index}</Button>
+                    })
+                    
                     updateModalContentHandler(modal_content);
                     // handler(song.id, song);
                     
