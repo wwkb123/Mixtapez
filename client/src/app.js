@@ -33,11 +33,19 @@ import UserAPI from './apis/UserAPI';
 class App extends Component{
     constructor(){
         super()
-        this.state = {signedUp: false,
+        this.state = {
+                        signedUp: false,
                         nickName: "",
                         userId: "",
                         musicListId: "",
-                        queue: []};
+                        queue: [],
+                        modal_content: null
+                    };
+    }
+
+    onModalClose = () =>{
+        var modal = document.getElementById("main_modal");
+        modal.style.display = "none";
     }
 
     signedIn = async (name,id) =>{
@@ -76,6 +84,9 @@ class App extends Component{
                         queue:[]});
     }
 
+    updateModalContentHandler = (content) => {
+        this.setState({modal_content:content});
+    }
 
     render(){
         return(
@@ -88,6 +99,7 @@ class App extends Component{
                             userId={this.state.userId}
                             signedUp={this.state.signedUp}
                             signedOut={this.signedOut}
+                            updateModalContentHandler={this.updateModalContentHandler}
                             />
                         </Col>
                         <Col xs={9} className="white-bg" style={{'height':'90vh', 'overflow':'scroll', 'overflowX': 'hidden'}}>
@@ -96,13 +108,13 @@ class App extends Component{
                                 <Route path='/friends' component={FriendScreen} />
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' component={ProfileScreen} />
-                                <Route path='/create' component={CreateNewList} />
+                                {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
-                                <Route path='/popup' component={Popup} />
+                                {/* <Route path='/popup' component={Popup} /> */}
                                 <Route path='/signin'  render={(props) => <SignInScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
@@ -119,6 +131,12 @@ class App extends Component{
                     </Row>
                 </Container>
                 <AudioPlayerBar/>
+                <div id="main_modal" className="modal">
+                    <div className="modal-content">
+                        <span onClick={this.onModalClose} className="close">&times;</span>
+                        { this.state.modal_content }
+                    </div>
+                </div>
             </div>
         );
     }

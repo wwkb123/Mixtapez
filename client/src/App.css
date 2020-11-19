@@ -68,7 +68,7 @@ body {
 }
 
 .white-bg{
-  background-color: white;
+  background-color: white !important;
 }
 
 .volume-slider{
@@ -208,7 +208,7 @@ body {
   width: fit-content;
   margin: 0 5px;
   background-color: #F06E9C !important;
-  border: none !important;
+  border: solid 2px #F06E9C !important;
   transition: 0.2s;
 }
 .search-btn:focus{
@@ -216,6 +216,22 @@ body {
 }
 .search-btn:hover{
   background-color: #ed4e85 !important;
+}
+
+.cancel-btn, .cancel-btn:active, .cancel-btn:focus{
+  /* width: 10%; */
+  width: fit-content;
+  margin: 0 5px;
+  background-color: white !important;
+  border: solid 2px #F06E9C !important;
+  transition: 0.2s;
+  color: #ed4e85 !important;
+}
+.cancel-btn:focus{
+  box-shadow: 0 0 0 0.2rem rgb(237 78 144);
+}
+.cancel-btn:hover{
+  background-color: white !important;
 }
 
 .modal{

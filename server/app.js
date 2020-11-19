@@ -277,7 +277,7 @@ app.post('/api/changePassword', async (req, res) => {
 
 // create a new playlist and return its Id
 app.post('/api/createMusicList', async (req, res) => {
-  const musicListModel = new MusicListModel({musicListName: "New List",
+  const musicListModel = new MusicListModel({musicListName: req.body.musicListName,
                                              owner: req.body.userId,
                                              isPublic: true,
                                              lastUpdate: new Date()});
