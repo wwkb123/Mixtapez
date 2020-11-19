@@ -46,6 +46,9 @@ class App extends Component{
         localStorage.setItem('isSignedIn', true);  // store to session
         localStorage.setItem('userId', id);
         localStorage.setItem('userNickName', name);
+        var queue = localStorage.getItem('queue');
+        if(!queue)
+            localStorage.setItem('queue', []);
         // try{
         //     const response = await UserAPI.get("/user/"+localStorage.getItem('userId'));
         //     if(response.data.status === "success"){ // search success
@@ -66,6 +69,7 @@ class App extends Component{
         localStorage.removeItem('isSignedIn');  // remove from session
         localStorage.removeItem('userId');
         localStorage.removeItem('userNickName');
+        // localStorage.removeItem('queue');
         this.setState({signedUp: false,
                         nickName: "",
                         userId: "",

@@ -233,7 +233,7 @@ body {
   background-color: gray !important;
 }
 
-.disabled:hover, .search-btn:active, .search-btn:focus{
+.disabled:hover, .disabled:active, .disabled:focus{
   background-color: gray !important;
   cursor: default !important;
   border: none !important;

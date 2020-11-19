@@ -63,6 +63,11 @@ export default function DisplayPlaylistScreen(props){
     const [owner, setOwner] = React.useState(null);
     const [reorder_mode, setReOrderMode] = React.useState(false);
     const [total_length, setTotalLength] = React.useState(0);
+    const [title_ascending, setTitleAscending] = React.useState(true);
+    const [artist_ascending, setArtistAscending] = React.useState(true);
+    const [album_ascending, setAlbumAscending] = React.useState(true);
+    const [time_ascending, setTimeAscending] = React.useState(true);
+
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -153,6 +158,102 @@ export default function DisplayPlaylistScreen(props){
                 }
             });
             props.history.push('/playlists');
+        }
+    }
+
+    const onTitleClickHandler = () => {
+        console.log("handler triggered");
+        if(musics){
+            var coeff = 1;  // to toggle ascending/descending order
+            if(!title_ascending){
+                coeff = -1;
+            }
+            musics.sort((music1, music2)=>{
+                if(music1.musicName < music2.musicName){
+                    return -1 * coeff;
+                }else if(music1.musicName > music2.musicName){
+                    return 1 * coeff;
+                }else{
+                    return 0;
+                }
+            });
+            setMusics([...musics]);
+            setTitleAscending(!title_ascending);
+            setArtistAscending(true);
+            setAlbumAscending(true);
+            setTimeAscending(true);
+        }
+    }
+
+    const onArtistClickHandler = () => {
+        console.log("handler triggered");
+        if(musics){
+            var coeff = 1;  // to toggle ascending/descending order
+            if(!artist_ascending){
+                coeff = -1;
+            }
+            musics.sort((music1, music2)=>{
+                if(music1.artist < music2.artist){
+                    return -1 * coeff;
+                }else if(music1.artist > music2.artist){
+                    return 1 * coeff;
+                }else{
+                    return 0;
+                }
+            });
+            setMusics([...musics]);
+            setTitleAscending(true);
+            setArtistAscending(!artist_ascending);
+            setAlbumAscending(true);
+            setTimeAscending(true);
+        }
+    }
+
+    const onAlbumClickHandler = () => {
+        console.log("handler triggered");
+        if(musics){
+            var coeff = 1;  // to toggle ascending/descending order
+            if(!album_ascending){
+                coeff = -1;
+            }
+            musics.sort((music1, music2)=>{
+                if(music1.album < music2.album){
+                    return -1 * coeff;
+                }else if(music1.album > music2.album){
+                    return 1 * coeff;
+                }else{
+                    return 0;
+                }
+            });
+            setMusics([...musics]);
+            setTitleAscending(true);
+            setArtistAscending(true);
+            setAlbumAscending(!album_ascending);
+            setTimeAscending(true);
+        }
+    }
+
+    const onTimeClickHandler = () => {
+        console.log("handler triggered");
+        if(musics){
+            var coeff = 1;  // to toggle ascending/descending order
+            if(!time_ascending){
+                coeff = -1;
+            }
+            musics.sort((music1, music2)=>{
+                if(music1.length < music2.length){
+                    return -1 * coeff;
+                }else if(music1.musicName > music2.musicName){
+                    return 1 * coeff;
+                }else{
+                    return 0;
+                }
+            });
+            setMusics([...musics]);
+            setTitleAscending(true);
+            setArtistAscending(true);
+            setAlbumAscending(true);
+            setTimeAscending(!time_ascending);
         }
     }
 
@@ -345,7 +446,13 @@ export default function DisplayPlaylistScreen(props){
                     </IconContext.Provider>
                 </Row>
                 
-                <SongTitleCard></SongTitleCard>
+                <SongTitleCard
+                reorder_mode={reorder_mode}
+                onTitleClickHandler={onTitleClickHandler}
+                onArtistClickHandler={onArtistClickHandler}
+                onAlbumClickHandler={onAlbumClickHandler}
+                onTimeClickHandler={onTimeClickHandler}
+                ></SongTitleCard>
                 { songcards }
                 
             </div>

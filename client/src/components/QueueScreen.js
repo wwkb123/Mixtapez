@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../apis/UserAPI";
-import SongCard from "./PlaylistPage/SongCard";
+import SongCard from "./PlaylistPage/SongCard.js";
 import SongTitleCard from './SongTitleCard';
 
 import Reorder, {
@@ -27,41 +27,16 @@ import Reorder, {
     reorderFromToImmutable
   } from 'react-reorder';
 
-
-const REMOVE_PLAYLIST = gql`
-    mutation removePlaylist($userId: String!
-                            $playlistId: String!
-        ) {
-        removePlaylist(id: $userId
-                    playlistId: $playlistId){
-                        _id
-                    }
-    }
-`;
-
-const REMOVE_MUSICLIST = gql`
-    mutation removeMusicList($playlistId: String!
-        ) {
-            removeMusicList(id: $playlistId){
-                _id
-            }
-    }
-`;
-
-const options = [
-    'Make Private',  // should toggle with Make Public
-    'Edit Details',
-    'Delete',
-    'Share'
-  ];
-
 export default function QueueScreen(props){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [musicList, setMusicList] = React.useState(null);
     const [musics, setMusics] = React.useState([]);
     const [owner, setOwner] = React.useState(null);
     const [reorder_mode, setReOrderMode] = React.useState(false);
-
+    const [total_length, setTotalLength] = React.useState(0);
+    var userId = localStorage.getItem('userId');
+    var queue = localStorage.getItem('queue');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -70,39 +45,10 @@ export default function QueueScreen(props){
       setAnchorEl(null);
     };
 
-    const updatePlaylist = async () => {  // use setstate to trigger re-render
-        try{
-                var musics = [];
-                for(let i = 0; i < props.queue.length; i++){
-                    let id = props.queue[i];
-                    const song_response = await UserAPI.get("/music/"+id);
-                    if(song_response.data.status == "success"){ // search success
-                        musics.push(song_response.data.music);
-                    }else{
-                        console.log("error searching song", id);
-                    }
-                }
-                setMusics(Array.from(musics)); // deep copy
-                setOwner(localStorage.getItem('user'));
-                console.log("owner", localStorage.getItem('user'));
-            
-        }catch(err){
-            console.log(err);
-        }
-    }
-
-
     useEffect(() => {
         async function fetchData() {
-            try{
-                console.log(props.queue);
-                setMusics(Array.from(props.queue)); // deep copy
-                setOwner(localStorage.getItem('user'));
-                console.log("owner", localStorage.getItem('user'));
-            }catch(err){
-                console.log(err);
-            }
-                }
+            setMusics(queue);
+        }
         fetchData();
       }, []);
     
@@ -114,22 +60,36 @@ export default function QueueScreen(props){
         setReOrderMode(true);
     }
 
-    const onSaveClick = () => {
+    const onSaveClick = async () => {
         if(reorder_mode){
-            // save changes to backend
-
+            // save playlist order
             setReOrderMode(false);  // turn off reorder_mode
+        }else{
+            console.log("won't able to save");
         }
     }
-    let deleteButton = null;
+
+    const onSaveQueueClick = async () => {
+        // save queue as a playlist, send info to backend
+    }
+
     let reorderButtons = null;
-    if(owner){
-        reorderButtons =<div>
-                            <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
-                            <Button className="search-btn" onClick={onSaveClick}>Save</Button>
-                        </div>       
+    let reorder_class = ""
+    let save_class = ""
+    if(reorder_mode){  // if mode is on
+        reorder_class = "search-btn disabled";
+        save_class = "search-btn"
+    }else{
+        reorder_class = "search-btn";
+        save_class = "search-btn disabled"
+    }
+    if(queue !== null){
+        reorderButtons =  <div>
+            <Button className={reorder_class} onClick={onReOrderClick}>Re-Order</Button>
+            <Button className={save_class} onClick={onSaveClick}>Save Changes</Button>
+            </div>       
         var songcards = null;
-        if(reorder_mode){
+        if(reorder_mode && musics && musics.length > 0){
             songcards = <Reorder
                 reorderId="my-list" // Unique ID that is used internally to track this list (required)
                 reorderGroup="reorder-group" // A group ID that allows items to be dragged between lists of the same group (optional)
@@ -144,35 +104,35 @@ export default function QueueScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={""} song={music}></SongCard></div>
+                    <div key={music._id}><SongCard musicListId={musicList._id} song={music}></SongCard></div>
                 ))}
             </Reorder>
-        }else{
+        }else if(musics && musics.length > 0){
             songcards = <div>{musics.map((music, index) => (
-                <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={""} song={music}></SongCard></div>
+                <div key={music._id}><SongCard musicListId={musicList._id} song={music}></SongCard></div>
             ))}</div>
         }
-        var playlist_type = "";
-        
+        var hours = 0;
+        hours = Math.round(total_length / 3600);
+        if(hours < 10) hours = "0"+hours;
+        var minutes = 0;
+        minutes = Math.round(total_length / 60);
+        if(minutes < 10) minutes = "0"+minutes;
+        var seconds = 0;
+        seconds = Math.round(total_length % 60);
+        if(seconds < 10) seconds = "0"+seconds;
         return(
             <div>
                 <Row>
                     <img src={Image} width={175} height={175} alt="">
                     </img>
                     <Col>
-                        <h1 style={{fontWeight: "bold"}} >Current Queue </h1>              
-                        <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | 0 second</h4>
-                        <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
+                        {/* <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>               */}
+                        <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
+                        <Button className="search-btn" onClick={onSaveQueueClick}>Save Queue</Button>
                     </Col>
                 </Row>
-                <Row xs={10}>
-                    <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                        <MdPauseCircleOutline/>
-                        { reorderButtons }
-                        {/* <AiOutlinePlusCircle/> */}
-                        {deleteButton}
-                    </IconContext.Provider>
-                </Row>
+                { reorderButtons }
                 
                 <SongTitleCard></SongTitleCard>
                 { songcards }
@@ -190,82 +150,3 @@ export default function QueueScreen(props){
 }
 
 
-
-
-
-// class QueueScreen extends Component{
-    
-//     render() {
-//         return(
-//             <div>
-//                 <br/><h1>Queue</h1>
-//                 <Button style={{"width":"10%"}} className="nav-btn">Save</Button>
-//                 <br/>
-//                 <Container>
-//                     <Row className="border-bottom-accent">
-//                         <Col xs={2}>
-//                             Like
-//                         </Col>
-//                         <Col xs={2}>
-//                             Title
-//                         </Col>
-//                         <Col xs={2}>
-//                             Artist
-//                         </Col>
-//                         <Col xs={2}>
-//                             Album
-//                         </Col>
-//                         <Col xs={2}>
-//                             Time
-//                         </Col>
-//                         <Col xs={2}>
-//                             Options
-//                         </Col>
-//                     </Row>
-//                     <Row className="border-bottom-accent">
-//                         <Col xs={2}>
-//                             &#9825;
-//                         </Col>
-//                         <Col xs={2}>
-//                             Song1
-//                         </Col>
-//                         <Col xs={2}>
-//                             ABC
-//                         </Col>
-//                         <Col xs={2}>
-//                             AAA
-//                         </Col>
-//                         <Col xs={2}>
-//                             01:11
-//                         </Col>
-//                         <Col xs={2}>
-//                             ...
-//                         </Col>
-//                     </Row>
-//                     <Row className="border-bottom-accent">
-//                         <Col xs={2}>
-//                             &#9825;
-//                         </Col>
-//                         <Col xs={2}>
-//                             Nice Song
-//                         </Col>
-//                         <Col xs={2}>
-//                             Him
-//                         </Col>
-//                         <Col xs={2}>
-//                             That album
-//                         </Col>
-//                         <Col xs={2}>
-//                             02:02
-//                         </Col>
-//                         <Col xs={2}>
-//                             ...
-//                         </Col>
-//                     </Row>
-//                 </Container>
-//             </div>
-
-//         );
-//     }
-// }
-// export default QueueScreen;
