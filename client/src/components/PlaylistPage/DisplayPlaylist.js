@@ -226,7 +226,7 @@ export default function DisplayPlaylistScreen(props){
     }
     console.log(props.match.params.id);
     let deleteButton = null;
-    
+    let reorderButtons = null;
     if(musicList && owner){
         if (props.userId === musicList.owner) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
@@ -235,7 +235,11 @@ export default function DisplayPlaylistScreen(props){
                             {(removeMusicList, { loading, error }) => 
                                 <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
                     </Mutation>}
-            </Mutation>                            
+            </Mutation>
+            reorderButtons =  <div>
+                <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
+                <Button className="search-btn" onClick={onSaveClick}>Save</Button>
+                </div>       
         }
         var songcards = null;
         if(reorder_mode){
@@ -279,8 +283,7 @@ export default function DisplayPlaylistScreen(props){
                 <Row xs={10}>
                     <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                         <MdPauseCircleOutline/>
-                        <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
-                        <Button className="search-btn" onClick={onSaveClick}>Save</Button>
+                        { reorderButtons }
                         {/* <AiOutlinePlusCircle/> */}
                         {deleteButton}
                         <IconButton
