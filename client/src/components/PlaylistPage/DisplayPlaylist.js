@@ -67,7 +67,8 @@ export default function DisplayPlaylistScreen(props){
     const [artist_ascending, setArtistAscending] = React.useState(true);
     const [album_ascending, setAlbumAscending] = React.useState(true);
     const [time_ascending, setTimeAscending] = React.useState(true);
-
+    const [modal_content, setModalContent] = React.useState(null);
+    
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -76,6 +77,11 @@ export default function DisplayPlaylistScreen(props){
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const updateModalContentHandler = (content) => {
+        setModalContent(content);
+    }
+
 
     const updatePlaylist = async () => {  // use setstate to trigger re-render
         try{
@@ -331,6 +337,10 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
+    const onModalClose = () =>{
+        var modal = document.getElementById("modal");
+        modal.style.display = "none";
+    }
 
 
     let deleteButton = null;
@@ -374,12 +384,25 @@ export default function DisplayPlaylistScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div style={{'cursor':'move'}} key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
+                    <div style={{'cursor':'move'}} key={music._id}>
+                        <PlaylistSongCard 
+                            updateModalContentHandler={updateModalContentHandler}
+                            updatePlaylist={updatePlaylist} 
+                            musicListId={musicList._id} 
+                            song={music}>
+                        </PlaylistSongCard>
+                    </div>
                 ))}
             </Reorder>
         }else{
             songcards = <div>{musics.map((music, index) => (
-                <div key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
+                <div key={music._id}>
+                    <PlaylistSongCard
+                        updateModalContentHandler={updateModalContentHandler}
+                        updatePlaylist={updatePlaylist}
+                        musicListId={musicList._id} 
+                        song={music}>
+                    </PlaylistSongCard></div>
             ))}</div>
         }
         var playlist_type = "";
@@ -454,6 +477,13 @@ export default function DisplayPlaylistScreen(props){
                 onTimeClickHandler={onTimeClickHandler}
                 ></SongTitleCard>
                 { songcards }
+
+                <div id="modal" className="modal">
+                    <div className="modal-content">
+                        <span onClick={onModalClose} className="close">&times;</span>
+                        { modal_content }
+                    </div>
+                </div>
                 
             </div>
     

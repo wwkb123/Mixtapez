@@ -50,7 +50,6 @@ export default function QueueSongCard(props){
         }catch(err){
             console.log(err);
         }
-        
     }
 
     const handleMenuItemClick = async (event, index) => {
@@ -71,7 +70,7 @@ export default function QueueSongCard(props){
         if(mode === "add_like"){ // add to liked songs
 
         }else if(mode === "add_playlist"){ // add to playlist
-            if(song){
+            if(song && userId){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
                 var modal = document.getElementById("modal");
@@ -95,19 +94,13 @@ export default function QueueSongCard(props){
                                         <div>{musicList.musicListName}</div>
                                     </div>
                                 )
-                                
                             })
-                            
                             updateModalContentHandler(modal_content);
                         }
                     }catch(err){
                         console.log(err);
                     }
-                    
-                    // handler(song.id, song);
-                    
-                }
-                    
+                }   
             }
         }else if(mode === "share"){ // share
 
