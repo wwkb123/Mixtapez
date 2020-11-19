@@ -63,10 +63,10 @@ export default function SongCard(props){
     
     if(song){
         var minutes = 0;
-        minutes = Math.round((song.length/1000) / 60);
+        minutes = Math.round((song.length) / 60);
         if(minutes < 10) minutes = "0"+minutes;
         var seconds = 0;
-        seconds = Math.round((song.length/1000) % 60);
+        seconds = Math.round((song.length) % 60);
         if(seconds < 10) seconds = "0"+seconds;
         var artist = "N/A";
         if(song.artist){
