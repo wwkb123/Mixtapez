@@ -516,6 +516,27 @@ app.post('/api/setIsPublic', async (req, res) => {
   });    
 });
 
+//remove a song from a specific playlist
+app.post('/api/removeSong', async (req, res) => {
+  await MusicListModel.update({'_id': req.body.musicListId },  { "$pull": { "musics": req.body.songID }}, { safe: true, multi:true }, function (err, musicList) {
+    if(musicList){
+      if (err) {
+          console.log("Something wrong when removing song "+req.body.songID+"!");
+          res.status(200).json({
+            status: "error"
+          });
+      }
+      res.status(200).json({
+        status: "success"
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });    
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

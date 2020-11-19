@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import UserAPI from "../../apis/UserAPI";
 
 const options = [
     'Add to Queue',
@@ -33,7 +34,7 @@ export default function SongCard(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index) => {
+    const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
@@ -56,7 +57,22 @@ export default function SongCard(props){
         }else if(index === 3){ // share
 
         }else if(index == 4){  // remove
-
+            if(song){
+                // alert("hi" + song.name+ " "+song._id);
+                try{
+                    const response = await UserAPI.post("/removeSong", {
+                        musicListId: props.musicListId,
+                        songID: song._id
+                    });
+                    if(response.data.status === "success"){ // search success
+                        // console.log("update isPublic success");
+                        var updatePlaylist = props.updatePlaylist;
+                        updatePlaylist();
+                    }
+                }catch(err){
+                    console.log(err);
+                }
+            }
         }
     };
 

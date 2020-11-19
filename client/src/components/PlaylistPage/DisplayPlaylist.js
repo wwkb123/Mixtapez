@@ -12,13 +12,11 @@ import { pink } from '@material-ui/core/colors';
 import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsTrashFill } from "react-icons/bs";
 import gql from 'graphql-tag'
-import MusicCard from './MusicCard'
 import {Query, Mutation} from 'react-apollo'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
-import axios from "axios";
 import SongCard from "./SongCard.js";
 import SongTitleCard from './SongTitleCard';
 
@@ -290,12 +288,12 @@ export default function DisplayPlaylistScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}><SongCard song={music}></SongCard></div>
+                    <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></SongCard></div>
                 ))}
             </Reorder>
         }else{
             songcards = <div>{musics.map((music, index) => (
-                <div key={music._id}><SongCard song={music}></SongCard></div>
+                <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></SongCard></div>
             ))}</div>
         }
         var playlist_type = "";
