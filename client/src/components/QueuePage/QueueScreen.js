@@ -45,7 +45,6 @@ export default function QueueScreen(props){
     const [musicListName, setMusicListName] = React.useState("");
     const [page, setPage] = React.useState(0);
 
-
     var userId = localStorage.getItem('userId');
     var queue = JSON.parse(localStorage.getItem('queue'));
     const handleClick = (event) => {
@@ -70,6 +69,8 @@ export default function QueueScreen(props){
     }
 
     const changePageHandler = (event, value)=>{
+        console.log("previous page:"+page)
+        setPage(value);
         console.log("clicked :"+value);
         
     }
@@ -78,6 +79,7 @@ export default function QueueScreen(props){
         async function fetchData() {
             console.log(queue)
             setMusics(queue);
+            setPage(1);
             var music_length = 0;
             for(let i = 0; i < queue.length; i++){
                 music_length += queue[i].length;
@@ -284,7 +286,7 @@ export default function QueueScreen(props){
             </Reorder>
         }else if(musics && musics.length > 0){
             console.log('musics are '+ musics);
-            songcards = <div>{musics.map((music, index) => (
+            songcards = <div>{musics.slice((page-1)*10,page*10).map((music, index) => (
                 <div key={music._id}>
                     <QueueSongCard
                     updateModalContentHandler={updateModalContentHandler}
@@ -323,7 +325,7 @@ export default function QueueScreen(props){
                 onTimeClickHandler={onTimeClickHandler}
                 ></SongTitleCard>
                 { songcards }
-                <Pagination count={10} shape="rounded" size="large" onChange={changePageHandler}/>
+                <Pagination count={parseInt(musics.length/10+(musics.length%10 > 0?1:0))} shape="rounded" size="large" onChange={changePageHandler}/>
 
                 <div id="modal" className="modal">
                     <div className="modal-content">
