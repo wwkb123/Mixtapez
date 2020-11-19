@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 class AudioPlayerBar extends Component {
     render() {
         return (
-            <div className="secondary-bg">
+            <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10'}}>
                 <Container>
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>

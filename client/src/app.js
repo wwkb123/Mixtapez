@@ -45,14 +45,15 @@ class App extends Component{
         console.log(id)
         localStorage.setItem('isSignedIn', true);  // store to session
         localStorage.setItem('userId', id);
-        try{
-            const response = await UserAPI.get("/user/"+id);
-            if(response.data.status === "success"){ // search success
-                localStorage.setItem('user', response.data.user);
-            }
-        }catch(err){
-            console.log(err);
-        }
+        localStorage.setItem('userNickName', name);
+        // try{
+        //     const response = await UserAPI.get("/user/"+localStorage.getItem('userId'));
+        //     if(response.data.status === "success"){ // search success
+        //         localStorage.setItem('user', response.data.user);
+        //     }
+        // }catch(err){
+        //     console.log(err);
+        // }
         this.setState({signedUp: true,
                         nickName: name,
                         userId: id,
@@ -75,7 +76,7 @@ class App extends Component{
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
-                <Container>
+                <Container style={{'height':'100vh'}}>
                     <Banner nickName={this.state.nickName}/>
                     <Row>
                         <Col xs={3}>
@@ -85,7 +86,7 @@ class App extends Component{
                             signedOut={this.signedOut}
                             />
                         </Col>
-                        <Col xs={9} className="white-bg">
+                        <Col xs={9} className="white-bg" style={{'height':'90vh', 'overflow':'scroll', 'overflowX': 'hidden'}}>
                             <Switch>
                                 <Route exact path='/' component={HomeScreen} />
                                 <Route path='/friends' component={FriendScreen} />
