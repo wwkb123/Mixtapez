@@ -60,12 +60,10 @@ export default function SongCard(props){
                         console.log(create_response.data.musicId)
                         let id = create_response.data.musicId
                         const song_response = await UserAPI.get("/music/"+id);
-                        console.log("music:"+song_response.data)
-                        console.log('Queue is '+queue);
-                        console.log('Song is '+song.id);
-                        queue.push(song_response.data.music);
-                        console.log(JSON.stringify(queue))
-                        localStorage.setItem('queue', JSON.stringify(queue))
+                        if(song_response.data.status == "success"){
+                            queue.push(song_response.data.music);
+                            localStorage.setItem('queue', JSON.stringify(queue))
+                        }
                     }
                 } catch (error) {
                     console.log(error)

@@ -243,7 +243,7 @@ export default function DisplayPlaylistScreen(props){
             musics.sort((music1, music2)=>{
                 if(music1.length < music2.length){
                     return -1 * coeff;
-                }else if(music1.musicName > music2.musicName){
+                }else if(music1.length > music2.length){
                     return 1 * coeff;
                 }else{
                     return 0;

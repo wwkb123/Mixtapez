@@ -80,7 +80,7 @@ export default function SongCard(props){
                     let index = 0;
                     for (let i = 0; i < queue.length; i++) {
                         const music = queue[i];
-                        if(music.id === song.id){
+                        if(music._id === song._id){
                             index = i;
                             break;
                         }

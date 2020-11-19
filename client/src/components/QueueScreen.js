@@ -167,7 +167,7 @@ export default function QueueScreen(props){
             musics.sort((music1, music2)=>{
                 if(music1.length < music2.length){
                     return -1 * coeff;
-                }else if(music1.musicName > music2.musicName){
+                }else if(music1.length > music2.length){
                     return 1 * coeff;
                 }else{
                     return 0;
@@ -212,7 +212,7 @@ export default function QueueScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music.id}>
+                    <div key={music._id}>
                         <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
                         </div>
                 ))}
@@ -220,7 +220,7 @@ export default function QueueScreen(props){
         }else if(musics && musics.length > 0){
             console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
-                <div key={music.id}>
+                <div key={music._id}>
                     <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
                     </div>
             ))}</div>
