@@ -52,6 +52,8 @@ export default function QueueSongCard(props){
         }
     }
 
+
+
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
@@ -203,7 +205,6 @@ export default function QueueSongCard(props){
                         </Col>
                     </Row>
                 </Container>
-                
             </div>
         );
     }else{

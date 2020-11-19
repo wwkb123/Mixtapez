@@ -62,7 +62,27 @@ export default function MusicCard(props){
         setAnchorEl(null);
         console.log('id is', musicId);
         if(index === 0){  // add to queue
-            
+            try {            
+                console.log(musicId)
+                let id = musicId
+                const song_response = await UserAPI.get("/music/"+id);
+                console.log(song_response.data.music)
+                if(song_response.data.status == "success"){
+                    let contains = queue.map((music)=>{
+                        if (music._id === song_response.data.music._id) {
+                            return true
+                        }else{
+                            return false
+                        }
+                    }).reduce((a,b)=>{ return(a||b) }, -Infinity);
+                    if (!contains) {
+                        queue.push(song_response.data.music);
+                        localStorage.setItem('queue', JSON.stringify(queue))
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }else if(index === 1){ // add to liked songs
 
         }else if(index === 2){ // add to playlist

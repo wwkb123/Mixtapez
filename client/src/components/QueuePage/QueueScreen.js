@@ -20,6 +20,7 @@ import UserAPI from "../../apis/UserAPI";
 import QueueSongCard from "./QueueSongCard.js";
 import SongTitleCard from './SongTitleCard';
 import { TextField } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 
 import Reorder, {
     reorder,
@@ -42,6 +43,7 @@ export default function QueueScreen(props){
     const [time_ascending, setTimeAscending] = React.useState(true);
     const [modal_content, setModalContent] = React.useState(null);
     const [musicListName, setMusicListName] = React.useState("");
+    const [page, setPage] = React.useState(0);
 
 
     var userId = localStorage.getItem('userId');
@@ -65,6 +67,11 @@ export default function QueueScreen(props){
     const handleChange = (e) => {
         const {target} = e;
         setMusicListName(target.value);
+    }
+
+    const changePageHandler = (event, value)=>{
+        console.log("clicked :"+value);
+        
     }
 
     useEffect(() => {
@@ -316,7 +323,7 @@ export default function QueueScreen(props){
                 onTimeClickHandler={onTimeClickHandler}
                 ></SongTitleCard>
                 { songcards }
-                
+                <Pagination count={10} shape="rounded" size="large" onChange={changePageHandler}/>
 
                 <div id="modal" className="modal">
                     <div className="modal-content">

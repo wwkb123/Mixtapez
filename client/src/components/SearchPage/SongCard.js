@@ -66,7 +66,8 @@ export default function SongCard(props){
                                 }else{
                                     return false
                                 }
-                            }).reduce((a,b)=>{ return(a||b) }, -Infinity);
+                            }).reduce((a,b)=>{ return(a||b) });
+                            console.log(contains);
                             if (!contains) {
                                 queue.push(song_response.data.music);
                                 localStorage.setItem('queue', JSON.stringify(queue))

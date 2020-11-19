@@ -72,17 +72,33 @@ export default function PlaylistSongCard(props){
         
 
         if(mode === "add_queue"){  // add to queue
-            let queue = localStorage.getItem('queue');
-            if(queue){
-                queue = JSON.parse(queue);
-            }else{
-                queue = [];
-            }
-            let id = song._id;
-            const song_response = await UserAPI.get("/music/"+id);
-            if(song_response.data.status == "success"){
-                queue.push(song_response.data.music);
-                localStorage.setItem('queue', JSON.stringify(queue))
+            try {      
+                let queue = localStorage.getItem('queue');
+                if(queue){
+                    queue = JSON.parse(queue);
+                }else{
+                    queue = [];
+                }      
+                console.log(song._id)
+                let id = song._id
+                const song_response = await UserAPI.get("/music/"+id);
+                console.log(song_response.data.music)
+                if(song_response.data.status == "success"){
+                    let contains = queue.map((music)=>{
+                        if (music._id === song_response.data.music._id) {
+                            return true
+                        }else{
+                            return false
+                        }
+                    }).reduce((a,b)=>{ return(a||b) });
+                    console.log(contains);
+                    if (!contains) {
+                        queue.push(song_response.data.music);
+                        localStorage.setItem('queue', JSON.stringify(queue))
+                    }
+                }
+            } catch (error) {
+                console.log(error)
             }
         }else if(mode === "add_like"){ // add to liked songs
 
