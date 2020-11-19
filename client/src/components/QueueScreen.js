@@ -39,6 +39,7 @@ export default function QueueScreen(props){
     const [artist_ascending, setArtistAscending] = React.useState(true);
     const [album_ascending, setAlbumAscending] = React.useState(true);
     const [time_ascending, setTimeAscending] = React.useState(true);
+    const [modal_content, setModalContent] = React.useState(null);
 
 
     var userId = localStorage.getItem('userId');
@@ -51,8 +52,12 @@ export default function QueueScreen(props){
       setAnchorEl(null);
     };
 
-    const updateMusicsHandler = (musics_new) =>{
+    const updateMusicsHandler = (musics_new) => {
         setMusics([...musics_new]);
+    }
+
+    const updateModalContentHandler = (content) => {
+        setModalContent(content);
     }
 
     useEffect(() => {
@@ -187,6 +192,11 @@ export default function QueueScreen(props){
         }
     }
 
+    const onModalClose = () =>{
+        var modal = document.getElementById("modal");
+        modal.style.display = "none";
+    }
+
     let reorderButtons = null;
     let reorder_class = ""
     let save_class = ""
@@ -219,7 +229,11 @@ export default function QueueScreen(props){
             >
                 {musics.map((music, index) => (
                     <div key={music._id}>
-                        <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
+                        <SongCard 
+                        updateModalContentHandler={updateModalContentHandler}
+                        isQueue={true} 
+                        song={music} 
+                        updateMusicsHandler={updateMusicsHandler}></SongCard>
                         </div>
                 ))}
             </Reorder>
@@ -227,7 +241,11 @@ export default function QueueScreen(props){
             console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
                 <div key={music._id}>
-                    <SongCard song={music} updateMusicsHandler={updateMusicsHandler}></SongCard>
+                    <SongCard
+                    updateModalContentHandler={updateModalContentHandler}
+                    isQueue={true}
+                    song={music} 
+                    updateMusicsHandler={updateMusicsHandler}></SongCard>
                     </div>
             ))}</div>
         }
@@ -248,7 +266,7 @@ export default function QueueScreen(props){
                     <Col>
                         {/* <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>               */}
                         <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
-                        <Button className="search-btn" onClick={onSaveQueueClick}>Save Queue</Button>
+                        <Button className="search-btn" onClick={onSaveQueueClick}>Save As Playlist</Button>
                     </Col>
                 </Row>
                 { reorderButtons }
@@ -262,6 +280,13 @@ export default function QueueScreen(props){
                 ></SongTitleCard>
                 { songcards }
                 
+
+                <div id="modal" className="modal">
+                    <div className="modal-content">
+                        <span onClick={onModalClose} className="close">&times;</span>
+                        { modal_content }
+                    </div>
+                </div>
             </div>
     
         );

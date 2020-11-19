@@ -104,8 +104,6 @@ export default function SongCard(props){
         var album = "N/A";
         if(song.album.name){
             album = song.album.name;
-        }else if(song.album){
-            album = song.album
         }
         return(
             <div>

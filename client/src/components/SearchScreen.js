@@ -226,51 +226,51 @@ class SearchScreen extends Component{
 
                 <div id="search_modal" className="modal">
 
-                <div className="modal-content">
-                    <span onClick={this.onClose} className="close">&times;</span>
-                    <Query query={GET_PLAYLIST} variables={{userId: userId}}>
-                    {({loading, error, data}) => 
-                    {
-                        if (loading) return 'Loading...';
-                        if (error) return `Error! ${error.message}`;
-                        if(data.user){  // check if user has signed in
-                            return(<div>
-                                {
-                                
-                                data.user.musicLists.map( (musicList) => 
-                                        (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
-                                        key={musicList}>
-                                        {({loading, error, data}) =>{
-                                            if (loading) return 'Loading...';
-                                            if (error) return `Error! ${error.message}`;
-                                            if(data.musicList)
-                                                console.log(data.musicList.owner);
-                                            //return(<div></div>)
-                                            if(data.musicList && data.musicList.owner){
-                                                return(
-                                                <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
-                                                    {(addMusicToMusicList, { loading, error }) => 
-                                                    <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList, data.musicList.musics)} className="playlist-card">
-                                                        <div>{data.musicList.musicListName}</div>
-                                                    </div>}
-                                                </Mutation>
-                                                
-                                                
-                                                
-                                                )
-                                            }else{
-                                                return <></>
-                                            }
-                                        }                                   
-                                    }
-                                    </Query>))
-                            }</div>)
-                        }else{
-                            return <></>
-                        }
-                        
-                        }}</Query>
-                </div>
+                    <div className="modal-content">
+                        <span onClick={this.onClose} className="close">&times;</span>
+                        <Query query={GET_PLAYLIST} variables={{userId: userId}}>
+                        {({loading, error, data}) => 
+                        {
+                            if (loading) return 'Loading...';
+                            if (error) return `Error! ${error.message}`;
+                            if(data.user){  // check if user has signed in
+                                return(<div>
+                                    {
+                                    
+                                    data.user.musicLists.map( (musicList) => 
+                                            (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
+                                            key={musicList}>
+                                            {({loading, error, data}) =>{
+                                                if (loading) return 'Loading...';
+                                                if (error) return `Error! ${error.message}`;
+                                                if(data.musicList)
+                                                    console.log(data.musicList.owner);
+                                                //return(<div></div>)
+                                                if(data.musicList && data.musicList.owner){
+                                                    return(
+                                                    <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
+                                                        {(addMusicToMusicList, { loading, error }) => 
+                                                        <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList, data.musicList.musics)} className="playlist-card">
+                                                            <div>{data.musicList.musicListName}</div>
+                                                        </div>}
+                                                    </Mutation>
+                                                    
+                                                    
+                                                    
+                                                    )
+                                                }else{
+                                                    return <></>
+                                                }
+                                            }                                   
+                                        }
+                                        </Query>))
+                                }</div>)
+                            }else{
+                                return <></>
+                            }
+                            
+                            }}</Query>
+                    </div>
 
                 </div>
                 

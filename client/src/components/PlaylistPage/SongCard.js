@@ -11,7 +11,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 
-const options = [
+var options = [
     'Add to Queue',
     'Save to Liked Songs',
     'Add to Playlist',
@@ -22,6 +22,17 @@ const options = [
 
 export default function SongCard(props){
     var song = props.song;
+
+    if(props.isQueue){
+        options = [
+            'Save to Liked Songs',
+            'Add to Playlist',
+            'Share',
+            'Remove from Queue'
+          ];
+    }
+
+    var modal_content = null;
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -37,29 +48,58 @@ export default function SongCard(props){
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
-        if(index === 0){  // add to queue
-            
-        }else if(index === 1){ // add to liked songs
+        var mode = ""
+        if(props.isQueue){
+            if(index === 0){ // add to liked songs
+                mode = "add_like";
+            }else if(index === 1){ // add to playlist
+                mode = "add_playlist";
+            }else if(index === 2){ // share
+                mode = "share";
+            }else if(index === 3){  // remove
+                mode = "remove";
+            }
+        }else{  // normal playlist
+            if(index === 0){  // add to queue
+                mode = "add_queue";
+            }else if(index === 1){ // add to liked songs
+                mode = "add_like";
+            }else if(index === 2){ // add to playlist
+                mode = "add_playlist";
+            }else if(index === 3){ // share
+                mode = "share";
+            }else if(index === 4){  // remove
+                mode = "remove";
+            }
+        }
 
-        }else if(index === 2){ // add to playlist
+        if(mode === "add_queue"){  // add to queue
+            
+        }else if(mode === "add_like"){ // add to liked songs
+
+        }else if(mode === "add_playlist"){ // add to playlist
             if(song){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
-                var modal = document.getElementById("search_modal");
+                var modal = document.getElementById("modal");
                 if(modal){
-                    var handler = props.childSongIdHandler;
+                    // var handler = props.childSongIdHandler;
                     // console.log(handler)
                     modal.style.display = "block";
-                    handler(song.id,song);
+                    var updateModalContentHandler = props.updateModalContentHandler;
+                    modal_content = <Button>test</Button>
+                    updateModalContentHandler(modal_content);
+                    // handler(song.id, song);
+                    
                 }
                     
             }
-        }else if(index === 3){ // share
+        }else if(mode === "share"){ // share
 
-        }else if(index == 4){  // remove
+        }else if(mode === "remove"){  // remove
             if(song){
                 // alert("hi" + song.name+ " "+song._id);
-                if(props.musicListId){
+                if(!props.isQueue){
                     try{
                         const response = await UserAPI.post("/removeSong", {
                             musicListId: props.musicListId,
