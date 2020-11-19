@@ -126,7 +126,7 @@ export default function DisplayPlaylistScreen(props){
             }
         }else if(index === 1){ // Edit Details
 
-        }else if(index === 2){ // Delete
+        }else if(index === 2){ // Delete this playlist
             
         }else if(index === 3){ // share
 
@@ -137,11 +137,9 @@ export default function DisplayPlaylistScreen(props){
         e.preventDefault();
         console.log('click to remove');
         if(true){
-            console.log(props.userId);
-            console.log(props.match.params.id);
             await removePlaylist({
                 variables:{
-                    userId: props.userId,
+                    userId: userId,
                     playlistId: props.match.params.id
                 }
             });
@@ -197,16 +195,45 @@ export default function DisplayPlaylistScreen(props){
         setReOrderMode(true);
     }
 
-    const onSaveClick = () => {
+    const onSaveClick = async () => {
         if(reorder_mode){
             // save changes to backend
-
+            var musicIDs = [];
+            for(let i = 0; i < musics.length; i++){
+                musicIDs.push(musics[i]._id);
+            }
+            try{
+                const response = await UserAPI.post("/updateMusicList", {
+                    id: musicList._id,
+                    musics: musicIDs
+                });
+                if(response.data.status === "success"){ // search success
+                    // console.log("update isPublic success");
+                    // var updatePlaylist = props.updatePlaylist;
+                    // updatePlaylist();
+                }else{
+                    console.log("error");
+                }
+            }catch(err){
+                console.log(err);
+            }
             setReOrderMode(false);  // turn off reorder_mode
+        }else{
+            console.log("won't able to save");
         }
     }
-    console.log(props.match.params.id);
+
     let deleteButton = null;
     let reorderButtons = null;
+    let reorder_class = ""
+    let save_class = ""
+    if(reorder_mode){  // if mode is on
+        reorder_class = "search-btn disabled";
+        save_class = "search-btn"
+    }else{
+        reorder_class = "search-btn";
+        save_class = "search-btn disabled"
+    }
     if(musicList && owner){
         if (userId === owner._id) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
@@ -217,8 +244,8 @@ export default function DisplayPlaylistScreen(props){
                     </Mutation>}
             </Mutation>
             reorderButtons =  <div>
-                <Button className="search-btn" onClick={onReOrderClick}>Re-Order</Button>
-                <Button className="search-btn" onClick={onSaveClick}>Save</Button>
+                <Button className={reorder_class} onClick={onReOrderClick}>Re-Order</Button>
+                <Button className={save_class} onClick={onSaveClick}>Save</Button>
                 </div>       
         }
         var songcards = null;
