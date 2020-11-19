@@ -82,8 +82,10 @@ export default function SongCard(props){
             artist = song.artists[0].name
         }
         var album = "N/A";
-        if(song.album){
+        if(song.album.name){
             album = song.album.name;
+        }else if(song.album){
+            album = song.album
         }
         return(
             <div>

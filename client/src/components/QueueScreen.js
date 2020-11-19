@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../apis/UserAPI";
-import SongCard from "./SongCard.js";
+import SongCard from "./PlaylistPage/SongCard.js";
 import SongTitleCard from './PlaylistPage/SongTitleCard';
 
 import Reorder, {
@@ -208,7 +208,7 @@ export default function QueueScreen(props){
             >
                 {musics.map((music, index) => (
                     <div key={music.id}>
-                        <SongCard musicListId={0} song={music}></SongCard>
+                        <SongCard song={music}></SongCard>
                         </div>
                 ))}
             </Reorder>
@@ -216,7 +216,7 @@ export default function QueueScreen(props){
             console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
                 <div key={music.id}>
-                    <SongCard musicListId={0} song={music}></SongCard>
+                    <SongCard song={music}></SongCard>
                     </div>
             ))}</div>
         }

@@ -10,6 +10,7 @@ import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
+//import music from '../../../../server/models/music';
 
 const options = [
     'Add to Queue',
@@ -59,18 +60,38 @@ export default function SongCard(props){
         }else if(index == 4){  // remove
             if(song){
                 // alert("hi" + song.name+ " "+song._id);
-                try{
-                    const response = await UserAPI.post("/removeSong", {
-                        musicListId: props.musicListId,
-                        songID: song._id
-                    });
-                    if(response.data.status === "success"){ // search success
-                        // console.log("update isPublic success");
-                        var updatePlaylist = props.updatePlaylist;
-                        updatePlaylist();
+                if(props.musicListId){
+                    try{
+                        const response = await UserAPI.post("/removeSong", {
+                            musicListId: props.musicListId,
+                            songID: song._id
+                        });
+                        if(response.data.status === "success"){ // search success
+                            // console.log("update isPublic success");
+                            var updatePlaylist = props.updatePlaylist;
+                            updatePlaylist();
+                        }
+                    }catch(err){
+                        console.log(err);
                     }
-                }catch(err){
-                    console.log(err);
+                }
+                else{
+                    let queue = JSON.parse(localStorage.getItem('queue'));
+                    console.log("before remove"+queue);
+                    let index = 0;
+                    for (let i = 0; i < queue.length; i++) {
+                        const music = queue[i];
+                        if(music.name === song.name && music.artists[0].name === song.artists[0].name && music.duration_ms == song.duration_ms){
+                            index = i;
+                            break;
+                        }
+                    }
+                    console.log(index);
+                    if(index > -1){
+                        queue.splice(index, 1);
+                    }
+                    console.log("after remove"+queue);
+                    localStorage.setItem('queue', JSON.stringify(queue))
                 }
             }
         }
@@ -79,19 +100,35 @@ export default function SongCard(props){
     
     if(song){
         var minutes = 0;
-        minutes = Math.round((song.length) / 60);
-        if(minutes < 10) minutes = "0"+minutes;
         var seconds = 0;
-        seconds = Math.round((song.length) % 60);
-        if(seconds < 10) seconds = "0"+seconds;
+        if(song.length){
+            minutes = Math.round((song.length) / 60);
+            if(minutes < 10) minutes = "0"+minutes;
+            seconds = Math.round((song.length) % 60);
+            if(seconds < 10) seconds = "0"+seconds;
+        }else if(song.duration_ms){
+            minutes = Math.round((song.duration_ms/1000) / 60);
+            if(minutes < 10) minutes = "0"+minutes;
+            seconds = Math.round((song.duration_ms/1000) % 60);
+            if(seconds < 10) seconds = "0"+seconds;
+        }
         var artist = "N/A";
-        if(song.artist){
+        if(song.artists[0].name){
+            artist = song.artists[0].name
+        }else if(song.artist){
             artist = song.artist
         }
         var album = "N/A";
-        if(song.album){
-            console.log(song.album)
+        if(song.album.name){
+            album = song.album.name;
+        }else if(song.album){
             album = song.album
+        }
+        let title = "N/A"
+        if(song.musicName){
+            title = song.musicName
+        }else if(song.name){
+            title = song.name
         }
         return(
             <div>
@@ -102,7 +139,7 @@ export default function SongCard(props){
                         </Col>
                         <Col xs={3}>
                             {/* {data.music[id].musicName} */}
-                            { song.musicName }
+                            { title }
                         </Col>
                         <Col xs={2}>
                             {/* {data.music[id].artist} */}
