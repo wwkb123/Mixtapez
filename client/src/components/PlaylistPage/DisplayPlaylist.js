@@ -237,10 +237,29 @@ export default function DisplayPlaylistScreen(props){
         setReOrderMode(true);
     }
 
-    const onSaveClick = () => {
+    const onSaveClick = async () => {
         if(reorder_mode){
             // save changes to backend
-
+            var musicIDs = []
+            console.log("musics is", musics);
+            for(let i = 0; i < musics.length; i++){
+                musicIDs.push(musics[i]._id);
+            }
+            try{
+                const response = await UserAPI.post("/updateMusicList", {
+                    id: musicList._id,
+                    musics: musicIDs
+                });
+                if(response.data.status === "success"){ // search success
+                    // console.log("update isPublic success");
+                    // var updatePlaylist = props.updatePlaylist;
+                    // updatePlaylist();
+                }else{
+                    console.log("error");
+                }
+            }catch(err){
+                console.log(err);
+            }
             setReOrderMode(false);  // turn off reorder_mode
         }else{
             console.log("won't able to save");

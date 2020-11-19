@@ -462,7 +462,6 @@ app.get('/api/user/musicLists/:id', async (req, res) => {
 
 app.get('/api/musicList/:id', async (req, res) => {
   await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
-    console.log("musicList is", musicList);
     if(musicList){
       res.status(200).json({
         status: "success",
@@ -478,7 +477,6 @@ app.get('/api/musicList/:id', async (req, res) => {
 
 app.get('/api/music/:id', async (req, res) => {
   await MusicModel.findOne({_id: req.params.id}, function (err, music) {
-    console.log(music);
     if(music){
       res.status(200).json({
         status: "success",
@@ -546,16 +544,13 @@ app.post('/api/updateMusicList', async (req, res) => {
           res.status(200).json({
             status: "error"
           });
-          musicList.musics = [...req.body.musics];
-          musicList.save(function (err) {
-            if(err) {
-                console.error('ERROR!');
-              }
-          });
-          res.status(200).json({
-            status: "success"
-          });
       }
+      musicList.musics = [...req.body.musics];
+      musicList.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+          }
+      });
       res.status(200).json({
         status: "success"
       });
