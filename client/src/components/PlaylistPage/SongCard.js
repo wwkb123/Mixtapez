@@ -114,9 +114,7 @@ export default function SongCard(props){
             if(seconds < 10) seconds = "0"+seconds;
         }
         var artist = "N/A";
-        if(song.artists[0].name){
-            artist = song.artists[0].name
-        }else if(song.artist){
+        if(song.artist){
             artist = song.artist
         }
         var album = "N/A";

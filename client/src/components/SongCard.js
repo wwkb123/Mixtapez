@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import UserAPI from "../apis/UserAPI";
 
 const options = [
     'Add to Queue',
@@ -32,7 +33,7 @@ export default function SongCard(props){
       setAnchorEl(null);
     };
 
-    const handleMenuItemClick = (event, index) => {
+    const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
@@ -43,11 +44,32 @@ export default function SongCard(props){
                 }else{
                     queue = [];
                 }
-                console.log('Queue is '+queue);
-                console.log('Song is '+song.id);
-                queue.push(song);
-                console.log(JSON.stringify(queue))
-                localStorage.setItem('queue', JSON.stringify(queue))
+                let musicName = song.name;
+                let artist = song.artists[0].name;
+                let URI = song.id;
+                let album = song.album.name;
+                let length = Math.round(song.duration_ms/1000);
+                console.log(song.id)
+                try {
+                    const create_response = await UserAPI.post("/createMusic", {musicName,
+                        URI,
+                        album,
+                        length,
+                        artist});
+                    if (create_response.data.status == "success") {
+                        console.log(create_response.data.musicId)
+                        let id = create_response.data.musicId
+                        const song_response = await UserAPI.get("/music/"+id);
+                        console.log("music:"+song_response.data)
+                        console.log('Queue is '+queue);
+                        console.log('Song is '+song.id);
+                        queue.push(song_response.data.music);
+                        console.log(JSON.stringify(queue))
+                        localStorage.setItem('queue', JSON.stringify(queue))
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
         }else if(index === 1){ // add to liked songs
 
