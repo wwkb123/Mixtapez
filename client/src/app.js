@@ -111,7 +111,7 @@ class App extends Component{
                                 {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
-                                <Route path='/queue' render={(props) => <QueueScreen queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
+                                <Route path='/queue' render={(props) => <QueueScreen updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 {/* <Route path='/popup' component={Popup} /> */}

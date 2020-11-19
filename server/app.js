@@ -296,6 +296,29 @@ app.post('/api/createMusicList', async (req, res) => {
   });
 });
 
+// create a new playlist, with given list of musics, and return its Id
+app.post('/api/createMusicListWithMusics', async (req, res) => {
+  const musicListModel = new MusicListModel({musicListName: req.body.musicListName,
+                                             musics: [...req.body.musics],
+                                             owner: req.body.userId,
+                                             isPublic: true,
+                                             lastUpdate: new Date()});
+  console.log(musicListModel)
+  musicListModel.save((err)=>{
+    if (err) return handleError(err);
+  });
+  if (!musicListModel) {
+      res.status(200).json({
+        status: "failed"
+      });
+  }
+  res.status(200).json({
+    status: "success",
+    musicListId: musicListModel._id
+  });
+});
+
+
 // create a new music and return its Id
 app.post('/api/createMusic', async (req, res) => {
   const music = await MusicModel.find({musicName: req.body.musicName,

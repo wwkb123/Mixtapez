@@ -17,7 +17,13 @@ class AudioPlayerBar extends Component {
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={2} className="content-center">
-                                <Link to="/queue" style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
+                                <Link
+                                to={{
+                                    pathname: "/queue",
+                                    // state: {handler: this.props.updateModalContentHandler}
+                                }}
+                                
+                                style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
                             </Col>
                             <Col xs={2} className="content-center">
                                 <div>Song Name</div>

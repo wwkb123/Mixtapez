@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 import QueueSongCard from "./QueueSongCard.js";
 import SongTitleCard from './SongTitleCard';
+import { TextField } from '@material-ui/core';
 
 import Reorder, {
     reorder,
@@ -40,6 +41,7 @@ export default function QueueScreen(props){
     const [album_ascending, setAlbumAscending] = React.useState(true);
     const [time_ascending, setTimeAscending] = React.useState(true);
     const [modal_content, setModalContent] = React.useState(null);
+    const [musicListName, setMusicListName] = React.useState("");
 
 
     var userId = localStorage.getItem('userId');
@@ -58,6 +60,11 @@ export default function QueueScreen(props){
 
     const updateModalContentHandler = (content) => {
         setModalContent(content);
+    }
+
+    const handleChange = (e) => {
+        const {target} = e;
+        setMusicListName(target.value);
     }
 
     useEffect(() => {
@@ -91,8 +98,41 @@ export default function QueueScreen(props){
         }
     }
 
+    const openModal = () => {
+        if(localStorage.getItem('isSignedIn')){
+            var modal = document.getElementById("main_modal");
+            if(modal){
+                modal.style.display = "block";
+                var updateModalContentHandler = props.updateModalContentHandler;
+                var content = <div>
+                    <h2>Create New Playlist</h2>
+                    <div style={{"padding":"5px"}}>
+                        <TextField id="musicListName" size="small" placeholder="New List" variant="outlined" onChange={handleChange} />
+                    </div>
+                    {/* <Button className="search-btn" onClick={(e) => this.setMusicListNameHandler(e, addNewPlaylist)}>Create</Button> */}
+                    <Button className="cancel-btn" onClick={closeModal}>Cancel</Button>
+                    </div>
+                updateModalContentHandler(content);
+            }
+        }else{
+            alert("Please sign in first!");
+        }
+    }
+
+    const closeModal = () =>{
+        var modal = document.getElementById("main_modal");
+        modal.style.display = "none";
+    }
+
     const onSaveQueueClick = async () => {
         // save queue as a playlist, send info to backend
+        
+        var musics_IDs = [];
+        for(let i = 0; i < musics.length; i++){
+            musics_IDs.push(musics[i]._id);
+        }
+        console.log(musics_IDs);
+        openModal();
     }
 
     const onTitleClickHandler = () => {
@@ -175,7 +215,6 @@ export default function QueueScreen(props){
                 coeff = -1;
             }
             musics.sort((music1, music2)=>{
-                console.log(music1, music2);
                 if(music1.length < music2.length){
                     return -1 * coeff;
                 }else if(music1.length > music2.length){
