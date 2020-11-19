@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import data from './Mixtapez_data.json'
-import UserAPI from "../apis/UserAPI";
+import UserAPI from "../../apis/UserAPI";
 
 class PlaylistCard extends Component{
     constructor(props){

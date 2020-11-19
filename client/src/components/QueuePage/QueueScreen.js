@@ -2,7 +2,7 @@ import React, { Component, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Image from '../tempData/AbbeyRoad.jpg'
+import Image from '../../tempData/AbbeyRoad.jpg'
 import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
 import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
@@ -16,9 +16,9 @@ import {Query, Mutation} from 'react-apollo'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import UserAPI from "../apis/UserAPI";
-import SongCard from "./PlaylistPage/SongCard.js";
-import SongTitleCard from './PlaylistPage/SongTitleCard';
+import UserAPI from "../../apis/UserAPI";
+import QueueSongCard from "./QueueSongCard.js";
+import SongTitleCard from './SongTitleCard';
 
 import Reorder, {
     reorder,
@@ -229,11 +229,10 @@ export default function QueueScreen(props){
             >
                 {musics.map((music, index) => (
                     <div key={music._id}>
-                        <SongCard 
+                        <QueueSongCard 
                         updateModalContentHandler={updateModalContentHandler}
-                        isQueue={true} 
                         song={music} 
-                        updateMusicsHandler={updateMusicsHandler}></SongCard>
+                        updateMusicsHandler={updateMusicsHandler}></QueueSongCard>
                         </div>
                 ))}
             </Reorder>
@@ -241,11 +240,10 @@ export default function QueueScreen(props){
             console.log('musics are '+ musics);
             songcards = <div>{musics.map((music, index) => (
                 <div key={music._id}>
-                    <SongCard
+                    <QueueSongCard
                     updateModalContentHandler={updateModalContentHandler}
-                    isQueue={true}
                     song={music} 
-                    updateMusicsHandler={updateMusicsHandler}></SongCard>
+                    updateMusicsHandler={updateMusicsHandler}></QueueSongCard>
                     </div>
             ))}</div>
         }

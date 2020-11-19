@@ -12,14 +12,17 @@ import { Link } from 'react-router-dom';
 class AudioPlayerBar extends Component {
     render() {
         return (
-            <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10'}}>
+            <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
-                            <Col xs={4} className="content-center">
-                                <Link to="/queue"><MdPlaylistPlay /></Link>
-                                <span>Song Name</span>
+                            <Col xs={2} className="content-center">
+                                <Link to="/queue" style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
                             </Col>
+                            <Col xs={2} className="content-center">
+                                <div>Song Name</div>
+                            </Col>
+                            
                             <Col xs={4} className="content-center">
                                 <MdSkipPrevious />
                                 <MdPlayArrow />

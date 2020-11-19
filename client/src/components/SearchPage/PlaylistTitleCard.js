@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import data from './Mixtapez_data.json'
 
-class SongTitleCard extends Component{
+
+class PlaylistTitleCard extends Component{
     
     render() {
         return(
@@ -14,22 +14,16 @@ class SongTitleCard extends Component{
                 <Container>
                     <Row className="border-bottom-accent">
                         <Col xs={1}>
-                            Like
+                            Liked
                         </Col>
                         <Col xs={3}>
-                            Title
-                        </Col>
-                        <Col xs={2}>
-                            Artist
+                            Name
                         </Col>
                         <Col xs={3}>
-                            Album
-                        </Col>
-                        <Col xs={2}>
-                            Time
+                            Owner
                         </Col>
                         <Col xs={1}>
-                            Options
+                            Option
                         </Col>
                     </Row>
                 </Container>
@@ -37,4 +31,4 @@ class SongTitleCard extends Component{
         );
     }
 }
-export default SongTitleCard;
+export default PlaylistTitleCard;

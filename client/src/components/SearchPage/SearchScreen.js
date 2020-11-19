@@ -6,14 +6,14 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { TextField } from '@material-ui/core';
 import { NativeSelect } from '@material-ui/core';
-import UserAPI from "../apis/UserAPI";
+import UserAPI from "../../apis/UserAPI";
 import SongCard from "./SongCard.js";
 import SongTitleCard from "./SongTitleCard.js";
 import UserCard from "./UserCard.js";
 import PlaylistCard from "./PlaylistCard.js";
 import UserTitleCard from "./UserTitleCard.js";
 import PlaylistTitleCard from "./PlaylistTitleCard.js";
-import './modal.css';
+import '../modal.css';
 import gql from 'graphql-tag'
 import {Query, Mutation} from 'react-apollo'
 
@@ -94,8 +94,9 @@ class SearchScreen extends Component{
                     // this.props.signedIn(response.data.nickName);
                     // this.props.history.push('/');
                     console.log(response.data.results);
-                    this.setState({search_results: response.data.results});
                     this.setState({search_results_mode: search_for});
+                    this.setState({search_results: response.data.results});
+                    
                 }else{ // somehow failed
                     
                 }
@@ -170,6 +171,7 @@ class SearchScreen extends Component{
         var result_title_card = "";
         var result_cards = "";
         var userId = localStorage.getItem('userId');
+        console.log("select is", select);
         if(search_results ){  // && search_results.length > 0
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
@@ -239,7 +241,7 @@ class SearchScreen extends Component{
                                     
                                     data.user.musicLists.map( (musicList) => 
                                             (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
-                                            key={musicList}>
+                                            key={musicList._id}>
                                             {({loading, error, data}) =>{
                                                 if (loading) return 'Loading...';
                                                 if (error) return `Error! ${error.message}`;

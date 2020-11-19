@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
-import SongCard from "./SongCard.js";
+import PlaylistSongCard from "./PlaylistSongCard.js";
 import SongTitleCard from './SongTitleCard';
 
 import Reorder, {
@@ -374,12 +374,12 @@ export default function DisplayPlaylistScreen(props){
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
                 {musics.map((music, index) => (
-                    <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></SongCard></div>
+                    <div key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
                 ))}
             </Reorder>
         }else{
             songcards = <div>{musics.map((music, index) => (
-                <div key={music._id}><SongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></SongCard></div>
+                <div key={music._id}><PlaylistSongCard updatePlaylist={updatePlaylist} musicListId={musicList._id} song={music}></PlaylistSongCard></div>
             ))}</div>
         }
         var playlist_type = "";

@@ -13,9 +13,9 @@ import Col from 'react-bootstrap/Col'
 
 
 import DisplayPlaylistScreen from './components/PlaylistPage/DisplayPlaylist';
-import QueueScreen from './components/QueueScreen';
+import QueueScreen from './components/QueuePage/QueueScreen';
 import LikedSongsScreen from './components/LikedSongsScreen';
-import SearchScreen from './components/SearchScreen';
+import SearchScreen from './components/SearchPage/SearchScreen';
 import ProfileScreen from './components/ProfileScreen';
 
 import Popup from './components/Popup';

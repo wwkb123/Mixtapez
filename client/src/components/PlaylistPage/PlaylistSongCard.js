@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
@@ -20,17 +20,8 @@ var options = [
   ];
 
 
-export default function SongCard(props){
+export default function PlaylistSongCard(props){
     var song = props.song;
-
-    if(props.isQueue){
-        options = [
-            'Save to Liked Songs',
-            'Add to Playlist',
-            'Share',
-            'Remove from Queue'
-          ];
-    }
 
     var modal_content = null;
 
@@ -49,29 +40,19 @@ export default function SongCard(props){
         setSelectedIndex(index);
         setAnchorEl(null);
         var mode = ""
-        if(props.isQueue){
-            if(index === 0){ // add to liked songs
-                mode = "add_like";
-            }else if(index === 1){ // add to playlist
-                mode = "add_playlist";
-            }else if(index === 2){ // share
-                mode = "share";
-            }else if(index === 3){  // remove
-                mode = "remove";
-            }
-        }else{  // normal playlist
-            if(index === 0){  // add to queue
-                mode = "add_queue";
-            }else if(index === 1){ // add to liked songs
-                mode = "add_like";
-            }else if(index === 2){ // add to playlist
-                mode = "add_playlist";
-            }else if(index === 3){ // share
-                mode = "share";
-            }else if(index === 4){  // remove
-                mode = "remove";
-            }
+        // normal playlist
+        if(index === 0){  // add to queue
+            mode = "add_queue";
+        }else if(index === 1){ // add to liked songs
+            mode = "add_like";
+        }else if(index === 2){ // add to playlist
+            mode = "add_playlist";
+        }else if(index === 3){ // share
+            mode = "share";
+        }else if(index === 4){  // remove
+            mode = "remove";
         }
+        
 
         if(mode === "add_queue"){  // add to queue
             
@@ -99,45 +80,22 @@ export default function SongCard(props){
         }else if(mode === "remove"){  // remove
             if(song){
                 // alert("hi" + song.name+ " "+song._id);
-                if(!props.isQueue){
-                    try{
-                        const response = await UserAPI.post("/removeSong", {
-                            musicListId: props.musicListId,
-                            songID: song._id
-                        });
-                        if(response.data.status === "success"){ // search success
-                            // console.log("update isPublic success");
-                            var updatePlaylist = props.updatePlaylist;
-                            updatePlaylist();
-                        }
-                    }catch(err){
-                        console.log(err);
+                try{
+                    const response = await UserAPI.post("/removeSong", {
+                        musicListId: props.musicListId,
+                        songID: song._id
+                    });
+                    if(response.data.status === "success"){ // search success
+                        // console.log("update isPublic success");
+                        var updatePlaylist = props.updatePlaylist;
+                        updatePlaylist();
                     }
-                }
-                else{
-                    let queue = JSON.parse(localStorage.getItem('queue'));
-                    console.log("before remove"+queue);
-                    let index = 0;
-                    for (let i = 0; i < queue.length; i++) {
-                        const music = queue[i];
-                        if(music._id === song._id){
-                            index = i;
-                            break;
-                        }
-                    }
-                    console.log(index);
-                    if(index > -1){
-                        queue.splice(index, 1);
-                    }
-                    console.log("after remove"+queue);
-                    localStorage.setItem('queue', JSON.stringify(queue))
-                    var updateMusicsHandler = props.updateMusicsHandler;
-                    updateMusicsHandler(queue);
+                }catch(err){
+                    console.log(err);
                 }
             }
         }
     };
-
     
     if(song){
         var minutes = 0;

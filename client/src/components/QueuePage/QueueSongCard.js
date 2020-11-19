@@ -1,26 +1,28 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import data from './Mixtapez_data.json'
 import {MdMoreHoriz} from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import UserAPI from "../apis/UserAPI";
+import UserAPI from "../../apis/UserAPI";
 
-const options = [
-    'Add to Queue',
+var options = [
     'Save to Liked Songs',
     'Add to Playlist',
-    'Share'
+    'Share',
+    'Remove from Queue'
   ];
 
-export default function SongCard(props){
+
+export default function QueueSongCard(props){
     var song = props.song;
+
+    var modal_content = null;
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -36,74 +38,84 @@ export default function SongCard(props){
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
-        if(index === 0){  // add to queue
-            if(song){
-                let queue = localStorage.getItem('queue');
-                if(queue){
-                    queue = JSON.parse(queue);
-                }else{
-                    queue = [];
-                }
-                let musicName = song.name;
-                let artist = song.artists[0].name;
-                let URI = song.id;
-                let album = song.album.name;
-                let length = Math.round(song.duration_ms/1000);
-                console.log(song.id)
-                try {
-                    const create_response = await UserAPI.post("/createMusic", {musicName,
-                        URI,
-                        album,
-                        length,
-                        artist});
-                    if (create_response.data.status == "success") {
-                        console.log(create_response.data.musicId)
-                        let id = create_response.data.musicId
-                        const song_response = await UserAPI.get("/music/"+id);
-                        if(song_response.data.status == "success"){
-                            queue.push(song_response.data.music);
-                            localStorage.setItem('queue', JSON.stringify(queue))
-                        }
-                    }
-                } catch (error) {
-                    console.log(error)
-                }
-            }
-        }else if(index === 1){ // add to liked songs
+        var mode = ""
+        
+        if(index === 0){ // add to liked songs
+            mode = "add_like";
+        }else if(index === 1){ // add to playlist
+            mode = "add_playlist";
+        }else if(index === 2){ // share
+            mode = "share";
+        }else if(index === 3){  // remove
+            mode = "remove";
+        }
 
-        }else if(index === 2){ // add to playlist
+        if(mode === "add_like"){ // add to liked songs
+
+        }else if(mode === "add_playlist"){ // add to playlist
             if(song){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
-                var modal = document.getElementById("search_modal");
+                var modal = document.getElementById("modal");
                 if(modal){
-                    var handler = props.childSongIdHandler;
+                    // var handler = props.childSongIdHandler;
                     // console.log(handler)
                     modal.style.display = "block";
-                    handler(song.id,song);
+                    var updateModalContentHandler = props.updateModalContentHandler;
+                    modal_content = <Button>test</Button>
+                    updateModalContentHandler(modal_content);
+                    // handler(song.id, song);
+                    
                 }
                     
             }
-        }else if(index === 3){ // share
+        }else if(mode === "share"){ // share
 
+        }else if(mode === "remove"){  // remove
+            if(song){
+                // alert("hi" + song.name+ " "+song._id);
+                let queue = JSON.parse(localStorage.getItem('queue'));
+                console.log("before remove"+queue);
+                let index = 0;
+                for (let i = 0; i < queue.length; i++) {
+                    const music = queue[i];
+                    if(music._id === song._id){
+                        index = i;
+                        break;
+                    }
+                }
+                console.log(index);
+                if(index > -1){
+                    queue.splice(index, 1);
+                }
+                console.log("after remove"+queue);
+                localStorage.setItem('queue', JSON.stringify(queue))
+                var updateMusicsHandler = props.updateMusicsHandler;
+                updateMusicsHandler(queue);
+            }
         }
     };
-
     
     if(song){
         var minutes = 0;
-        minutes = Math.floor((song.duration_ms/1000) / 60);
-        if(minutes < 10) minutes = "0"+minutes;
         var seconds = 0;
-        seconds = Math.floor((song.duration_ms/1000) % 60);
-        if(seconds < 10) seconds = "0"+seconds;
+        if(song.length){
+            minutes = Math.floor((song.length) / 60);
+            if(minutes < 10) minutes = "0"+minutes;
+            seconds = Math.floor((song.length) % 60);
+            if(seconds < 10) seconds = "0"+seconds;
+        }
         var artist = "N/A";
-        if(song.artists){
-            artist = song.artists[0].name
+        if(song.artist){
+            artist = song.artist
         }
         var album = "N/A";
-        if(song.album.name){
-            album = song.album.name;
+        if(song.album){
+            album = song.album
+        }
+        let title = "N/A"
+        if(song.musicName){
+            title = song.musicName
         }
         return(
             <div>
@@ -114,7 +126,7 @@ export default function SongCard(props){
                         </Col>
                         <Col xs={3}>
                             {/* {data.music[id].musicName} */}
-                            { song.name }
+                            { title }
                         </Col>
                         <Col xs={2}>
                             {/* {data.music[id].artist} */}
