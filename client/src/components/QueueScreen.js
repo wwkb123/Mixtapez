@@ -59,6 +59,11 @@ export default function QueueScreen(props){
         async function fetchData() {
             console.log(queue)
             setMusics(queue);
+            var music_length = 0;
+            for(let i = 0; i < queue.length; i++){
+                music_length += queue[i].length;
+            }
+            setTotalLength(music_length);
         }
         fetchData();
       }, []);
@@ -165,6 +170,7 @@ export default function QueueScreen(props){
                 coeff = -1;
             }
             musics.sort((music1, music2)=>{
+                console.log(music1, music2);
                 if(music1.length < music2.length){
                     return -1 * coeff;
                 }else if(music1.length > music2.length){

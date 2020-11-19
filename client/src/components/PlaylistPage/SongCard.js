@@ -103,14 +103,9 @@ export default function SongCard(props){
         var minutes = 0;
         var seconds = 0;
         if(song.length){
-            minutes = Math.round((song.length) / 60);
+            minutes = Math.floor((song.length) / 60);
             if(minutes < 10) minutes = "0"+minutes;
-            seconds = Math.round((song.length) % 60);
-            if(seconds < 10) seconds = "0"+seconds;
-        }else if(song.duration_ms){
-            minutes = Math.round((song.duration_ms/1000) / 60);
-            if(minutes < 10) minutes = "0"+minutes;
-            seconds = Math.round((song.duration_ms/1000) % 60);
+            seconds = Math.floor((song.length) % 60);
             if(seconds < 10) seconds = "0"+seconds;
         }
         var artist = "N/A";
@@ -118,16 +113,12 @@ export default function SongCard(props){
             artist = song.artist
         }
         var album = "N/A";
-        if(song.album.name){
-            album = song.album.name;
-        }else if(song.album){
+        if(song.album){
             album = song.album
         }
         let title = "N/A"
         if(song.musicName){
             title = song.musicName
-        }else if(song.name){
-            title = song.name
         }
         return(
             <div>
