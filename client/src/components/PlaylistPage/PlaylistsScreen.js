@@ -7,6 +7,7 @@ import PlaylistCard from './PlaylistCard';
 import gql from 'graphql-tag'
 import {Query} from 'react-apollo'
 import UserAPI from "../../apis/UserAPI";
+import { TextField } from '@material-ui/core';
 
 const GET_PLAYLIST = gql`
     query user($userId: String) {
@@ -32,6 +33,7 @@ const GET_LIST_DETAIL = gql`
 
 export default function PlaylistsScreen(props){
     const [playlists, setPlaylists] = React.useState(null);
+    const [filter_criteria, setFilterCriteria] = React.useState("");
     // var userId = props.userId;
     var userId = localStorage.getItem('userId');
     
@@ -82,14 +84,26 @@ export default function PlaylistsScreen(props){
         fetchData();
     }, []);
 
+    const handleFilter = (e) => {
+        const {target} = e;
+        setFilterCriteria(target.value);
+    }
+
     if(!userId){  // or current logged in id is not equal to this id
         props.history.push('/signin');
     }
     if(playlists){
         return (
             <div>
+                
                 <br/><h1>All Playlists</h1>
-                {playlists.map( (musicList) => 
+
+                <div style={{"padding":"5px"}}>
+                    <TextField size="small" placeholder="Filter..." variant="outlined" 
+                    id="filter" onChange={handleFilter}/>
+                </div>
+
+                {playlists.filter(musicList => musicList.musicListName.toLowerCase().includes(filter_criteria)).map( (musicList) => 
                     <PlaylistCard
                     key={musicList._id}
                     isPublic={musicList.isPublic}

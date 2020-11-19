@@ -263,6 +263,8 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
+
+
     let deleteButton = null;
     let reorderButtons = null;
     let reorder_class = ""
