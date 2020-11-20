@@ -13,7 +13,7 @@ class ProfilePlaylistCard extends Component {
             <div>
                 <Link to={"/playlist/"+playlist._id} style={{'color':'#ed4e85'}}>
                     <div className="album-card">
-                        <img src={Image} width={100} height={100} alt=""/>
+                        <img src={Image} width={150} height={150} alt=""/>
                         <div>{playlist.musicListName}</div>
                     </div>
                 </Link>

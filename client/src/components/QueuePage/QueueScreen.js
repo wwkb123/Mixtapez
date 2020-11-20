@@ -293,7 +293,7 @@ export default function QueueScreen(props){
     }
     if(queue !== null){
         reorderButtons =  <div>
-            <Button className={reorder_class} onClick={onReOrderClick}>Re-Order</Button>
+            <Button className={reorder_class} onClick={onReOrderClick}>Reorder Songs</Button>
             <Button className={save_class} onClick={onSaveClick}>Save Changes</Button>
             </div>       
         var songcards = null;
@@ -314,7 +314,8 @@ export default function QueueScreen(props){
                 {musics
                 .map((music, index) => (
                     <div style={{'cursor':'move'}} key={music._id}>
-                        <QueueSongCard 
+                        <QueueSongCard
+                        reorder_mode={reorder_mode}
                         updateModalContentHandler={updateModalContentHandler}
                         song={music} 
                         updateMusicsHandler={updateMusicsHandler}
@@ -328,6 +329,7 @@ export default function QueueScreen(props){
                 .map((music, index) => (
                 <div key={music._id}>
                     <QueueSongCard
+                    reorder_mode={reorder_mode}
                     updateModalContentHandler={updateModalContentHandler}
                     song={music} 
                     updateMusicsHandler={updateMusicsHandler}

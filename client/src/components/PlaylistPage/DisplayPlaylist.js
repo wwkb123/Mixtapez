@@ -397,8 +397,8 @@ export default function DisplayPlaylistScreen(props){
                     </Mutation>}
             </Mutation>
             reorderButtons =  <div>
-                <Button className={reorder_class} onClick={onReOrderClick}>Re-Order</Button>
-                <Button className={save_class} onClick={onSaveClick}>Save</Button>
+                <Button className={reorder_class} onClick={onReOrderClick}>Reorder Songs</Button>
+                <Button className={save_class} onClick={onSaveClick}>Save Changes</Button>
                 </div>       
         }
         var songcards = null;
@@ -419,7 +419,8 @@ export default function DisplayPlaylistScreen(props){
                 {musics
                 .map((music, index) => (
                     <div style={{'cursor':'move'}} key={music._id}>
-                        <PlaylistSongCard 
+                        <PlaylistSongCard
+                            reorder_mode={reorder_mode}
                             updateModalContentHandler={updateModalContentHandler}
                             updatePlaylist={updatePlaylist} 
                             musicListId={musicList._id} 
@@ -433,6 +434,7 @@ export default function DisplayPlaylistScreen(props){
                 .map((music, index) => (
                 <div key={music._id}>
                     <PlaylistSongCard
+                        reorder_mode={reorder_mode}
                         updateModalContentHandler={updateModalContentHandler}
                         updatePlaylist={updatePlaylist}
                         musicListId={musicList._id} 

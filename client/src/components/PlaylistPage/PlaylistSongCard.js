@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import {MdMoreHoriz} from "react-icons/md";
+import {MdMoreHoriz, MdDragHandle} from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
+// import { GrDrag } from "react-icons/gr";
+// import { AiOutlineDrag } from "react-icons/ai";
 
 var options = [
     'Add to Queue',
@@ -183,12 +185,19 @@ export default function PlaylistSongCard(props){
         if(song.musicName){
             title = song.musicName
         }
+        var drag_icon = ""
+        if(props.reorder_mode){
+            drag_icon = 
+            <IconContext.Provider value={{ color: "#F06E9C", size: '25px' }}>
+                <MdDragHandle/>
+            </IconContext.Provider>
+        }
         return(
             <div>
                 <Container>
                     <Row className="border-bottom-accent">
                         <Col xs={1}>
-                            &#9825;
+                            { drag_icon }
                         </Col>
                         <Col xs={3}>
                             {/* {data.music[id].musicName} */}
