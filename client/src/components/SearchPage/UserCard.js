@@ -16,12 +16,9 @@ class UserCard extends Component{
                     <Link to={"/profile/"+user._id}>
                         <Container>
                             <Row className="border-bottom-accent">
-                                <Col xs={3}>
+                                <Col xs={4}>
                                     {/* {data.music[id].musicName} */}
                                     { user.nickName }
-                                </Col>
-                                <Col xs={1}>
-                                    {/* ... */}
                                 </Col>
                             </Row>
                         </Container>

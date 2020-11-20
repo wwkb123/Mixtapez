@@ -103,7 +103,7 @@ export default function PlaylistsScreen(props){
                     id="filter" onChange={handleFilter}/>
                 </div>
 
-                {playlists.filter(musicList => musicList.musicListName.toLowerCase().includes(filter_criteria)).map( (musicList) => 
+                {playlists.filter(musicList => musicList.musicListName.toLowerCase().includes(filter_criteria.toLowerCase())).map( (musicList) => 
                     <PlaylistCard
                     key={musicList._id}
                     isPublic={musicList.isPublic}
