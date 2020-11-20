@@ -19,6 +19,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 import PlaylistSongCard from "./PlaylistSongCard.js";
 import SongTitleCard from './SongTitleCard';
+import Pagination from '@material-ui/lab/Pagination';
 
 import Reorder, {
     reorder,
@@ -68,7 +69,8 @@ export default function DisplayPlaylistScreen(props){
     const [album_ascending, setAlbumAscending] = React.useState(true);
     const [time_ascending, setTimeAscending] = React.useState(true);
     const [modal_content, setModalContent] = React.useState(null);
-    
+    const [page, setPage] = React.useState(0);
+
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -82,6 +84,12 @@ export default function DisplayPlaylistScreen(props){
         setModalContent(content);
     }
 
+    const changePageHandler = (event, value)=>{
+        console.log("previous page:"+page)
+        setPage(value);
+        console.log("clicked :"+value);
+        
+    }
 
     const updatePlaylist = async () => {  // use setstate to trigger re-render
         try{
@@ -266,6 +274,7 @@ export default function DisplayPlaylistScreen(props){
     useEffect(() => {
         async function fetchData() {
             try {
+                setPage(1);
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
                 if(response.data.status == "success"){ // search success
                     // console.log("success");
@@ -383,7 +392,8 @@ export default function DisplayPlaylistScreen(props){
                 disabled={false} // Disable reordering (optional), defaults to false
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
-                {musics.map((music, index) => (
+                {musics.slice((page-1)*10,page*10)
+                .map((music, index) => (
                     <div style={{'cursor':'move'}} key={music._id}>
                         <PlaylistSongCard 
                             updateModalContentHandler={updateModalContentHandler}
@@ -395,7 +405,8 @@ export default function DisplayPlaylistScreen(props){
                 ))}
             </Reorder>
         }else{
-            songcards = <div>{musics.map((music, index) => (
+            songcards = <div>{musics.slice((page-1)*10,page*10)
+                .map((music, index) => (
                 <div key={music._id}>
                     <PlaylistSongCard
                         updateModalContentHandler={updateModalContentHandler}
@@ -477,6 +488,7 @@ export default function DisplayPlaylistScreen(props){
                 onTimeClickHandler={onTimeClickHandler}
                 ></SongTitleCard>
                 { songcards }
+                <Pagination count={parseInt(musics.length/10+(musics.length%10 > 0?1:0))} shape="rounded" size="large" onChange={changePageHandler}/>
 
                 <div id="modal" className="modal">
                     <div className="modal-content">

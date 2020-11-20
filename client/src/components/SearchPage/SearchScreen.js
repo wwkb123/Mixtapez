@@ -16,6 +16,7 @@ import PlaylistTitleCard from "./PlaylistTitleCard.js";
 import '../modal.css';
 import gql from 'graphql-tag'
 import {Query, Mutation} from 'react-apollo'
+import Pagination from '@material-ui/lab/Pagination';
 
 const GET_PLAYLIST = gql`
     query user($userId: String) {
@@ -64,7 +65,8 @@ class SearchScreen extends Component{
             search_results: [],
             search_results_mode: "song",
             songID: "",
-            songInfo: {}
+            songInfo: {},
+            page: 1
         }
         this.childSongIdHandler = this.childSongIdHandler.bind(this)
     }
@@ -77,6 +79,13 @@ class SearchScreen extends Component{
             [target.id]: target.value
     
         }));
+    }
+
+    changePageHandler = (event, value)=>{
+        console.log("previous page:"+this.state.page)
+        this.setState({page: value});
+        console.log("clicked :"+value);
+        
     }
 
     onClick = async (e) => {
@@ -176,21 +185,21 @@ class SearchScreen extends Component{
         if(search_results ){  // && search_results.length > 0
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
-                result_cards = search_results.map(result => {
+                result_cards = search_results.slice((this.state.page-1)*10,this.state.page*10).map(result => {
                     return (
                     <SongCard childSongIdHandler={this.childSongIdHandler} key={result.id} song={result}></SongCard>
                     );
                 });
             }else if(select === "user"){
                 result_title_card = <UserTitleCard></UserTitleCard>
-                result_cards = search_results.map(result => {
+                result_cards = search_results.slice((this.state.page-1)*10,this.state.page*10).map(result => {
                     return (
                         <UserCard key={result._id} user={result}></UserCard>
                     );
                 });
             }else if(select === "playlist"){
                 result_title_card = <PlaylistTitleCard></PlaylistTitleCard>
-                result_cards = search_results.map(result => {
+                result_cards = search_results.slice((this.state.page-1)*10,this.state.page*10).map(result => {
                     return (
                         <PlaylistCard key={result._id} playlist={result}></PlaylistCard>
                     );
@@ -224,7 +233,8 @@ class SearchScreen extends Component{
                 </form>
                 { result_title_card }
                 { result_cards }
-                
+                <Pagination count={parseInt(search_results.length/10+(search_results.length%10 > 0?1:0))} shape="rounded" size="large" onChange={this.changePageHandler}/>
+
 
 
                 <div id="search_modal" className="modal">

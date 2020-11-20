@@ -275,7 +275,8 @@ export default function QueueScreen(props){
                 disabled={false} // Disable reordering (optional), defaults to false
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
-                {musics.map((music, index) => (
+                {musics.slice((page-1)*10,page*10)
+                .map((music, index) => (
                     <div style={{'cursor':'move'}} key={music._id}>
                         <QueueSongCard 
                         updateModalContentHandler={updateModalContentHandler}
@@ -286,7 +287,8 @@ export default function QueueScreen(props){
             </Reorder>
         }else if(musics && musics.length > 0){
             console.log('musics are '+ musics);
-            songcards = <div>{musics.slice((page-1)*10,page*10).map((music, index) => (
+            songcards = <div>{musics.slice((page-1)*10,page*10)
+                .map((music, index) => (
                 <div key={music._id}>
                     <QueueSongCard
                     updateModalContentHandler={updateModalContentHandler}
