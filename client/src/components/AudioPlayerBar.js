@@ -11,6 +11,12 @@ import { Link } from 'react-router-dom';
 
 class AudioPlayerBar extends Component {
     render() {
+        var path_to_queue = ""
+        if(localStorage.getItem('isSignedIn')){
+            path_to_queue = {pathname: "/queue"}
+        }else{
+            path_to_queue = "";
+        }
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
@@ -18,10 +24,7 @@ class AudioPlayerBar extends Component {
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={2} className="content-center">
                                 <Link
-                                to={{
-                                    pathname: "/queue",
-                                    // state: {handler: this.props.updateModalContentHandler}
-                                }}
+                                to={path_to_queue}
                                 
                                 style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
                             </Col>
