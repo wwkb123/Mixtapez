@@ -49,10 +49,10 @@ const REMOVE_MUSICLIST = gql`
     }
 `;
 
-const options = [
+var options = [
     'Make Private',  // should toggle with Make Public
     'Edit Details',
-    'Delete',
+    // 'Delete',
     'Share'
   ];
 
@@ -125,7 +125,9 @@ export default function DisplayPlaylistScreen(props){
     const handleMenuItemClick = async (event, index, isPublic, isOwner) => {
         setSelectedIndex(index);
         setAnchorEl(null);
-        if(index === 0){  // make public/private
+        var mode = options[index]; // Make Public/Make Private/Edit Details/Share/Fork
+
+        if(mode === "Make Public" || mode === "Make Private"){  // make public/private
             if(isOwner){
                 if(isPublic){ // currently is public, once click, it'll become private, so next display text will be make public
                     options[0] = "Make Public";
@@ -147,11 +149,13 @@ export default function DisplayPlaylistScreen(props){
             }else{
                 alert("you do not own the playlist")
             }
-        }else if(index === 1){ // Edit Details
+        }else if(mode === "Edit Details"){ // Edit Details
 
-        }else if(index === 2){ // Delete this playlist
+        // }else if(index === 2){ // Delete this playlist
             
-        }else if(index === 3){ // share
+        }else if(mode === "Share"){ // share
+
+        }else if(mode === "Fork"){ // Fork
 
         }
     };
@@ -309,6 +313,25 @@ export default function DisplayPlaylistScreen(props){
         }
         fetchData();
       }, []);
+
+      useEffect(() => {
+        if(owner){
+            if(userId === owner._id){
+                options = [
+                    'Make Private',  // should toggle with Make Public
+                    'Edit Details',
+                    // 'Delete',
+                    'Share'
+                  ];
+            }else{
+                options = [
+                    'Fork',
+                    'Share'
+                ];
+                
+            }
+        }
+      }, [owner])
     
     function onReorder (event, previousIndex, nextIndex, fromId, toId) {
         setMusics(reorder(musics, previousIndex, nextIndex));
@@ -417,13 +440,16 @@ export default function DisplayPlaylistScreen(props){
             ))}</div>
         }
         var playlist_type = "";
-        if(!musicList.isPublic){
-            playlist_type = "Private Playlist";
-            options[0] = "Make Public";
-        }else{
-            playlist_type = "Public Playlist";
-            options[0] = "Make Private";
+        if(userId === owner._id){
+            if(!musicList.isPublic){
+                playlist_type = "Private Playlist";
+                options[0] = "Make Public";
+            }else{
+                playlist_type = "Public Playlist";
+                options[0] = "Make Private";
+            }
         }
+        
         var hours = 0;
         hours = Math.floor(total_length / 3600);
         if(hours < 10) hours = "0"+hours;
@@ -440,7 +466,7 @@ export default function DisplayPlaylistScreen(props){
                     </img>
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
-                        <h4 style={{fontWeight: "bold"}} >{owner.nickName} | {musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
+                        <span>by </span><span style={{'fontSize':'28px'}}>{owner.nickName}</span><h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
                     </Col>
                 </Row>
