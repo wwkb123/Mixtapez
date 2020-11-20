@@ -69,10 +69,7 @@ export default function QueueScreen(props){
     }
 
     const changePageHandler = (event, value)=>{
-        console.log("previous page:"+page)
         setPage(value);
-        console.log("clicked :"+value);
-        
     }
 
     useEffect(() => {
@@ -119,7 +116,6 @@ export default function QueueScreen(props){
     const saveAsMusicListHandler = async (e, musicsIDs) => {
         var name = document.getElementById('musicListName').value;  // get value of input field
         if(name === "") return;
-        console.log(name, musicsIDs);
         try{
             const response = await UserAPI.post('/createMusicListWithMusics', {
                 musicListName: name,
@@ -179,7 +175,9 @@ export default function QueueScreen(props){
     }
 
     const onClearQueueClick = () => {
-
+        var new_queue = [];
+        setMusics(new_queue);
+        localStorage.setItem('queue', JSON.stringify(new_queue));
     }
 
     const onTitleClickHandler = () => {
