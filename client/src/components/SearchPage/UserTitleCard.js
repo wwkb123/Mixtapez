@@ -13,11 +13,8 @@ class UserTitleCard extends Component{
             <div>
                 <Container>
                     <Row className="border-bottom-accent">
-                        <Col xs={3}>
+                        <Col xs={4}>
                             Name
-                        </Col>
-                        <Col xs={1}>
-                            Option
                         </Col>
                     </Row>
                 </Container>
