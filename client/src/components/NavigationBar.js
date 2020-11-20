@@ -42,7 +42,9 @@ class NavigationBar extends Component{
 
     selectButtons = () =>{
         if(localStorage.getItem('isSignedIn')){
+            let userId = localStorage.getItem('userId');
             return(<div>
+                <Link to={"/profile/"+userId}><Button className="nav-btn" size="lg">My Profile</Button></Link>
                 <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
                 <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
                 <Mutation mutation={ADD_PLAYLIST}>
