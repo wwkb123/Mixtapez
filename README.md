@@ -1,5 +1,5 @@
-In the root folder, npm install
-In the client/ folder, npm install
-In the server/ folder, npm install
+In the root folder, npm install<br>
+In the client/ folder, npm install<br>
+In the server/ folder, npm install<br>
 
 After all installations are finished, go to root folder, npm start
