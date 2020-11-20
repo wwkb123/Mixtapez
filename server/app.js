@@ -563,7 +563,21 @@ app.post('/api/addSong', async (req, res) => {
           });
       }
       var musics = musicList.musics;
-      musics.push(req.body.songID);
+      if (musics.length>0) {
+        let contains = musics.map((music)=>{
+          if (music == req.body.songID) {
+            return true
+          } else {
+            return false
+          }
+        }).reduce((a,b)=> {return(a||b)})
+        console.log(contains)
+        if (!contains) {
+          musics.push(req.body.songID);
+        }
+      }else{
+        musics.push(req.body.songID);
+      }
       musicList.musics = [...musics];
       musicList.save(function (err) {
         if(err) {
