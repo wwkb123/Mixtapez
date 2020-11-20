@@ -66,7 +66,9 @@ class SearchScreen extends Component{
             search_results_mode: "song",
             songID: "",
             songInfo: {},
-            page: 1
+            page: 1,
+            musics:[],
+            initialized: false
         }
         this.childSongIdHandler = this.childSongIdHandler.bind(this)
     }
@@ -121,7 +123,7 @@ class SearchScreen extends Component{
             modal.style.display = "none";
     }
 
-    onAddPlaylistClick = async (e, musicListId, addMusicToMusicList, musics) => {
+    onAddPlaylistClick = async (e, musicListId, addMusicToMusicList) => {
         e.preventDefault();
         var songID = this.state.songID;
         if(songID !== ""){
@@ -142,20 +144,37 @@ class SearchScreen extends Component{
             if (create_response.data.status == "success") {
                console.log(this.props.userId)
                console.log(create_response.data.musicId)
-               let control = true;
-               musics.forEach(mus => {
-                   if(mus._id === create_response.data.musicId){
-                       control = false;
-                   }
-               });
-               if (control) {
-                addMusicToMusicList({
+               const request_musicList = await UserAPI.get("/musicList/"+musicListId);
+               if (request_musicList.data.status == "success") {
+                 let musicList = request_musicList.data.musicList.musics;
+                 console.log(musicList);
+                 console.log(musicList.map((mus)=> {return(mus == create_response.data.musicId)}))
+                 if (musicList.length > 0) {
+                    let control = true;
+                    musicList.forEach(mus => {
+                        if(mus == create_response.data.musicId){
+                            control = false;
+                        }
+                    });
+                    console.log(control)
+                    if (control) {
+                     addMusicToMusicList({
+                         variables:{
+                                 musicId: create_response.data.musicId,
+                                 musicListId: musicListId
+                             }
+                         });
+                    } 
+                 }else{
+                    addMusicToMusicList({
                     variables:{
                             musicId: create_response.data.musicId,
                             musicListId: musicListId
                         }
                     });
-               }           
+                 }
+               }
+                 
                 this.onClose();
            }else{
                alert("Playlist creation failed")
@@ -175,7 +194,6 @@ class SearchScreen extends Component{
     }
 
     render() {
-        
         var search_results = this.state.search_results;
         var select = this.state.search_results_mode;
         var result_title_card = "";
@@ -263,7 +281,7 @@ class SearchScreen extends Component{
                                                     return(
                                                     <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
                                                         {(addMusicToMusicList, { loading, error }) => 
-                                                        <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList, data.musicList.musics)} className="playlist-card">
+                                                        <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList)} className="playlist-card">
                                                             <div>{data.musicList.musicListName}</div>
                                                         </div>}
                                                     </Mutation>
