@@ -425,13 +425,13 @@ export default function DisplayPlaylistScreen(props){
             options[0] = "Make Private";
         }
         var hours = 0;
-        hours = Math.round(total_length / 3600);
+        hours = Math.floor(total_length / 3600);
         if(hours < 10) hours = "0"+hours;
         var minutes = 0;
-        minutes = Math.round(total_length / 60);
+        minutes = Math.floor(total_length / 60);
         if(minutes < 10) minutes = "0"+minutes;
         var seconds = 0;
-        seconds = Math.round(total_length % 60);
+        seconds = Math.floor(total_length % 60);
         if(seconds < 10) seconds = "0"+seconds;
         return(
             <div>

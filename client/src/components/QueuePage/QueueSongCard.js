@@ -127,6 +127,8 @@ export default function QueueSongCard(props){
                 localStorage.setItem('queue', JSON.stringify(queue))
                 var updateMusicsHandler = props.updateMusicsHandler;
                 updateMusicsHandler(queue);
+                
+                
             }
         }
     };

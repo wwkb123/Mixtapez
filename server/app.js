@@ -598,6 +598,39 @@ app.post('/api/addSong', async (req, res) => {
   });    
 });
 
+//append a musicListId to a specific user's musicLists
+app.post('/api/addMusicList', async (req, res) => {
+  await UserModel.findOne({'_id': req.body.userId }, function (err, user) {
+    if(user){
+      if (err) {
+          console.log("Something wrong when adding musicList "+req.body.musicListId+"!");
+          res.status(200).json({
+            status: "error"
+          });
+      }
+      var musicLists = user.musicLists;
+      musicLists.push(req.body.musicListId);
+      user.musicLists = [...musicLists];
+      user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+      res.status(200).json({
+        status: "success"
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });    
+});
+
+
 //remove a song from a specific playlist
 app.post('/api/removeSong', async (req, res) => {
   await MusicListModel.update({'_id': req.body.musicListId },  { "$pull": { "musics": req.body.songID }}, { safe: true, multi:true }, function (err, musicList) {

@@ -88,6 +88,15 @@ export default function QueueScreen(props){
         }
         fetchData();
       }, []);
+
+      useEffect(() => {
+        var music_length = 0;
+        for(let i = 0; i < musics.length; i++){
+            music_length += musics[i].length;
+        }
+        setTotalLength(music_length);
+      }, [musics]);
+      
     
     function onReorder (event, previousIndex, nextIndex, fromId, toId) {
         setMusics(reorder(musics, previousIndex, nextIndex));
@@ -107,7 +116,33 @@ export default function QueueScreen(props){
         }
     }
 
-    const openModal = () => {
+    const saveAsMusicListHandler = async (e, musicsIDs) => {
+        var name = document.getElementById('musicListName').value;  // get value of input field
+        if(name === "") return;
+        console.log(name, musicsIDs);
+        try{
+            const response = await UserAPI.post('/createMusicListWithMusics', {
+                musicListName: name,
+                musics: musicsIDs,
+                userId
+            });
+            if(response.data.status === "success"){  // add musicListId to user's musicLists
+                var musicListId = response.data.musicListId;
+                const addMusicListId_response = await UserAPI.post('/addMusicList', {
+                    musicListId,
+                    userId
+                });
+                if(addMusicListId_response.data.status === "success"){
+                    closeModal();
+                }
+            }
+        }catch(err){
+            console.log(err);
+        }
+        
+    }
+
+    const openModal = (musicsIDs) => {
         if(localStorage.getItem('isSignedIn')){
             var modal = document.getElementById("main_modal");
             if(modal){
@@ -118,7 +153,7 @@ export default function QueueScreen(props){
                     <div style={{"padding":"5px"}}>
                         <TextField id="musicListName" size="small" placeholder="New List" variant="outlined" onChange={handleChange} />
                     </div>
-                    {/* <Button className="search-btn" onClick={(e) => this.setMusicListNameHandler(e, addNewPlaylist)}>Create</Button> */}
+                    <Button className="search-btn" onClick={(e) => saveAsMusicListHandler(e, musicsIDs)}>Create</Button>
                     <Button className="cancel-btn" onClick={closeModal}>Cancel</Button>
                     </div>
                 updateModalContentHandler(content);
@@ -140,8 +175,11 @@ export default function QueueScreen(props){
         for(let i = 0; i < musics.length; i++){
             musics_IDs.push(musics[i]._id);
         }
-        console.log(musics_IDs);
-        openModal();
+        openModal(musics_IDs);
+    }
+
+    const onClearQueueClick = () => {
+
     }
 
     const onTitleClickHandler = () => {
@@ -281,7 +319,8 @@ export default function QueueScreen(props){
                         <QueueSongCard 
                         updateModalContentHandler={updateModalContentHandler}
                         song={music} 
-                        updateMusicsHandler={updateMusicsHandler}></QueueSongCard>
+                        updateMusicsHandler={updateMusicsHandler}
+                        ></QueueSongCard>
                         </div>
                 ))}
             </Reorder>
@@ -293,19 +332,21 @@ export default function QueueScreen(props){
                     <QueueSongCard
                     updateModalContentHandler={updateModalContentHandler}
                     song={music} 
-                    updateMusicsHandler={updateMusicsHandler}></QueueSongCard>
+                    updateMusicsHandler={updateMusicsHandler}
+                    ></QueueSongCard>
                     </div>
             ))}</div>
         }
         var hours = 0;
-        hours = Math.round(total_length / 3600);
+        hours = Math.floor(total_length / 3600);
         if(hours < 10) hours = "0"+hours;
         var minutes = 0;
-        minutes = Math.round(total_length / 60);
+        minutes = Math.floor(total_length / 60);
         if(minutes < 10) minutes = "0"+minutes;
         var seconds = 0;
-        seconds = Math.round(total_length % 60);
+        seconds = Math.floor(total_length % 60);
         if(seconds < 10) seconds = "0"+seconds;
+
         return(
             <div>
                 <Row>
@@ -315,6 +356,7 @@ export default function QueueScreen(props){
                         {/* <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>               */}
                         <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <Button className="search-btn" onClick={onSaveQueueClick}>Save As Playlist</Button>
+                        <Button className="search-btn" onClick={onClearQueueClick}>Clear Queue</Button>
                     </Col>
                 </Row>
                 { reorderButtons }
