@@ -3,16 +3,16 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import AlbumCard from './HomePage/AlbumCard.js'
+import ProfilePlaylistCard from './ProfilePlaylistCard.js'
 import FriendCard from './FriendPage/FriendCard.js'
-import data from './Mixtapez_data.json'
 import UserAPI from "../apis/UserAPI";
 
 class ProfileScreen extends Component {
     constructor(props){
         super(props);
         this.state = {
-            user: null
+            user: null,
+            publicPlaylists: []
         }
     }
     getUser = async (id) => {
@@ -26,6 +26,26 @@ class ProfileScreen extends Component {
                 console.log("success");
                 user = response.data.user;
                 this.setState({user});
+                const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
+                if(playlists_response.data.status == "success"){
+                    var musicLists = playlists_response.data.musicLists;  // list of playlist ids
+                    var publicPlaylists = [];
+                    for(let i = 0; i < musicLists.length; i++){
+                        let id = musicLists[i];
+                        const playlist_response = await UserAPI.get("/musicList/"+id);
+                        if(playlist_response.data.status === "success"){ // search success
+                            var musicList = playlist_response.data.musicList;
+                            if(musicList.isPublic) // only show public playlist
+                                publicPlaylists.push(musicList);
+                        }else{
+                            console.log("error searching playlist", id);
+                        }
+                    }
+
+                    this.setState({publicPlaylists: publicPlaylists});
+                    
+                }
+
             }else{ // somehow failed
                 
             }
@@ -45,7 +65,14 @@ class ProfileScreen extends Component {
     render() {
         var userID = this.props.match.params.id;
         var user = this.state.user;
+        var playlist_cards = ""
+        if(this.state.publicPlaylists){
+            playlist_cards = this.state.publicPlaylists.map((playlist, index) => {
+                return (<ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>)
+            })
+        }
         if(user){
+            console.log();
             return (
                 <div>
                     <br/>
@@ -53,7 +80,11 @@ class ProfileScreen extends Component {
                     {/* <FriendCard name={data.users[userID].nickName}/> */}
                     <FriendCard name={user.nickName}/>
                     <Button className="search-btn bg-gray">Remove Friend</Button><br/><br/>
-                    <Container>
+                    <div className="grid-container">
+                        { playlist_cards }
+                    </div>
+                    
+                    {/* <Container>
                         <Row>
                             <Col xs={3}>
                                 <AlbumCard/>
@@ -82,11 +113,11 @@ class ProfileScreen extends Component {
                                 <AlbumCard/>
                             </Col>
                         </Row>
-                    </Container>
+                    </Container> */}
                 </div>
             );
         }else{
-            return <></>
+            return <>Loading...</>
         }
     }
 }
