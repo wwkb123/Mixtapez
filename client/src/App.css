@@ -192,6 +192,13 @@ body {
   color: #ed4e85;
   margin: 10px;
   cursor: pointer;
+  width: 20vw;
+  transition: 0.3s;
+}
+
+.playlist-card:hover{
+  color: white;
+  background-color: #ed4e85;
 }
 
 .border-bottom-accent{
@@ -263,4 +270,9 @@ body {
 
 .non-reorder-mode-title{
   transition: 0.2s;
+}
+
+a:hover {
+  color: #ed4e85 !important;
+  text-decoration: none !important;
 }
