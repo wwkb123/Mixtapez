@@ -46,23 +46,22 @@ class PlaylistCard extends Component{
             var owner = this.state.owner;
             return(
                 <div>
-                    <Container>
-                        <Row className="border-bottom-accent">
-                            <Col xs={1}>
-                                &#9825;
-                            </Col>
-                            <Col xs={3}>
-                                {/* {data.music[id].musicName} */}
-                                { playlist.musicListName }
-                            </Col>
-                            <Col xs={3}>
-                                { owner }
-                            </Col>
-                            <Col xs={1}>
-                                ...
-                            </Col>
-                        </Row>
-                    </Container>
+                    <Link to={"/playlist/"+playlist._id} style={{'color':'#ed4e85'}}>
+                        <Container>
+                            <Row className="border-bottom-accent">
+                                <Col xs={1}>
+                                    &#9825;
+                                </Col>
+                                <Col xs={3}>
+                                    {/* {data.music[id].musicName} */}
+                                    { playlist.musicListName }
+                                </Col>
+                                <Col xs={3}>
+                                    { owner }
+                                </Col>
+                            </Row>
+                        </Container>
+                    </Link>
                 </div>
             );
         }else{

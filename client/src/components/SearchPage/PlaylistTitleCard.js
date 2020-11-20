@@ -22,9 +22,6 @@ class PlaylistTitleCard extends Component{
                         <Col xs={3}>
                             Owner
                         </Col>
-                        <Col xs={1}>
-                            Option
-                        </Col>
                     </Row>
                 </Container>
             </div>
