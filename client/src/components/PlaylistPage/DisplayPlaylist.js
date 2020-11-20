@@ -20,6 +20,7 @@ import UserAPI from "../../apis/UserAPI";
 import PlaylistSongCard from "./PlaylistSongCard.js";
 import SongTitleCard from './SongTitleCard';
 import Pagination from '@material-ui/lab/Pagination';
+import { Link } from 'react-router-dom';
 
 import Reorder, {
     reorder,
@@ -466,7 +467,8 @@ export default function DisplayPlaylistScreen(props){
                     </img>
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
-                        <span>by </span><span style={{'fontSize':'28px'}}>{owner.nickName}</span><h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
+                        <span>by </span><Link to={"/profile/"+owner._id}><span style={{'fontSize':'28px'}}>{owner.nickName}</span></Link>
+                        <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
                     </Col>
                 </Row>
