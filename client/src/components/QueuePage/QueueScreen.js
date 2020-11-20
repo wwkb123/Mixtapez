@@ -275,7 +275,7 @@ export default function QueueScreen(props){
                 disabled={false} // Disable reordering (optional), defaults to false
                 disableContextMenus={true} // Disable context menus when holding on touch devices (optional), defaults to true
             >
-                {musics.slice((page-1)*10,page*10)
+                {musics
                 .map((music, index) => (
                     <div style={{'cursor':'move'}} key={music._id}>
                         <QueueSongCard 
