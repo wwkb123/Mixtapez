@@ -84,17 +84,22 @@ export default function PlaylistSongCard(props){
                 const song_response = await UserAPI.get("/music/"+id);
                 console.log(song_response.data.music)
                 if(song_response.data.status == "success"){
-                    let contains = queue.map((music)=>{
-                        if (music._id === song_response.data.music._id) {
-                            return true
-                        }else{
-                            return false
+                    if (queue.length > 0) {
+                        let contains = queue.map((music)=>{
+                            if (music._id === song_response.data.music._id) {
+                                return true
+                            }else{
+                                return false
+                            }
+                        }).reduce((a,b)=>{ return(a||b) });
+                        console.log(contains);
+                        if (!contains) {
+                            queue.push(song_response.data.music);
+                            localStorage.setItem('queue', JSON.stringify(queue))
                         }
-                    }).reduce((a,b)=>{ return(a||b) });
-                    console.log(contains);
-                    if (!contains) {
+                    }else{
                         queue.push(song_response.data.music);
-                        localStorage.setItem('queue', JSON.stringify(queue))
+                            localStorage.setItem('queue', JSON.stringify(queue))
                     }
                 }
             } catch (error) {
