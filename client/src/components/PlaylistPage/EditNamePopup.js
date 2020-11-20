@@ -55,21 +55,24 @@ class EditNamePopup extends Component{
     render(){
         return(
             <div className={"modal d-block"} style={{visibility: this.props.show ? 'visible' : 'hidden' }}>
+                <div className="modal-content">
+                    <span onClick={this.props.handleClose} className="close">&times;</span>
                 <Container>
-                    <h2>New name</h2>
+                    <h2>Edit Playlist Name:</h2>
+                    
                     <div className="form-group">
-                        <label>Enter Name:</label>
                         <TextField id="modalInputName" size="small" type="name" placeholder="new name" variant="outlined" onChange={this.handleChange}/>
                     </div>
                     <Row>
-                        <Button onClick={e => this.handleSubmit(e)}>
+                        <Button className="search-btn" onClick={e => this.handleSubmit(e)}>
                             Save
                         </Button>
-                        <Button className="modal-close" onClick={this.props.handleClose}>
-                            close
+                        <Button className="modal-close cancel-btn" onClick={this.props.handleClose}>
+                            Cancel
                         </Button>
                     </Row>
                 </Container>
+                </div>
             </div>
         )
     }

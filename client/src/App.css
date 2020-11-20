@@ -216,7 +216,7 @@ body {
   margin: 0 5px;
   background-color: #F06E9C !important;
   border: solid 2px #F06E9C !important;
-  transition: 0.2s;
+  /* transition: 0.2s; */
 }
 .search-btn:focus{
   box-shadow: 0 0 0 0.2rem rgb(237 78 144);
@@ -231,7 +231,7 @@ body {
   margin: 0 5px;
   background-color: white !important;
   border: solid 2px #F06E9C !important;
-  transition: 0.2s;
+  /* transition: 0.2s; */
   color: #ed4e85 !important;
 }
 .cancel-btn:focus{
@@ -254,12 +254,14 @@ body {
 
 .disabled{
   background-color: gray !important;
+  border: none !important;
 }
 
 .disabled:hover, .disabled:active, .disabled:focus{
   background-color: gray !important;
   cursor: default !important;
   border: none !important;
+  box-shadow: none;
 }
 
 .reorder-mode-title{
@@ -272,7 +274,7 @@ body {
   transition: 0.2s;
 }
 
-a:hover {
+a, a:hover {
   color: #ed4e85 !important;
   text-decoration: none !important;
 }

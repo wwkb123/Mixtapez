@@ -126,10 +126,12 @@ class PlaylistCard extends Component {
                         <div>{this.props.musicListName}</div>
                     </div>
                 </Link>
-                <IconContext.Provider value={{ color: "#F06E9C", size: '45px' }}>
-                    {deleteButton}
-                    {editButton}
-                </IconContext.Provider>
+                <div style={{'cursor':'pointer'}}>
+                    <IconContext.Provider value={{ color: "#F06E9C", size: '35px' }}>
+                        {editButton}
+                        {deleteButton} 
+                    </IconContext.Provider>
+                </div>
                 <Mutation mutation={EDIT_MUSICLIST}>
                                 {(updateMusicList, { loading, error }) => 
                                     <EditNamePopup
