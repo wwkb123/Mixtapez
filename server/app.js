@@ -679,6 +679,36 @@ app.post('/api/updateMusicList', async (req, res) => {
   });    
 });
 
+// get random public playlists for homepage
+app.get('/api/randomPlaylists', async (req, res) => {
+  await MusicListModel.find({'isPublic': true}, function (err, result) {
+    let n = 8;
+    if(result){
+      if(result.length <= n){
+        res.status(200).json({
+          status: "success",
+          playlists: result
+        });
+      }else{ // pick random 8
+        const shuffled_array = result.sort(() => 0.5 - Math.random());
+        let selected_playlists = shuffled_array.slice(0, n);
+        res.status(200).json({
+          status: "success",
+          playlists: selected_playlists
+        });
+      }
+    }
+
+    if(err){
+      console.log(err);
+      res.status(200).json({
+        status: "error",
+      });
+    }
+
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

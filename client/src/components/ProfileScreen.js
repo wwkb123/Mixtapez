@@ -83,37 +83,6 @@ class ProfileScreen extends Component {
                     <div className="grid-container">
                         { playlist_cards }
                     </div>
-                    
-                    {/* <Container>
-                        <Row>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                            <Col xs={3}>
-                                <AlbumCard/>
-                            </Col>
-                        </Row>
-                    </Container> */}
                 </div>
             );
         }else{

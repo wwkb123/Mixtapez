@@ -2,16 +2,45 @@ import React, { Component } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-
-import AlbumCard from './AlbumCard.js'
 import Carousel from 'react-bootstrap/Carousel'
 import Image from '../../tempData/AbbeyRoad.jpg'
 import image2 from '../../tempData/album2.jpg'
 import image3 from '../../tempData/album3.jpg'
+import ProfilePlaylistCard from '../ProfilePlaylistCard';
+import UserAPI from '../../apis/UserAPI';
 
 class HomeScreen extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            publicPlaylists: []
+        }
+    }
+
+    getPublicPlaylists = async () => {
+        try{
+            const playlists_response = await UserAPI.get("/randomPlaylists");
+            if(playlists_response.data.status == "success"){
+                var publicPlaylists = playlists_response.data.playlists;
+                // console.log(publicPlaylists);
+                this.setState({publicPlaylists: publicPlaylists});
+            }
+        }catch (err) {
+            console.log(err);
+        }
+    }
+
+    componentDidMount() {
+        this.getPublicPlaylists();
+    }
 
     render() {
+        var playlist_cards = ""
+        if(this.state.publicPlaylists){
+            playlist_cards = this.state.publicPlaylists.map((playlist, index) => {
+                return (<ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>)
+            })
+        }
         return (
             <div>
                 <Carousel>
@@ -58,36 +87,9 @@ class HomeScreen extends Component {
                         </Carousel.Caption>
                     </Carousel.Item>
                     </Carousel>
-                <Container>
-                    <Row>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                        <Col xs={3}>
-                            <AlbumCard/>
-                        </Col>
-                    </Row>
-                </Container>
+                    <div className="grid-container">
+                        { playlist_cards }
+                    </div>
             </div>
         );
     }
