@@ -10,29 +10,80 @@ import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
 import ReactAudioPlayer from 'react-audio-player';
 import IconButton from '@material-ui/core/IconButton';
+import UserAPI from "../apis/UserAPI";
 
 class AudioPlayerBar extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            isPlaying: false
+        this.state={
+            volume: 100,
+            track_url: "",
+            track_data: null,
+            progress: 0,
+            duration: 0,
+            isPlaying: false,
+            audioTag: new Audio()
+        };
+    }
+    
+
+    tick = () =>{
+        if(!this.state.isPlaying){
+            return;
         }
+        this.setState({
+            progress: this.state.audioTag.currentTime * 1000
+        });
     }
 
-    onPlayClick = () => {
-        var audio = document.getElementById('audio');
-        if(audio){
-            if(!this.state.isPlaying){
-                audio.play();
-                this.setState({isPlaying: !this.state.isPlaying})
-            }else{
-                audio.pause();
-                this.setState({isPlaying: !this.state.isPlaying})
+    onPlayClick = async () =>{
+        console.log("clicked play")
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        console.log("queue:"+queue)
+
+        if(this.state.track_data){
+            if(this.state.audioTag){
+                if(!this.state.isPlaying){
+                    this.state.audioTag.play();
+                    this.setState({isPlaying: !this.state.isPlaying})
+                }else{
+                    this.state.audioTag.pause();
+                    this.setState({isPlaying: !this.state.isPlaying})
+                }
+                    
             }
-                
+        }else{
+            if(queue.length > 0){
+                let URI = queue[0]? queue[0].URI : null;
+                console.log("URI:"+URI)
+                const getSong_response = await UserAPI.post("/getSongAudio", {
+                    URI});
+                if (getSong_response.data.status == "success") {
+                    console.log("successful load the track information")
+                    console.log("track url:"+getSong_response.data.track.preview_url)
+                    if (getSong_response.data.track.preview_url) {
+                        this.setState({
+                            url: getSong_response.data.track.preview_url,
+                            track_data: getSong_response.data.track,
+                            isPlaying: true
+                        });
+                        this.state.audioTag.src = getSong_response.data.track.preview_url;
+                        this.state.audioTag.play();
+                    }else{
+                        console.log("no sample music aviliable")
+                    }
+                    
+                }else{
+                    console.log("errored")
+                }
+            }
         }
-    }
+        
+        
 
+    }
+    
     render() {
         var play_pause_icon = <MdPlayArrow />
         if(this.state.isPlaying){
@@ -47,10 +98,6 @@ class AudioPlayerBar extends Component {
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
-                <audio
-                    id="audio"
-                    src="https://p.scdn.co/mp3-preview/3eb16018c2a700240e9dfb8817b6f2d041f15eb1?cid=774b29d4f13844c495f206cafdad9c86"
-                />
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={2} className="content-center">
@@ -66,12 +113,11 @@ class AudioPlayerBar extends Component {
                             <Col xs={4} className="content-center">
                                 <MdSkipPrevious />
                                 <IconButton
-                                aria-label="play"
-                                onClick={this.onPlayClick}
-                            >
-                                { play_pause_icon }
-                            </IconButton>
-                                
+                                    aria-label="play"
+                                    onClick={this.onPlayClick}
+                                >
+                                    { play_pause_icon }
+                                </IconButton>
                                 <MdSkipNext />
                             </Col>
                             <Col xs={4} className="content-center">
