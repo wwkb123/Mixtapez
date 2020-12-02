@@ -8,6 +8,8 @@ import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
+import ReactAudioPlayer from 'react-audio-player';
+
 
 class AudioPlayerBar extends Component {
     render() {
@@ -20,6 +22,11 @@ class AudioPlayerBar extends Component {
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
+                <ReactAudioPlayer
+                    src="https://p.scdn.co/mp3-preview/3eb16018c2a700240e9dfb8817b6f2d041f15eb1?cid=774b29d4f13844c495f206cafdad9c86"
+                    autoPlay
+                    controls
+                />
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={2} className="content-center">

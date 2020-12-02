@@ -370,7 +370,7 @@ export default function QueueScreen(props){
                 ></SongTitleCard>
                 { songcards }
                 <Pagination count={parseInt(musics.length/10+(musics.length%10 > 0?1:0))} shape="rounded" size="large" onChange={changePageHandler}/>
-
+                <audio controls src="https://p.scdn.co/mp3-preview/3eb16018c2a700240e9dfb8817b6f2d041f15eb1?cid=774b29d4f13844c495f206cafdad9c86"></audio>
                 <div id="modal" className="modal">
                     <div className="modal-content">
                         <span onClick={onModalClose} className="close">&times;</span>
