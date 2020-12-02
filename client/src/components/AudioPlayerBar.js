@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { IconContext } from "react-icons";
 import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
-    MdShuffle, MdRepeat, MdVolumeUp, MdVolumeOff
+    MdShuffle, MdRepeat, MdVolumeUp, MdVolumeOff, MdTagFaces
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
@@ -25,29 +25,24 @@ class AudioPlayerBar extends Component {
             isMute: false,
             isLoop: false,
             isShuffle: false,
-            currentIndex: 0
+            currentIndex: 0,
+            interval: null
         };
 
 
         this.state.audioTag.addEventListener('ended', (event) => {  // when the music ends
-            let queue = localStorage.getItem('queue');
-            queue = JSON.parse(queue);
-            if (this.state.currentIndex == queue.length - 1) {
-                this.setState({isPlaying: false});
-            } else {
-                this.onNextSong();
-            }
-            
+            this.onNextSong();
         });
     }
-    
+
 
     tick = () =>{
+        console.log("tick working");
         if(!this.state.isPlaying){
             return;
         }
         this.setState({
-            progress: this.state.audioTag.currentTime * 1000
+            progress: this.state.audioTag.currentTime
         });
     }
 
@@ -61,10 +56,8 @@ class AudioPlayerBar extends Component {
         if (this.state.isShuffle) {
             index = Math.floor(Math.random()* queue.length)
         } else if (this.state.currentIndex == (queue.length - 1)){
-            if (this.state.isLoop) {
-                console.log("loop to beginning")
-                index = 0;
-            }        
+            console.log("loop to beginning")
+            index = 0;
         } else{
             index = index + 1
         }
@@ -72,70 +65,52 @@ class AudioPlayerBar extends Component {
         if (index < queue.length) {
             let URI = queue[index]? queue[index].URI : null;
             console.log("URI:"+URI)
-            const getSong_response = await UserAPI.post("/getSongAudio", {
-                URI});
-            if (getSong_response.data.status == "success") {
-                console.log("successful load the track information")
-                console.log("track url:"+getSong_response.data.track.preview_url)
-                if (getSong_response.data.track.preview_url) {
-                    this.setState({
-                        url: getSong_response.data.track.preview_url,
-                        track_data: getSong_response.data.track,
-                        isPlaying: true,
-                        currentIndex: index
-                    });
-                    this.state.audioTag.src = getSong_response.data.track.preview_url;
-                    this.state.audioTag.play();
-                }else{
-                    console.log("no sample music aviliable")
-                }
-                
-            }else{
-                console.log("errored")
-            } 
+            this.loadSongAndplay(URI, index);
         }
     }
 
     onPrevSong = async () => {
         console.log("previous music");
-        if (this.state.audioTag.currentTime > 0) {
-            this.state.audioTag.currentTime = 0;
-            this.state.audioTag.pause();
-            this.setState({isPlaying: false})
-        }else{
-            let index = this.state.currentIndex;
-            let queue = localStorage.getItem('queue');
-            queue = JSON.parse(queue);
-            console.log("queue:"+queue);
-            if (this.state.currentIndex != 0){
-                console.log("current index before update:"+this.state.currentIndex)
-                index = index - 1;
-                console.log("current index after update:"+index)
-                let URI = queue[index]? queue[index].URI : null;
-                console.log("URI:"+URI)
-                const getSong_response = await UserAPI.post("/getSongAudio", {
-                    URI});
-                if (getSong_response.data.status == "success") {
-                    console.log("successful load the track information")
-                    console.log("track url:"+getSong_response.data.track.preview_url)
-                    if (getSong_response.data.track.preview_url) {
-                        this.setState({
-                            url: getSong_response.data.track.preview_url,
-                            track_data: getSong_response.data.track,
-                            isPlaying: true,
-                            currentIndex: index
-                        });
-                        this.state.audioTag.src = getSong_response.data.track.preview_url;
-                        this.state.audioTag.play();
-                    }else{
-                        console.log("no sample music aviliable")
-                    }
-                    
-                }else{
-                    console.log("errored")
-                } 
-            }
+        
+        let index = this.state.currentIndex;
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        console.log("queue:"+queue);
+        if (this.state.currentIndex != 0){
+            console.log("current index before update:"+this.state.currentIndex)
+            index = index - 1;
+            console.log("current index after update:"+index)
+            let URI = queue[index]? queue[index].URI : null;
+            console.log("URI:"+URI)
+            this.loadSongAndplay(URI, index);
+            
         }
+    }
+
+    loadSongAndplay = async (URI, index) =>{
+        const getSong_response = await UserAPI.post("/getSongAudio", {
+            URI});
+        if (getSong_response.data.status == "success") {
+            console.log("successful load the track information")
+            console.log("track url:"+getSong_response.data.track.preview_url)
+            if (getSong_response.data.track.preview_url) {
+                this.setState({
+                    url: getSong_response.data.track.preview_url,
+                    track_data: getSong_response.data.track,
+                    isPlaying: true,
+                    progress: 0,
+                    currentIndex: index,
+                    interval: setInterval(this.tick, 100)
+                });
+                this.state.audioTag.src = getSong_response.data.track.preview_url;
+                this.state.audioTag.play();
+            }else{
+                console.log("no sample music aviliable")
+            }
+            
+        }else{
+            console.log("errored")
+        } 
     }
 
     handleChange = (e, newValue) => {
@@ -144,6 +119,15 @@ class AudioPlayerBar extends Component {
         if(this.state.audioTag){
             this.state.audioTag.volume = newValue / 100;
             this.setState({volume: newValue});
+        }
+    }
+
+    handleAudioSlider = (e, newValue) => {
+        console.log('new', newValue);
+        console.log('current time', this.state.audioTag.currentTime);
+        if (this.state.audioTag) {
+            this.state.audioTag.currentTime = newValue/100 * 30;
+            this.setState({progress: newValue/100 * 30});
         }
     }
 
@@ -157,9 +141,12 @@ class AudioPlayerBar extends Component {
             if(this.state.audioTag){
                 if(!this.state.isPlaying){
                     this.state.audioTag.play();
-                    this.setState({isPlaying: !this.state.isPlaying})
+                    this.setState({
+                        interval: setInterval(this.tick, 100),
+                        isPlaying: !this.state.isPlaying})
                 }else{
                     this.state.audioTag.pause();
+                    clearInterval(this.state.interval);
                     this.setState({isPlaying: !this.state.isPlaying})
                 }
             }
@@ -167,26 +154,7 @@ class AudioPlayerBar extends Component {
             if(queue.length > 0){
                 let URI = queue[this.state.currentIndex]? queue[this.state.currentIndex].URI : null;
                 console.log("URI:"+URI)
-                const getSong_response = await UserAPI.post("/getSongAudio", {
-                    URI});
-                if (getSong_response.data.status == "success") {
-                    console.log("successful load the track information")
-                    console.log("track url:"+getSong_response.data.track.preview_url)
-                    if (getSong_response.data.track.preview_url) {
-                        this.setState({
-                            url: getSong_response.data.track.preview_url,
-                            track_data: getSong_response.data.track,
-                            isPlaying: true
-                        });
-                        this.state.audioTag.src = getSong_response.data.track.preview_url;
-                        this.state.audioTag.play();
-                    }else{
-                        console.log("no sample music aviliable")
-                    }
-                    
-                }else{
-                    console.log("errored")
-                }
+                this.loadSongAndplay(URI, this.state.currentIndex);
             }
         }
     }
@@ -224,6 +192,7 @@ class AudioPlayerBar extends Component {
                 this.setState({isShuffle: false})  // force turn off shuffle
             }else{
                 this.state.audioTag.muted = false;
+                this.state.audioTag.loop = false;
                 this.setState({isLoop: !this.state.isLoop})
             }
         }
@@ -266,7 +235,7 @@ class AudioPlayerBar extends Component {
         }else{
             path_to_queue = "";
         }
-        let progress = (this.state.progress/60<10?"0":"")+this.state.progress/60+":"+(this.state.progress%60<10?"0":"")+this.state.progress%60;
+        let progress = (this.state.progress/60<10?"0":"")+Math.floor(this.state.progress/60)+":"+(this.state.progress%60<10?"0":"")+Math.floor(this.state.progress%60);
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
@@ -335,7 +304,7 @@ class AudioPlayerBar extends Component {
                     <Row>
                         <Col className="content-center">
                         <span style={{"margin":"10px"}}>{progress}</span>
-                        <Slider className="audio-slider" aria-labelledby="continuous-slider" />
+                        <Slider className="audio-slider" aria-labelledby="continuous-slider" value={this.state.progress/30*100} onChange={this.handleAudioSlider} />
                         <span style={{"margin":"10px"}}>00:30</span>
                         </Col>
                     </Row>
