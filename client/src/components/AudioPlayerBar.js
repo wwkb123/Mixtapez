@@ -8,7 +8,6 @@ import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
-import ReactAudioPlayer from 'react-audio-player';
 import IconButton from '@material-ui/core/IconButton';
 import UserAPI from "../apis/UserAPI";
 
@@ -25,7 +24,8 @@ class AudioPlayerBar extends Component {
             audioTag: new Audio(),
             isMute: false,
             isLoop: false,
-            isShuffle: false
+            isShuffle: false,
+            currentIndex: 0
         };
 
 
@@ -42,6 +42,93 @@ class AudioPlayerBar extends Component {
         this.setState({
             progress: this.state.audioTag.currentTime * 1000
         });
+    }
+
+    onNextSong = async () => {
+        console.log("next music");
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        console.log("currentIndex:"+this.state.currentIndex);
+        this.state.audioTag.pause();
+        let index = this.state.currentIndex;
+        if (this.state.isShuffle) {
+            index = Math.floor(Math.random()* queue.length)
+        } else if (this.state.currentIndex == (queue.length - 1)){
+            if (this.state.isLoop) {
+                console.log("loop to beginning")
+                index = 0;
+            }        
+        } else{
+            index = index + 1
+        }
+        console.log("updated index:"+index)
+        if (index < queue.length) {
+            let URI = queue[index]? queue[index].URI : null;
+            console.log("URI:"+URI)
+            const getSong_response = await UserAPI.post("/getSongAudio", {
+                URI});
+            if (getSong_response.data.status == "success") {
+                console.log("successful load the track information")
+                console.log("track url:"+getSong_response.data.track.preview_url)
+                if (getSong_response.data.track.preview_url) {
+                    this.setState({
+                        url: getSong_response.data.track.preview_url,
+                        track_data: getSong_response.data.track,
+                        isPlaying: true,
+                        currentIndex: index
+                    });
+                    this.state.audioTag.src = getSong_response.data.track.preview_url;
+                    this.state.audioTag.play();
+                }else{
+                    console.log("no sample music aviliable")
+                }
+                
+            }else{
+                console.log("errored")
+            } 
+        }
+    }
+
+    onPrevSong = async () => {
+        console.log("previous music");
+        if (this.state.audioTag.currentTime > 0) {
+            this.state.audioTag.currentTime = 0;
+            this.state.audioTag.pause();
+            this.setState({isPlaying: !this.state.isPlaying})
+        }else{
+            let index = this.state.currentIndex;
+            let queue = localStorage.getItem('queue');
+            queue = JSON.parse(queue);
+            console.log("queue:"+queue);
+            if (this.state.currentIndex != 0){
+                console.log("current index before update:"+this.state.currentIndex)
+                index = index - 1;
+                console.log("current index after update:"+index)
+                let URI = queue[index]? queue[index].URI : null;
+                console.log("URI:"+URI)
+                const getSong_response = await UserAPI.post("/getSongAudio", {
+                    URI});
+                if (getSong_response.data.status == "success") {
+                    console.log("successful load the track information")
+                    console.log("track url:"+getSong_response.data.track.preview_url)
+                    if (getSong_response.data.track.preview_url) {
+                        this.setState({
+                            url: getSong_response.data.track.preview_url,
+                            track_data: getSong_response.data.track,
+                            isPlaying: true,
+                            currentIndex: index
+                        });
+                        this.state.audioTag.src = getSong_response.data.track.preview_url;
+                        this.state.audioTag.play();
+                    }else{
+                        console.log("no sample music aviliable")
+                    }
+                    
+                }else{
+                    console.log("errored")
+                } 
+            }
+        }
     }
 
     handleChange = (e, newValue) => {
@@ -71,7 +158,7 @@ class AudioPlayerBar extends Component {
             }
         }else{
             if(queue.length > 0){
-                let URI = queue[0]? queue[0].URI : null;
+                let URI = queue[this.state.currentIndex]? queue[this.state.currentIndex].URI : null;
                 console.log("URI:"+URI)
                 const getSong_response = await UserAPI.post("/getSongAudio", {
                     URI});
@@ -188,14 +275,14 @@ class AudioPlayerBar extends Component {
                             </Col>
                             
                             <Col xs={4} className="content-center">
-                                <MdSkipPrevious />
+                                <MdSkipPrevious onClick={this.onPrevSong} />
                                 <IconButton
                                     aria-label="play"
                                     onClick={this.onPlayClick}
                                 >
                                     { play_pause_icon }
                                 </IconButton>
-                                <MdSkipNext />
+                                <MdSkipNext onClick={this.onNextSong}/>
                             </Col>
                             <Col xs={4} className="content-center">
                                 <IconButton
