@@ -23,7 +23,9 @@ class AudioPlayerBar extends Component {
             duration: 0,
             isPlaying: false,
             audioTag: new Audio(),
-            isMute: false
+            isMute: false,
+            isLoop: false,
+            isShuffle: false
         };
 
 
@@ -107,6 +109,32 @@ class AudioPlayerBar extends Component {
         }
     }
 
+    onShuffleClick = () => {
+        if(this.state.audioTag){
+            if(!this.state.isShuffle){
+                // this.state.audioTag.loop = true;
+                this.setState({isShuffle: !this.state.isShuffle})
+                this.setState({isLoop: false})  // force turn off loop
+            }else{
+                // this.state.audioTag.muted = false;
+                this.setState({isShuffle: !this.state.isShuffle})
+            }
+        }
+    }
+
+    onLoopClick = () => {
+        if(this.state.audioTag){
+            if(!this.state.isLoop){
+                this.state.audioTag.loop = true;
+                this.setState({isLoop: !this.state.isLoop})
+                this.setState({isShuffle: false})  // force turn off shuffle
+            }else{
+                this.state.audioTag.muted = false;
+                this.setState({isLoop: !this.state.isLoop})
+            }
+        }
+    }
+
     render() {
         var play_pause_icon = <MdPlayArrow />
         if(this.state.isPlaying){
@@ -116,6 +144,28 @@ class AudioPlayerBar extends Component {
         if(this.state.isMute){
             volume_icon = <MdVolumeOff/>
         }
+
+        var shuffle_icon = 
+        <IconContext.Provider value={{ color: "#ADADAD", size: '40px'}}>
+            <MdShuffle/>
+        </IconContext.Provider>
+        if(this.state.isShuffle){
+            shuffle_icon = 
+            <IconContext.Provider value={{ color: "#F06E9C", size: '40px'}}>
+                <MdShuffle/>
+            </IconContext.Provider>
+        }
+        var loop_icon = 
+        <IconContext.Provider value={{ color: "#ADADAD", size: '40px'}}>
+            <MdRepeat/>
+        </IconContext.Provider>
+        if(this.state.isLoop){
+            loop_icon = 
+            <IconContext.Provider value={{ color: "#F06E9C", size: '40px'}}>
+                <MdRepeat/>
+            </IconContext.Provider>
+        }
+       
         var path_to_queue = ""
         if(localStorage.getItem('isSignedIn')){
             path_to_queue = {pathname: "/queue"}
@@ -148,8 +198,19 @@ class AudioPlayerBar extends Component {
                                 <MdSkipNext />
                             </Col>
                             <Col xs={4} className="content-center">
-                                <MdShuffle/>
-                                <MdRepeat/>
+                                <IconButton
+                                    aria-label="shuffle"
+                                    onClick={this.onShuffleClick}
+                                >
+                                    { shuffle_icon }
+                                </IconButton>
+
+                                <IconButton
+                                    aria-label="loop"
+                                    onClick={this.onLoopClick}
+                                >
+                                    { loop_icon }
+                                </IconButton>
 
                                 <IconButton
                                     aria-label="volume"
