@@ -9,10 +9,35 @@ import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
 import ReactAudioPlayer from 'react-audio-player';
-
+import IconButton from '@material-ui/core/IconButton';
 
 class AudioPlayerBar extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            isPlaying: false
+        }
+    }
+
+    onPlayClick = () => {
+        var audio = document.getElementById('audio');
+        if(audio){
+            if(!this.state.isPlaying){
+                audio.play();
+                this.setState({isPlaying: !this.state.isPlaying})
+            }else{
+                audio.pause();
+                this.setState({isPlaying: !this.state.isPlaying})
+            }
+                
+        }
+    }
+
     render() {
+        var play_pause_icon = <MdPlayArrow />
+        if(this.state.isPlaying){
+            play_pause_icon = <MdPause />
+        }
         var path_to_queue = ""
         if(localStorage.getItem('isSignedIn')){
             path_to_queue = {pathname: "/queue"}
@@ -22,10 +47,9 @@ class AudioPlayerBar extends Component {
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
-                <ReactAudioPlayer
+                <audio
+                    id="audio"
                     src="https://p.scdn.co/mp3-preview/3eb16018c2a700240e9dfb8817b6f2d041f15eb1?cid=774b29d4f13844c495f206cafdad9c86"
-                    autoPlay
-                    controls
                 />
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
@@ -41,7 +65,13 @@ class AudioPlayerBar extends Component {
                             
                             <Col xs={4} className="content-center">
                                 <MdSkipPrevious />
-                                <MdPlayArrow />
+                                <IconButton
+                                aria-label="play"
+                                onClick={this.onPlayClick}
+                            >
+                                { play_pause_icon }
+                            </IconButton>
+                                
                                 <MdSkipNext />
                             </Col>
                             <Col xs={4} className="content-center">
