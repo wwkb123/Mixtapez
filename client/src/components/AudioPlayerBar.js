@@ -50,23 +50,32 @@ class AudioPlayerBar extends Component {
         console.log("next music");
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
-        console.log("currentIndex:"+this.state.currentIndex);
         this.state.audioTag.pause();
-        let index = this.state.currentIndex;
-        if (this.state.isShuffle) {
-            index = Math.floor(Math.random()* queue.length)
-        } else if (this.state.currentIndex == (queue.length - 1)){
-            console.log("loop to beginning")
-            index = 0;
-        } else{
-            index = index + 1
+        if (this.state.track_data) {
+            let index = 0;
+            for (index = 0; index < queue.length; index++) {
+                if (queue[index].URI === this.state.track_data.id){
+                    break;
+                }
+            }
+            if (this.state.isShuffle) {
+                index = Math.floor(Math.random()* queue.length)
+            } else if (index == (queue.length - 1)){
+                console.log("loop to beginning")
+                index = 0;
+            } else{
+                index = index + 1
+            }
+            console.log("updated index:"+index)
+            if (index < queue.length) {
+                let URI = queue[index]? queue[index].URI : null;
+                console.log("URI:"+URI)
+                this.loadSongAndplay(URI, index);
+            }
+        } else {
+            this.onPlayClick();
         }
-        console.log("updated index:"+index)
-        if (index < queue.length) {
-            let URI = queue[index]? queue[index].URI : null;
-            console.log("URI:"+URI)
-            this.loadSongAndplay(URI, index);
-        }
+        
     }
 
     onPrevSong = async () => {
@@ -76,14 +85,23 @@ class AudioPlayerBar extends Component {
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
         console.log("queue:"+queue);
-        if (this.state.currentIndex != 0){
-            console.log("current index before update:"+this.state.currentIndex)
-            index = index - 1;
-            console.log("current index after update:"+index)
-            let URI = queue[index]? queue[index].URI : null;
-            console.log("URI:"+URI)
-            this.loadSongAndplay(URI, index);
-            
+        if (this.state.track_data) {
+            let index = 0;
+            for (index = 0; index < queue.length; index++) {
+                if (queue[index].URI === this.state.track_data.id){
+                    break;
+                }
+            }
+            if (index != 0){
+                console.log("current index before update:"+index)
+                index = index - 1;
+                console.log("current index after update:"+index)
+                let URI = queue[index]? queue[index].URI : null;
+                console.log("URI:"+URI)
+                this.loadSongAndplay(URI, index);
+            }
+        } else {
+            this.onPlayClick();
         }
     }
 
@@ -94,13 +112,17 @@ class AudioPlayerBar extends Component {
             console.log("successful load the track information")
             console.log("track url:"+getSong_response.data.track.preview_url)
             if (getSong_response.data.track.preview_url) {
+                let interval = this.state.interval;
+                if(!interval){
+                    interval = setInterval(this.tick, 100);
+                }
                 this.setState({
                     url: getSong_response.data.track.preview_url,
                     track_data: getSong_response.data.track,
                     isPlaying: true,
                     progress: 0,
                     currentIndex: index,
-                    interval: setInterval(this.tick, 100)
+                    interval: interval
                 });
                 this.state.audioTag.src = getSong_response.data.track.preview_url;
                 this.state.audioTag.play();
@@ -147,14 +169,15 @@ class AudioPlayerBar extends Component {
                 }else{
                     this.state.audioTag.pause();
                     clearInterval(this.state.interval);
-                    this.setState({isPlaying: !this.state.isPlaying})
+                    this.setState({isPlaying: !this.state.isPlaying,
+                    interval: null})
                 }
             }
         }else{
             if(queue.length > 0){
-                let URI = queue[this.state.currentIndex]? queue[this.state.currentIndex].URI : null;
+                let URI = queue[0]? queue[0].URI : null;
                 console.log("URI:"+URI)
-                this.loadSongAndplay(URI, this.state.currentIndex);
+                this.loadSongAndplay(URI, 0);
             }
         }
     }
@@ -248,7 +271,7 @@ class AudioPlayerBar extends Component {
                                 style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
                             </Col>
                             <Col xs={2} className="content-center">
-                                <div>Song Name</div>
+                                <div>{this.state.track_data?this.state.track_data.name:"none"}</div>
                             </Col>
                             
                             <Col xs={4} className="content-center">
