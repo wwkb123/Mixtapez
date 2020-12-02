@@ -48,7 +48,6 @@ export default function SongCard(props){
                 let URI = song.id;
                 let album = song.album.name;
                 let length = Math.round(song.duration_ms/1000);
-                console.log(song.id)
                 try {
                     const create_response = await UserAPI.post("/createMusic", {musicName,
                         URI,
@@ -59,6 +58,7 @@ export default function SongCard(props){
                         console.log(create_response.data.musicId)
                         let id = create_response.data.musicId
                         const song_response = await UserAPI.get("/music/"+id);
+                        console.log(id);
                         if(song_response.data.status == "success"){
                             if (queue.length > 0) {
                                 let contains = queue.map((music)=>{

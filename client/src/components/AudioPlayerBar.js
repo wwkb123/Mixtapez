@@ -36,9 +36,9 @@ class AudioPlayerBar extends Component {
     clickPlay = async () =>{
         console.log("clicked play")
         let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
         console.log("queue:"+queue)
-        if(queue){
-            queue = JSON.parse(queue);
+        if(queue.length > 0){
             let URI = queue[0]? queue[0].URI : null;
             console.log("URI:"+URI)
             const getSong_response = await UserAPI.post("/getSongAudio", {
@@ -46,12 +46,18 @@ class AudioPlayerBar extends Component {
             if (getSong_response.data.status == "success") {
                 console.log("successful load the track information")
                 console.log("track url:"+getSong_response.data.track.preview_url)
-                this.setState({
-                    url: getSong_response.data.track.preview_url,
-                    track_data: getSong_response.data.track
-                });
-                this.state.audioTag.src = getSong_response.data.track.preview_url;
-                this.state.audioTag.play();
+                if (getSong_response.data.track.preview_url) {
+                    this.setState({
+                        url: getSong_response.data.track.preview_url,
+                        track_data: getSong_response.data.track,
+                        playing: true
+                    });
+                    this.state.audioTag.src = getSong_response.data.track.preview_url;
+                    this.state.audioTag.play();
+                }else{
+                    console.log("no sample music aviliable")
+                }
+                
             }else{
                 console.log("errored")
             }
