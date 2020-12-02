@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { IconContext } from "react-icons";
 import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
-    MdShuffle, MdRepeat, MdVolumeUp
+    MdShuffle, MdRepeat, MdVolumeUp, MdVolumeOff
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
@@ -22,8 +22,14 @@ class AudioPlayerBar extends Component {
             progress: 0,
             duration: 0,
             isPlaying: false,
-            audioTag: new Audio()
+            audioTag: new Audio(),
+            isMute: false
         };
+
+
+        this.state.audioTag.addEventListener('ended', (event) => {  // when the music ends
+            this.setState({isPlaying: false});
+        });
     }
     
 
@@ -34,6 +40,15 @@ class AudioPlayerBar extends Component {
         this.setState({
             progress: this.state.audioTag.currentTime * 1000
         });
+    }
+
+    handleChange = (e, newValue) => {
+        // console.log('new', newValue);
+        
+        if(this.state.audioTag){
+            this.state.audioTag.volume = newValue / 100;
+            this.setState({volume: newValue});
+        }
     }
 
     onPlayClick = async () =>{
@@ -51,7 +66,6 @@ class AudioPlayerBar extends Component {
                     this.state.audioTag.pause();
                     this.setState({isPlaying: !this.state.isPlaying})
                 }
-                    
             }
         }else{
             if(queue.length > 0){
@@ -79,15 +93,28 @@ class AudioPlayerBar extends Component {
                 }
             }
         }
-        
-        
-
     }
     
+    onVolumeClick = () => {
+        if(this.state.audioTag){
+            if(!this.state.isMute){
+                this.state.audioTag.muted = true;
+                this.setState({isMute: !this.state.isMute})
+            }else{
+                this.state.audioTag.muted = false;
+                this.setState({isMute: !this.state.isMute})
+            }
+        }
+    }
+
     render() {
         var play_pause_icon = <MdPlayArrow />
         if(this.state.isPlaying){
             play_pause_icon = <MdPause />
+        }
+        var volume_icon = <MdVolumeUp/>
+        if(this.state.isMute){
+            volume_icon = <MdVolumeOff/>
         }
         var path_to_queue = ""
         if(localStorage.getItem('isSignedIn')){
@@ -123,8 +150,14 @@ class AudioPlayerBar extends Component {
                             <Col xs={4} className="content-center">
                                 <MdShuffle/>
                                 <MdRepeat/>
-                                <MdVolumeUp/>
-                                <Slider className="volume-slider" aria-labelledby="continuous-slider" />
+
+                                <IconButton
+                                    aria-label="volume"
+                                    onClick={this.onVolumeClick}
+                                >
+                                    { volume_icon }
+                                </IconButton>
+                                <Slider id="volume" value={this.state.volume} onChange={this.handleChange} className="volume-slider" aria-labelledby="continuous-slider" />
                             </Col>
                         </IconContext.Provider>
                     </Row>
