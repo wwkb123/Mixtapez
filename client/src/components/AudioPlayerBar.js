@@ -30,7 +30,14 @@ class AudioPlayerBar extends Component {
 
 
         this.state.audioTag.addEventListener('ended', (event) => {  // when the music ends
-            this.setState({isPlaying: false});
+            let queue = localStorage.getItem('queue');
+            queue = JSON.parse(queue);
+            if (this.state.currentIndex == queue.length - 1) {
+                this.setState({isPlaying: false});
+            } else {
+                this.onNextSong();
+            }
+            
         });
     }
     
@@ -94,7 +101,7 @@ class AudioPlayerBar extends Component {
         if (this.state.audioTag.currentTime > 0) {
             this.state.audioTag.currentTime = 0;
             this.state.audioTag.pause();
-            this.setState({isPlaying: !this.state.isPlaying})
+            this.setState({isPlaying: false})
         }else{
             let index = this.state.currentIndex;
             let queue = localStorage.getItem('queue');
@@ -259,6 +266,7 @@ class AudioPlayerBar extends Component {
         }else{
             path_to_queue = "";
         }
+        let progress = (this.state.progress/60<10?"0":"")+this.state.progress/60+":"+(this.state.progress%60<10?"0":"")+this.state.progress%60;
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
@@ -312,9 +320,9 @@ class AudioPlayerBar extends Component {
                         
                     <Row>
                         <Col className="content-center">
-                        <span style={{"margin":"10px"}}>00:00</span>
+                        <span style={{"margin":"10px"}}>{progress}</span>
                         <Slider className="audio-slider" aria-labelledby="continuous-slider" />
-                        <span style={{"margin":"10px"}}>04:00</span>
+                        <span style={{"margin":"10px"}}>00:30</span>
                         </Col>
                     </Row>
                 </Container>
