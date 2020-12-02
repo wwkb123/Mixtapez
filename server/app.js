@@ -713,10 +713,12 @@ app.get('/api/randomPlaylists', async (req, res) => {
 // get the audio source of a song
 app.post('/api/getSongAudio', async (req, res) => {
   // spotifyApi
-  spotifyApi.getTrack(req.body.uri).then(function(data) {
+  console.log(req.body.URI)
+  spotifyApi.getTrack(req.body.URI).then(function(data) {
+    console.log(data.body)
     res.status(200).json({
       status: "success",
-      results: data.body.track
+      track: data.body
     });
   }, function(err) {
     res.status(200).json({

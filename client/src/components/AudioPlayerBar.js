@@ -8,10 +8,58 @@ import { MdPlayArrow, MdPause, MdSkipNext, MdSkipPrevious, MdPlaylistPlay,
 } from "react-icons/md";
 import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
-import ReactAudioPlayer from 'react-audio-player';
-
+import UserAPI from "../apis/UserAPI";
 
 class AudioPlayerBar extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            volume: 100,
+            track_url: "",
+            track_data: null,
+            progress: 0,
+            duration: 0,
+            playing: false,
+            audioTag: new Audio()
+        };
+    }
+
+    tick = () =>{
+        if(!this.state.playing){
+            return;
+        }
+        this.setState({
+            progress: this.state.audioTag.currentTime * 1000
+        });
+    }
+
+    clickPlay = async () =>{
+        console.log("clicked play")
+        let queue = localStorage.getItem('queue');
+        console.log("queue:"+queue)
+        if(queue){
+            queue = JSON.parse(queue);
+            let URI = queue[0]? queue[0].URI : null;
+            console.log("URI:"+URI)
+            const getSong_response = await UserAPI.post("/getSongAudio", {
+                URI});
+            if (getSong_response.data.status == "success") {
+                console.log("successful load the track information")
+                console.log("track url:"+getSong_response.data.track.preview_url)
+                this.setState({
+                    url: getSong_response.data.track.preview_url,
+                    track_data: getSong_response.data.track
+                });
+                this.state.audioTag.src = getSong_response.data.track.preview_url;
+                this.state.audioTag.play();
+            }else{
+                console.log("errored")
+            }
+        }
+        
+
+    }
+    
     render() {
         var path_to_queue = ""
         if(localStorage.getItem('isSignedIn')){
@@ -22,11 +70,6 @@ class AudioPlayerBar extends Component {
         return (
             <div className="secondary-bg" style={{'height':'20vh', 'zIndex':'10', 'color':'#ed4e85'}}>
                 <Container>
-                <ReactAudioPlayer
-                    src="https://p.scdn.co/mp3-preview/3eb16018c2a700240e9dfb8817b6f2d041f15eb1?cid=774b29d4f13844c495f206cafdad9c86"
-                    autoPlay
-                    controls
-                />
                     <Row>
                         <IconContext.Provider value={{ color: "#F06E9C", size: '40px' }}>
                             <Col xs={2} className="content-center">
@@ -41,7 +84,7 @@ class AudioPlayerBar extends Component {
                             
                             <Col xs={4} className="content-center">
                                 <MdSkipPrevious />
-                                <MdPlayArrow />
+                                <MdPlayArrow onClick={this.clickPlay} />
                                 <MdSkipNext />
                             </Col>
                             <Col xs={4} className="content-center">
