@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
-import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
+import { MdPlayCircleOutline, MdMoreHoriz} from "react-icons/md";
 import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
@@ -160,6 +160,15 @@ export default function DisplayPlaylistScreen(props){
 
         }
     };
+
+    const onPlayClick = () =>{
+        var queue = [];
+        queue = Array.from(musics);
+        localStorage.setItem('queue', JSON.stringify(queue));
+        var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
+        if(queue.length > 0)
+            loadQueueSongsToAudioPlayerCallBack(queue[0].URI);
+    }
 
     const handleOnClick = async (e, removePlaylist, removeMusicList) =>{
         e.preventDefault();
@@ -476,7 +485,12 @@ export default function DisplayPlaylistScreen(props){
                 </Row>
                 <Row xs={10}>
                     <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                        <MdPauseCircleOutline/>
+                        <IconButton
+                            aria-label="play"
+                            onClick={onPlayClick}
+                        >
+                            <MdPlayCircleOutline/>
+                        </IconButton>
                         { reorderButtons }
                         {/* <AiOutlinePlusCircle/> */}
                         {deleteButton}
@@ -485,7 +499,7 @@ export default function DisplayPlaylistScreen(props){
                         aria-controls="menu"
                         aria-haspopup="true"
                         onClick={handleClick}
-                    >
+                        >
                         
                             <MdMoreHoriz/>
                         </IconButton>

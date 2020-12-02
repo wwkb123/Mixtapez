@@ -35,6 +35,13 @@ class AudioPlayerBar extends Component {
         });
     }
 
+    componentDidMount() {
+        this.props.onRef(this)
+    }
+    
+    componentWillUnmount() {
+        this.props.onRef(undefined)
+    }
 
     tick = () =>{
         console.log("tick working");

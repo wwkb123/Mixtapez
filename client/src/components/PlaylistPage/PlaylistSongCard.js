@@ -101,7 +101,7 @@ export default function PlaylistSongCard(props){
                         }
                     }else{
                         queue.push(song_response.data.music);
-                            localStorage.setItem('queue', JSON.stringify(queue))
+                        localStorage.setItem('queue', JSON.stringify(queue))
                     }
                 }
             } catch (error) {

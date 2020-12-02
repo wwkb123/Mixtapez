@@ -88,6 +88,10 @@ class App extends Component{
         this.setState({modal_content:content});
     }
 
+    loadQueueSongsToAudioPlayer = (URI) =>{
+        this.audioPlayer.loadSongAndplay(URI, 0);
+    }
+
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
@@ -110,7 +114,7 @@ class App extends Component{
                                 <Route path='/profile/:id' component={ProfileScreen} />
                                 {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
-                                <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
+                                <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
@@ -130,7 +134,7 @@ class App extends Component{
                         </Col>
                     </Row>
                 </Container>
-                <AudioPlayerBar/>
+                <AudioPlayerBar onRef={ref => (this.audioPlayer = ref)} />
                 <div id="main_modal" className="modal">
                     <div className="modal-content">
                         <span onClick={this.onModalClose} className="close">&times;</span>
