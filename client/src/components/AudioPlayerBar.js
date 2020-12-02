@@ -283,14 +283,28 @@ class AudioPlayerBar extends Component {
                             </Col>
                             
                             <Col xs={4} className="content-center">
-                                <MdSkipPrevious onClick={this.onPrevSong} />
+                                <IconButton
+                                    aria-label="prev"
+                                    onClick={this.onPrevSong}
+                                >
+                                    <MdSkipPrevious  />
+                                </IconButton>
+                                
                                 <IconButton
                                     aria-label="play"
                                     onClick={this.onPlayClick}
                                 >
                                     { play_pause_icon }
                                 </IconButton>
-                                <MdSkipNext onClick={this.onNextSong}/>
+                                
+                                <IconButton
+                                    aria-label="next"
+                                    onClick={this.onNextSong}
+                                >
+                                    <MdSkipNext />
+                                </IconButton>
+                                
+
                             </Col>
                             <Col xs={4} className="content-center">
                                 <IconButton
