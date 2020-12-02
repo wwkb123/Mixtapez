@@ -16,7 +16,8 @@
 body {
   /* background-color: var(--swatch-foundation); */
   background-color: white;
-  font-family: 'Lexend Exa';
+  /* font-family: 'Lexend Exa'; */
+  font-family: sans-serif;
   color: #ed4e85;
 }
 
