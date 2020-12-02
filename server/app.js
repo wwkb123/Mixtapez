@@ -713,6 +713,17 @@ app.get('/api/randomPlaylists', async (req, res) => {
 // get the audio source of a song
 app.post('/api/getSongAudio', async (req, res) => {
   // spotifyApi
+  spotifyApi.getTrack(req.body.uri).then(function(data) {
+    res.status(200).json({
+      status: "success",
+      results: data.body.track
+    });
+  }, function(err) {
+    res.status(200).json({
+      status: "failed"
+    });
+    console.error(err);
+  });
 });
 
 // catch 404 and forward to error handler
