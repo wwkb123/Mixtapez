@@ -89,7 +89,12 @@ class SignUpScreen extends Component{
     onSubmit = async (e, addUser) => {
         e.preventDefault();
         var email = this.state.email;
-        // todo: check email format
+        var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        var validate_result = regex.test(email);
+        if(validate_result == false){
+            alert("Please enter an email address with correct format.");
+            return;
+        }
         console.log(email);
         if(this.state.email !== "" && this.state.nickName && this.state.password !== "" && this.state.passwordConfirm !== ""){
             if(this.state.password === this.state.passwordConfirm){
