@@ -145,6 +145,7 @@ class App extends Component{
                         { this.state.modal_content }
                     </div>
                 </div>
+                <div id="loading_toast">Loading...</div>
                 <div id="no_song_toast">This song doesn't have a preview. Playing our default song instead...</div>
             </div>
         );

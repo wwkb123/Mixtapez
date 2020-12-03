@@ -104,6 +104,10 @@ class SignUpScreen extends Component{
                         email
                     });
                     if(register_response.data.status == "success"){  // email can be used
+                        var toast = document.getElementById("loading_toast");
+                        toast.className = "show"; // show the toast
+                        // After 3 seconds, remove the show class from toast
+                        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
                         await addUser({
                             variables: {
                                 userName: this.state.email,
