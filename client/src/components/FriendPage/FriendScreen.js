@@ -25,14 +25,16 @@ class FriendScreen extends Component {
                     id: userID
                 });
                 if(response.data.status == "success"){
-                    console.log(response.data.user);
+                    this.setState({friends: response.data.user.friends});
+                    this.setState({friendRequests: response.data.user.friendRequests});
+                    // console.log(response.data.user);
                 }
+                this.setState({isLoaded: true});
             }catch(err){
-
+                console.log(err);
             }
-            
         }
-        this.setState({isLoaded: true});
+        
     }
 
     componentDidMount() {
