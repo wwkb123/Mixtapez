@@ -56,7 +56,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdPerson style={{'padding-bottom':'5px'}}/>
+                                    <MdPerson style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -70,7 +70,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdPeople style={{'padding-bottom':'5px'}}/>
+                                    <MdPeople style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -84,7 +84,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdQueueMusic style={{'padding-bottom':'5px'}}/>
+                                    <MdQueueMusic style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -101,7 +101,7 @@ class NavigationBar extends Component{
                                 <Row>
                                     <Col xs={2}>
                                         <IconContext.Provider value={{ size: '30px' }}>
-                                            <MdPlaylistAdd style={{'padding-bottom':'5px'}}/>
+                                            <MdPlaylistAdd style={{'paddingBottom':'5px'}}/>
                                         </IconContext.Provider>
                                     </Col>
                                     <Col xs={10}>
@@ -117,7 +117,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdFavorite style={{'padding-bottom':'5px'}}/>
+                                    <MdFavorite style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -130,7 +130,7 @@ class NavigationBar extends Component{
                     <Row>
                         <Col xs={2}>
                             <IconContext.Provider value={{ size: '30px' }}>
-                                <CgLogOut style={{'padding-bottom':'5px'}}/>
+                                <CgLogOut style={{'paddingBottom':'5px'}}/>
                             </IconContext.Provider>
                         </Col>
                         <Col xs={10}>
@@ -147,7 +147,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <CgLogIn style={{'padding-bottom':'5px'}}/>
+                                    <CgLogIn style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -161,7 +161,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdAssignment style={{'padding-bottom':'5px'}}/>
+                                    <MdAssignment style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -242,7 +242,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdHome style={{'padding-bottom':'5px'}}/>
+                                    <MdHome style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
@@ -256,7 +256,7 @@ class NavigationBar extends Component{
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdSearch style={{'padding-bottom':'5px'}}/>
+                                    <MdSearch style={{'paddingBottom':'5px'}}/>
                                 </IconContext.Provider>
                             </Col>
                             <Col xs={10}>
