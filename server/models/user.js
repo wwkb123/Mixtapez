@@ -18,10 +18,10 @@ var UserSchema = new mongoose.Schema({
 		  type: mongoose.Schema.Types.ObjectId,
           ref: 'music'
   },
-  favourites: {
+  favorites: [{
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'musicList'
-  },
+          ref: 'music'
+  }],
   musicLists: [
 	{
           type: mongoose.Schema.Types.ObjectId,

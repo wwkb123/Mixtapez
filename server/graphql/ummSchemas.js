@@ -102,8 +102,8 @@ var userType = new GraphQLObjectType({
             nowListening:{
                 type: musicType
             },
-            favourites:{
-                type: GraphQLList(musicListType)
+            favorites:{
+                type: GraphQLList(musicType)
             },
             musicLists:{
                 type: GraphQLList(musicListType)
