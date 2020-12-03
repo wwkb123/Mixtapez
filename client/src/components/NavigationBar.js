@@ -6,6 +6,13 @@ import { Mutation } from "react-apollo";
 import UserAPI from "../apis/UserAPI";
 import { withRouter } from "react-router-dom";
 import { TextField } from '@material-ui/core';
+import { MdHome, MdSearch, MdPerson, MdPeople, 
+    MdQueueMusic, MdPlaylistAdd, MdFavorite, MdExitToApp, MdAssignment
+} from "react-icons/md";
+import { CgLogIn, CgLogOut } from "react-icons/cg";
+import { IconContext } from "react-icons";
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 const ADD_PLAYLIST=gql`
     mutation AddNewPlaylist(
@@ -44,27 +51,125 @@ class NavigationBar extends Component{
         if(localStorage.getItem('isSignedIn')){
             let userId = localStorage.getItem('userId');
             return(<div>
-                <Link to={"/profile/"+userId}><Button className="nav-btn" size="lg">My Profile</Button></Link>
-                <Link to="/friends"><Button className="nav-btn" size="lg">Friends</Button></Link>
-                <Link to="/playlists"><Button className="nav-btn" size="lg">Playlists</Button></Link>
+                <Link to={"/profile/"+userId}>
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdPerson style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                My Profile
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
+                <Link to="/friends">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdPeople style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Friends
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
+                <Link to="/playlists">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdQueueMusic style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Playlists
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
                 <Mutation mutation={ADD_PLAYLIST}>
                     {(addNewPlaylist,{loading, error})=>(
                         //<Link to={'/playlist/${this.state.playlist}'}>
                             // <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
                             <Button className="nav-btn" size="lg" onClick={(e) => this.openModal(e, addNewPlaylist)}>
-                                Create Playlist
+                                <Row>
+                                    <Col xs={2}>
+                                        <IconContext.Provider value={{ size: '30px' }}>
+                                            <MdPlaylistAdd style={{'padding-bottom':'5px'}}/>
+                                        </IconContext.Provider>
+                                    </Col>
+                                    <Col xs={10}>
+                                        Create Playlist
+                                    </Col>
+                                </Row>
                             </Button>
                         //</Link>
                     )}
                 </Mutation>
-                <Link to="/likedsongs"><Button className="nav-btn" size="lg">Liked Songs</Button></Link>
-                <Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>Sign Out</Button>
+                <Link to="/likedsongs">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdFavorite style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Liked Songs
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
+                <Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>
+                    <Row>
+                        <Col xs={2}>
+                            <IconContext.Provider value={{ size: '30px' }}>
+                                <CgLogOut style={{'padding-bottom':'5px'}}/>
+                            </IconContext.Provider>
+                        </Col>
+                        <Col xs={10}>
+                            Sign Out
+                        </Col>
+                    </Row>
+                </Button>
                 </div>)
         }
         else{
             return(<div>
-                <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
-                <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link>
+                <Link to="/signin">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <CgLogIn style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Sign In
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
+                <Link to="/signup">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdAssignment style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Sign Up
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
             </div>)
         }
     }
@@ -132,8 +237,34 @@ class NavigationBar extends Component{
     render() {
         return(
             <div>
-                <Link to="/"><Button className="nav-btn" size="lg">Home</Button></Link>
-                <Link to="/search"><Button className="nav-btn" size="lg">Search</Button></Link>
+                <Link to="/">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdHome style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Home
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
+                <Link to="/search">
+                    <Button className="nav-btn" size="lg">
+                        <Row>
+                            <Col xs={2}>
+                                <IconContext.Provider value={{ size: '30px' }}>
+                                    <MdSearch style={{'padding-bottom':'5px'}}/>
+                                </IconContext.Provider>
+                            </Col>
+                            <Col xs={10}>
+                                Search
+                            </Col>
+                        </Row>
+                    </Button>
+                </Link>
                 {this.selectButtons()}
                 {/* <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
                 <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link> */}
