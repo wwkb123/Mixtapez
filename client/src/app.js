@@ -128,7 +128,7 @@ class App extends Component{
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
                                 <Route path='/changepassword/:id' component={ChangePasswordScreen} />
                                 <Route path='/verification/:id' render={(props) => <VerificationScreen signedIn={this.signedIn} {...props} isAuthed={true}/>}/>
-                                <Route path='/friendrequests' component={FriendRequestsScreen} />
+                                {/* <Route path='/friendrequests' component={FriendRequestsScreen} /> */}
                                 <Route path='/emailsent' component={EmailSentScreen} />
                                 <Route path='/error' component={ErrorScreen} />
                                 {/* <Route path='/edit/:id' component={EditLogoScreen} />

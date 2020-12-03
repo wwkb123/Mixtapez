@@ -9,6 +9,7 @@ import data from '../Mixtapez_data.json'
 import UserAPI from "../../apis/UserAPI";
 import { BsFillCaretDownFill, BsFillCaretUpFill } from "react-icons/bs";
 import { IconContext } from "react-icons";
+import FriendRequestCard from './FriendRequestCard.js'
 
 class FriendScreen extends Component {
     constructor(props){
@@ -28,8 +29,29 @@ class FriendScreen extends Component {
                     id: userID
                 });
                 if(response.data.status == "success"){
-                    this.setState({friends: response.data.user.friends});
-                    this.setState({friendRequests: response.data.user.friendRequests});
+                    let friends_IDs = response.data.user.friends;
+                    let friends = [];
+                    for(let i = 0; i < friends_IDs.length; i++){
+                        const user_response = await UserAPI.post("/user", {
+                            id: friends_IDs[i]
+                        });
+                        if(user_response.data.status == "success"){
+                            friends.push(user_response.data.user);
+                        }
+                    }
+
+                    let friendRequests_IDs = response.data.user.friendRequests;
+                    let friendRequests = [];
+                    for(let i = 0; i < friendRequests_IDs.length; i++){
+                        const user_response = await UserAPI.post("/user", {
+                            id: friendRequests_IDs[i]
+                        });
+                        if(user_response.data.status == "success"){
+                            friendRequests.push(user_response.data.user);
+                        }
+                    }
+                    this.setState({friends: Array.from(friends)});
+                    this.setState({friendRequests:  Array.from(friendRequests)});
                     // console.log(response.data.user);
                 }
                 this.setState({isLoaded: true});
@@ -59,16 +81,18 @@ class FriendScreen extends Component {
     }
 
     render() {
-        var friend_cards = ""
-        var friendRequests = ""
-        var friend_request_cards = ""
+        let friend_cards = ""
+        let friendRequests = ""
+        let friend_request_cards = ""
         if(this.state.isLoaded){
             if(this.state.friends){
                 if(this.state.friends.length == 0){
                     friend_cards = <div>You have no friend yet. Go to search page and search for users.</div>
                 }else{
-                    friend_cards = this.state.friends.map((friend, index) => {
-                        return (<div>{friend}</div>)
+                    friend_cards = this.state.friends.map((user, index) => {
+                        return (<div key={index}>
+                            <FriendCard user={user}></FriendCard>
+                        </div>)
                     })
                 }
                 
@@ -79,7 +103,12 @@ class FriendScreen extends Component {
                     friend_request_cards = <div>You have no friend requests.</div>
                 }else{
                     friend_request_cards = friendRequests.map((user, index) => {
-                        return (<div>{user}</div>)
+                        return (
+                            <div key={index}>
+                                <FriendRequestCard user={user}></FriendRequestCard>
+                            </div>
+                        
+                        )
                     })
                 }
             }
@@ -104,8 +133,6 @@ class FriendScreen extends Component {
                     </div>
                     <hr></hr>
                     { friend_cards }
-                    {/* <Link to="/chat/1"><FriendCard name={data.users[1].nickName}/></Link>
-                    <FriendCard name={data.users[2].nickName}/> */}
                 </div>
             );
         }else{

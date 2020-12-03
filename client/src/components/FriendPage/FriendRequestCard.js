@@ -8,8 +8,19 @@ import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 
 class FriendRequestCard extends Component {
+    onAcceptClick = () => {
+
+    }
+
+    onDeclineClick = () => {
+
+    }
 
     render() {
+        var username = ""
+        if(this.props.user){
+            username = this.props.user.nickName;
+        }
         return (
             <div className="m-5">
                 <Container>
@@ -20,9 +31,9 @@ class FriendRequestCard extends Component {
                         </IconContext.Provider>
                         </Col>
                         <Col xs={9}>
-                            <h4>wwkb123</h4>
-                            <Link to="/friends"><Button className="search-btn">Accept</Button></Link>
-                            <Link to="/friends"><Button className="search-btn">Decline</Button></Link>
+                            <h4>{username}</h4>
+                            <Button onClick={this.onAcceptClick} className="search-btn">Accept</Button>
+                            <Button  onClick={this.onDeclineClick} className="search-btn">Decline</Button>
                         </Col>
                     </Row>
                 </Container>
