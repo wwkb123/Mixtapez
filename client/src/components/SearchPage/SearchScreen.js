@@ -125,6 +125,7 @@ class SearchScreen extends Component{
             modal.style.display = "none";
     }
 
+    // deprecated
     onAddPlaylistClick = async (e, musicListId, addMusicToMusicList) => {
         e.preventDefault();
         var songID = this.state.songID;

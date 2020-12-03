@@ -92,6 +92,10 @@ class App extends Component{
         this.audioPlayer.loadSongAndplay(URI, 0);
     }
 
+    loadQueueIndexToAudioPlayer = (index) => {
+        this.audioPlayer.loadQueueIndexAndPlay(index);
+    }
+
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
@@ -115,7 +119,7 @@ class App extends Component{
                                 {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
-                                <Route path='/queue' render={(props) => <QueueScreen updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
+                                <Route path='/queue' render={(props) => <QueueScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 {/* <Route path='/popup' component={Popup} /> */}

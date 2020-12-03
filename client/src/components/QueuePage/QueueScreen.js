@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
-import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
+import { MdPlayCircleOutline, MdMoreHoriz} from "react-icons/md";
 import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
@@ -180,6 +180,14 @@ export default function QueueScreen(props){
         localStorage.setItem('queue', JSON.stringify(new_queue));
     }
 
+    const onPlayClick = () =>{
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        var loadQueueIndexToAudioPlayerCallBack = props.loadQueueIndexToAudioPlayer;
+        if(queue.length > 0)
+            loadQueueIndexToAudioPlayerCallBack(0);
+    }
+
     const onTitleClickHandler = () => {
         console.log("handler triggered");
         if(musics){
@@ -293,10 +301,10 @@ export default function QueueScreen(props){
         save_class = "search-btn disabled"
     }
     if(queue !== null){
-        reorderButtons =  <div>
+        reorderButtons =  <>
             <Button className={reorder_class} onClick={onReOrderClick}>Reorder Songs</Button>
             <Button className={save_class} onClick={onSaveClick}>Save Changes</Button>
-            </div>       
+            </>       
         var songcards = null;
         if(reorder_mode && musics && musics.length > 0){
             songcards = <Reorder
@@ -354,12 +362,20 @@ export default function QueueScreen(props){
                     <img src={Image} width={175} height={175} alt="">
                     </img>
                     <Col>
-                        {/* <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>               */}
+                        <h1 style={{fontWeight: "bold"}} > Queue </h1>              
                         <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <Button className="search-btn" onClick={onSaveQueueClick}>Save As Playlist</Button>
                         <Button className="search-btn" onClick={onClearQueueClick}>Clear Queue</Button>
                     </Col>
                 </Row>
+                <IconButton
+                    aria-label="play"
+                    onClick={onPlayClick}
+                >   
+                    <IconContext.Provider value={{ color: "#F06E9C", size: '40px'}}>
+                        <MdPlayCircleOutline/>
+                    </IconContext.Provider>
+                </IconButton>
                 { reorderButtons }
                 
                 <SongTitleCard

@@ -38,7 +38,7 @@ class AudioPlayerBar extends Component {
     componentDidMount() {
         this.props.onRef(this)
     }
-    
+
     componentWillUnmount() {
         this.props.onRef(undefined)
     }
@@ -110,6 +110,12 @@ class AudioPlayerBar extends Component {
         } else {
             this.onPlayClick();
         }
+    }
+
+    loadQueueIndexAndPlay = (index) => {
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        this.loadSongAndplay(queue[index].URI, index);
     }
 
     loadSongAndplay = async (URI, index) =>{
