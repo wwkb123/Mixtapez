@@ -10,6 +10,7 @@ import Slider from '@material-ui/core/Slider';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import UserAPI from "../apis/UserAPI";
+import default_song from '../tempData/default.mp3'
 
 class AudioPlayerBar extends Component {
     constructor(props){
@@ -44,7 +45,7 @@ class AudioPlayerBar extends Component {
     }
 
     tick = () =>{
-        console.log("tick working");
+        // console.log("tick working");
         if(!this.state.isPlaying){
             return;
         }
@@ -141,6 +142,23 @@ class AudioPlayerBar extends Component {
                 this.state.audioTag.play();
             }else{
                 console.log("no sample music aviliable")
+                let interval = this.state.interval;
+                if(!interval){
+                    interval = setInterval(this.tick, 100);
+                }
+                this.setState({
+                    track_data: getSong_response.data.track,
+                    isPlaying: true,
+                    progress: 0,
+                    currentIndex: index,
+                    interval: interval
+                });
+                this.state.audioTag.src = default_song;
+                this.state.audioTag.play();
+                var toast = document.getElementById("no_song_toast");
+                toast.className = "show"; // show the toast
+                // After 3 seconds, remove the show class from toast
+                setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
             }
             
         }else{

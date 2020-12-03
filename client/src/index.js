@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 import './App.css';
+import './toast.css';
 // THESE ARE OUR REACT SCREENS, WHICH WE WILL ROUTE HERE
 // import HomeScreen from './components/HomePage/HomeScreen';
 // import FriendScreen from './components/FriendPage/FriendScreen'

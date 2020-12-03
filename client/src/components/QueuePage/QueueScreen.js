@@ -290,6 +290,14 @@ export default function QueueScreen(props){
             modal.style.display = "none";
     }
 
+    const onSongCardClick = (e, index) => {
+        let queue = localStorage.getItem('queue');
+        queue = JSON.parse(queue);
+        var loadQueueIndexToAudioPlayerCallBack = props.loadQueueIndexToAudioPlayer;
+        if(queue.length > 0)
+            loadQueueIndexToAudioPlayerCallBack(index);
+    }
+
     let reorderButtons = null;
     let reorder_class = ""
     let save_class = ""
@@ -333,10 +341,10 @@ export default function QueueScreen(props){
                 ))}
             </Reorder>
         }else if(musics && musics.length > 0){
-            console.log('musics are '+ musics);
+            // console.log('musics are '+ musics);
             songcards = <div>{musics.slice((page-1)*10,page*10)
                 .map((music, index) => (
-                <div key={music._id}>
+                <div key={music._id} style={{'cursor':'pointer'}} onClick={(e) => onSongCardClick(e, index)}>
                     <QueueSongCard
                     reorder_mode={reorder_mode}
                     updateModalContentHandler={updateModalContentHandler}
