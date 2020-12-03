@@ -175,9 +175,28 @@ export default function QueueScreen(props){
     }
 
     const onClearQueueClick = () => {
+        if(localStorage.getItem('isSignedIn')){
+            var modal = document.getElementById("main_modal");
+            if(modal){
+                modal.style.display = "block";
+                var updateModalContentHandler = props.updateModalContentHandler;
+                var content = <div>
+                    <h3>Are you sure to clear the queue?</h3>
+                    <Button className="search-btn" onClick={onClearQueueConfirm}>Confirm</Button>
+                    <Button className="cancel-btn" onClick={closeModal}>Cancel</Button>
+                    </div>
+                updateModalContentHandler(content);
+            }
+        }else{
+            alert("Please sign in first!");
+        }
+    }
+
+    const onClearQueueConfirm = () => {
         var new_queue = [];
         setMusics(new_queue);
         localStorage.setItem('queue', JSON.stringify(new_queue));
+        closeModal();
     }
 
     const onPlayClick = () =>{

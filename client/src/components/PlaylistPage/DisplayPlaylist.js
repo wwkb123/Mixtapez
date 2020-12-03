@@ -170,23 +170,44 @@ export default function DisplayPlaylistScreen(props){
             loadQueueSongsToAudioPlayerCallBack(queue[0].URI);
     }
 
-    const handleOnClick = async (e, removePlaylist, removeMusicList) =>{
-        e.preventDefault();
-        console.log('click to remove');
-        if(true){
-            await removePlaylist({
-                variables:{
-                    userId: userId,
-                    playlistId: props.match.params.id
-                }
-            });
-            await removeMusicList({
-                variables:{
-                    playlistId: props.match.params.id
-                }
-            });
-            props.history.push('/playlists');
+    const onDeleteClick = (e, removePlaylist, removeMusicList) => {
+        if(localStorage.getItem('isSignedIn')){
+            var modal = document.getElementById("main_modal");
+            if(modal){
+                modal.style.display = "block";
+                var updateMainModalContentHandler = props.updateMainModalContentHandler;
+                var content = <div>
+                    <h3>Are you sure to delete the playlist "{musicList.musicListName}"?</h3>
+                    <Button className="search-btn" onClick={(e) => onDeleteConfirm(e, removePlaylist, removeMusicList)}>Confirm</Button>
+                    <Button className="cancel-btn" onClick={closeMainModal}>Cancel</Button>
+                    </div>
+                updateMainModalContentHandler(content);
+            }
+        }else{
+            alert("Please sign in first!");
         }
+    }
+    const onDeleteConfirm = async (e, removePlaylist, removeMusicList) =>{
+        e.preventDefault();
+        await removePlaylist({
+            variables:{
+                userId: userId,
+                playlistId: props.match.params.id
+            }
+        });
+        await removeMusicList({
+            variables:{
+                playlistId: props.match.params.id
+            }
+        });
+        closeMainModal();
+        props.history.push('/playlists');
+    
+    }
+
+    const closeMainModal = () =>{
+        var modal = document.getElementById("main_modal");
+        modal.style.display = "none";
     }
 
     const onTitleClickHandler = () => {
@@ -379,6 +400,8 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
+
+
     const onModalClose = () =>{
         var modal = document.getElementById("modal");
         modal.style.display = "none";
@@ -402,7 +425,7 @@ export default function DisplayPlaylistScreen(props){
                     {(removePlaylist, { loading, error }) => 
                     <Mutation mutation={REMOVE_MUSICLIST}>
                             {(removeMusicList, { loading, error }) => 
-                                <BsTrashFill onClick={(e) => handleOnClick(e,removePlaylist, removeMusicList )}/> }
+                                <BsTrashFill style={{'cursor':'pointer'}} onClick={(e) => onDeleteClick(e,removePlaylist, removeMusicList )}/> }
                     </Mutation>}
             </Mutation>
             reorderButtons =  <div>

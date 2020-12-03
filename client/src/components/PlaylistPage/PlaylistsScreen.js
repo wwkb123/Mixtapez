@@ -52,6 +52,8 @@ export default function PlaylistsScreen(props){
         setPlaylists(Array.from(newMusicLists));
     }
 
+
+
     useEffect(() => {
         
         async function fetchData() {
@@ -111,6 +113,7 @@ export default function PlaylistsScreen(props){
                     musicListId={musicList._id}
                     musicListName={musicList.musicListName}
                     ownerId={musicList.owner}
+                    updateModalContentHandler={props.updateModalContentHandler}
                     handler={handler}/>
                 )}   
             </div>

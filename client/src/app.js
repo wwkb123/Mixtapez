@@ -117,8 +117,8 @@ class App extends Component{
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' component={ProfileScreen} />
                                 {/* <Route path='/create' component={CreateNewList} /> */}
-                                <Route path='/playlists' render={(props) => <PlaylistsScreen userId={this.state.userId} {...props} isAuthed={true}/>} />
-                                <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
+                                <Route path='/playlists' render={(props) => <PlaylistsScreen updateModalContentHandler={this.updateModalContentHandler} userId={this.state.userId} {...props} isAuthed={true}/>} />
+                                <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen updateMainModalContentHandler={this.updateModalContentHandler} loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
                                 <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
