@@ -12,9 +12,26 @@ class ProfileScreen extends Component {
         super(props);
         this.state = {
             user: null,
-            publicPlaylists: []
+            publicPlaylists: [],
+            self: null
         }
     }
+
+    getSelf = async () => {
+        var selfID = localStorage.getItem('userId');
+        try {
+            const response = await UserAPI.post("/user", {
+                id: selfID
+            });
+            if(response.data.status == "success"){ // search success
+                var self = response.data.user;
+                this.setState({self});
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     getUser = async (id) => {
         var user = "";
         console.log("looking for user", id);
@@ -25,7 +42,7 @@ class ProfileScreen extends Component {
             if(response.data.status == "success"){ // search success
                 console.log("success");
                 user = response.data.user;
-                this.setState({user});
+                
                 const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
                 if(playlists_response.data.status == "success"){
                     var musicLists = playlists_response.data.musicLists;  // list of playlist ids
@@ -43,7 +60,7 @@ class ProfileScreen extends Component {
                     }
 
                     this.setState({publicPlaylists: publicPlaylists});
-                    
+                    this.setState({user});
                 }
 
             }else{ // somehow failed
@@ -58,35 +75,81 @@ class ProfileScreen extends Component {
         var userID = this.props.match.params.id;
         if(userID !== ""){
             this.getUser(userID);
+            this.getSelf();
         }
+    }
+
+    // if only the props is updated
+    componentWillReceiveProps(nextProps) {
+        var userID = nextProps.match.params.id;
+        if(userID !== ""){
+            this.getUser(userID);
+            this.getSelf();
+        }
+    }
+
+    onAddFriendClick = () => {
         
+    }
+
+    onRemoveFriendClick = () => {
+
     }
 
     render() {
         var userID = this.props.match.params.id;
         var user = this.state.user;
+        var self = ""
+        var selfID = ""
         var playlist_cards = ""
+        var user_card = ""
+        var publicPlaylists = [];
+
         if(this.state.publicPlaylists){
-            playlist_cards = this.state.publicPlaylists.map((playlist, index) => {
-                return (<ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>)
+            publicPlaylists = this.state.publicPlaylists;
+            playlist_cards = publicPlaylists.map((playlist, index) => {
+                return (<div key={index}>
+                    <ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>
+                </div>
+                )
             })
         }
         var friend_btns = ""
-        var selfID = localStorage.getItem('userId');
-        if(userID !== selfID){
-            friend_btns =
-            <div>
-                <Button className="search-btn bg-gray">Remove Friend</Button>
-            </div>
+        if(this.state.self){
+            self = this.state.self;
+            selfID = this.state.self._id;
+            if(userID !== selfID){ // if not self
+                if(self.friends.includes(userID)){  // if is a friend
+                    friend_btns =
+                    <div>
+                        <Button onClick={this.onRemoveFriendClick} className="remove-friend-btn">Remove Friend</Button>
+                    </div>
+                }else{
+                    friend_btns =
+                    <div>
+                        <Button onClick={this.onAddFriendClick} className="add-friend-btn">Add Friend</Button>
+                    </div>
+                }
+                if(self.friendRequests.includes(userID)){  // if request is sent
+                    friend_btns =
+                    <div>
+                        <Button style={{'cursor':'default'}} className="pending-friend-btn">Request sent</Button>
+                    </div>
+                }
+                
+                user_card = <FriendCard user={user}/>
+            }else{ // if self
+                user_card = <FriendCard user={self}/>
+            }
         }
         if(user){
-            console.log();
             return (
                 <div>
                     <br/>
                     <h1>Profile</h1>
-                    <FriendCard user={user}/>
+                    { user_card }
                     { friend_btns }
+                    <hr></hr>
                     <div className="grid-container">
                         { playlist_cards }
                     </div>

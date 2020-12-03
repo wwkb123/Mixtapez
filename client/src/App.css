@@ -248,10 +248,24 @@ body {
 
 }
 
-.bg-gray{
-  background-color: gray !important;
-  margin-left: 15%;
+.remove-friend-btn{
+  background-color: #ec2727 !important;
+  margin-left: 5%;
+  border: none !important;
 }
+
+.add-friend-btn {
+  background-color: #ed4e85 !important;
+  margin-left: 5%;
+  border: none !important;
+}
+
+.pending-friend-btn{
+  background-color: gray !important;
+  margin-left: 5%;
+  border: none !important;
+}
+
 
 .disabled{
   background-color: gray !important;
