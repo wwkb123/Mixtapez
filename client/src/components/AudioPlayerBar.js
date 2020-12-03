@@ -58,6 +58,7 @@ class AudioPlayerBar extends Component {
         console.log("next music");
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
+        if(!queue) return;
         this.state.audioTag.pause();
         if (this.state.track_data) {
             let index = 0;
@@ -92,7 +93,7 @@ class AudioPlayerBar extends Component {
         let index = this.state.currentIndex;
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
-        console.log("queue:"+queue);
+        if(!queue) return;
         if (this.state.track_data) {
             let index = 0;
             for (index = 0; index < queue.length; index++) {
@@ -116,6 +117,7 @@ class AudioPlayerBar extends Component {
     loadQueueIndexAndPlay = (index) => {
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
+        if(!queue) return;
         this.loadSongAndplay(queue[index].URI, index);
     }
 
@@ -188,8 +190,7 @@ class AudioPlayerBar extends Component {
         console.log("clicked play")
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
-        console.log("queue:"+queue)
-
+        if(!queue) return;
         if(this.state.track_data){
             if(this.state.audioTag){
                 if(!this.state.isPlaying){
