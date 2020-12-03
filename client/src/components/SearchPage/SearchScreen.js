@@ -68,9 +68,11 @@ class SearchScreen extends Component{
             songInfo: {},
             page: 1,
             musics:[],
-            initialized: false
+            initialized: false,
+            modal_content: null
         }
-        this.childSongIdHandler = this.childSongIdHandler.bind(this)
+        this.childSongIdHandler = this.childSongIdHandler.bind(this);
+        this.updateModalContentHandler = this.updateModalContentHandler.bind(this);
     }
 
     handleChange = (e) => {
@@ -118,7 +120,7 @@ class SearchScreen extends Component{
     }
 
     onClose = () =>{
-        var modal = document.getElementById("search_modal");
+        var modal = document.getElementById("modal");
         if(modal)
             modal.style.display = "none";
     }
@@ -184,6 +186,10 @@ class SearchScreen extends Component{
         }
     }
 
+    updateModalContentHandler = (content) => {
+        this.setState({modal_content: content})
+    }
+
     childSongIdHandler(songID, songInfo) {
         console.log(songID);
         console.log(songInfo);
@@ -205,7 +211,10 @@ class SearchScreen extends Component{
                 result_title_card = <SongTitleCard></SongTitleCard>
                 result_cards = search_results.slice((this.state.page-1)*10,this.state.page*10).map(result => {
                     return (
-                    <SongCard childSongIdHandler={this.childSongIdHandler} key={result.id} song={result}></SongCard>
+                    <SongCard 
+                    updateModalContentHandler={this.updateModalContentHandler}
+                    childSongIdHandler={this.childSongIdHandler} 
+                    key={result.id} song={result}></SongCard>
                     );
                 });
             }else if(select === "user"){
@@ -253,55 +262,12 @@ class SearchScreen extends Component{
                 { result_cards }
                 <Pagination count={parseInt(search_results.length/10+(search_results.length%10 > 0?1:0))} shape="rounded" size="large" onChange={this.changePageHandler}/>
 
-
-
-                <div id="search_modal" className="modal">
-
+                <div id="modal" className="modal">
                     <div className="modal-content">
                         <span onClick={this.onClose} className="close">&times;</span>
-                        <Query query={GET_PLAYLIST} variables={{userId: userId}}>
-                        {({loading, error, data}) => 
-                        {
-                            if (loading) return 'Loading...';
-                            if (error) return `Error! ${error.message}`;
-                            if(data.user){  // check if user has signed in
-                                return(<div>
-                                    {
-                                    
-                                    data.user.musicLists.map( (musicList) => 
-                                            (<Query query={GET_LIST_DETAIL} variables={{musicListId: musicList._id}}
-                                            key={musicList._id}>
-                                            {({loading, error, data}) =>{
-                                                if (loading) return 'Loading...';
-                                                if (error) return `Error! ${error.message}`;
-                                                // if(data.musicList)
-                                                    // console.log(data.musicList.owner);
-                                                //return(<div></div>)
-                                                if(data.musicList && data.musicList.owner){
-                                                    return(
-                                                    <Mutation mutation={ADD_MUSIC_TO_MUSICLIST}>
-                                                        {(addMusicToMusicList, { loading, error }) => 
-                                                        <div onClick={(e) => this.onAddPlaylistClick(e, musicList._id, addMusicToMusicList)} className="playlist-card">
-                                                            <div>{data.musicList.musicListName}</div>
-                                                        </div>}
-                                                    </Mutation>
-                                                    )
-                                                }else{
-                                                    return <></>
-                                                }
-                                            }                                   
-                                        }
-                                        </Query>))
-                                }</div>)
-                            }else{
-                                return <></>
-                            }
-                            
-                            }}</Query>
+                        { this.state.modal_content }
                     </div>
-
                 </div>
-                
 
             </div>
 

@@ -278,7 +278,8 @@ export default function QueueScreen(props){
 
     const onModalClose = () =>{
         var modal = document.getElementById("modal");
-        modal.style.display = "none";
+        if(modal)
+            modal.style.display = "none";
     }
 
     let reorderButtons = null;

@@ -20,6 +20,8 @@ const options = [
 
 export default function SongCard(props){
     var song = props.song;
+    var userId = localStorage.getItem('userId');
+    var modal_content = null;
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedIndex, setSelectedIndex] = React.useState(1);
@@ -32,11 +34,41 @@ export default function SongCard(props){
       setAnchorEl(null);
     };
 
+    const addSongToMusicList = async (e, song, musicListID) => {
+        let musicName = song.name;
+        let artist = song.artists[0].name;
+        let URI = song.id;
+        let album = song.album.name;
+        let length = Math.round(song.duration_ms/1000);
+        
+        try{
+            const create_response = await UserAPI.post("/createMusic", {musicName,
+                URI,
+                album,
+                length,
+                artist});
+            if (create_response.data.status == "success") {
+                let songID = create_response.data.musicId
+                const addSong_response = await UserAPI.post("/addSong", {
+                    musicListID,
+                    songID
+                });
+                if(addSong_response.data.status === "success"){  // close the modal
+                    var modal = document.getElementById("modal");
+                    if(modal)
+                        modal.style.display = "none";
+                }
+            }
+        }catch(err){
+            console.log(err);
+        }
+    }
+
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
         if(index === 0){  // add to queue
-            if(song){
+            if(song && userId){
                 let queue = localStorage.getItem('queue');
                 if(queue){
                     queue = JSON.parse(queue);
@@ -86,15 +118,40 @@ export default function SongCard(props){
         }else if(index === 1){ // add to liked songs
 
         }else if(index === 2){ // add to playlist
-            if(song){
+            if(song && userId){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
-                var modal = document.getElementById("search_modal");
+                var modal = document.getElementById("modal");
                 if(modal){
                     var handler = props.childSongIdHandler;
                     // console.log(handler)
                     modal.style.display = "block";
                     handler(song.id,song);
+
+                    var updateModalContentHandler = props.updateModalContentHandler;
+                    try{
+                        const musicLists_response = await UserAPI.get("/user/musicLists/"+userId);
+                        if(musicLists_response.data.status === "success"){
+                            var musicListsIDs = musicLists_response.data.musicLists;
+                            var musicLists = [];
+                            for(let i = 0; i < musicListsIDs.length; i++){
+                                const musicList_response = await UserAPI.get("/musicList/"+musicListsIDs[i]);
+                                if(musicList_response.data.status === "success"){
+                                    musicLists.push(musicList_response.data.musicList);
+                                }
+                            }
+                            modal_content = musicLists.map((musicList, index) => {
+                                return(
+                                    <div onClick={(e)=> addSongToMusicList(e, song, musicList._id)} className="playlist-card">
+                                        <div>{musicList.musicListName}</div>
+                                    </div>
+                                )
+                            })
+                            updateModalContentHandler(modal_content);
+                        }
+                    }catch(err){
+                        console.log(err);
+                    }
                 }
                     
             }
