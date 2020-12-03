@@ -10,7 +10,7 @@ var UserSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
 }],
-  firendRequests:[{
+  friendRequests:[{
     type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
 }],
