@@ -6,7 +6,14 @@ var UserSchema = new mongoose.Schema({
   password: String,
   nickName: String,
   verified: Boolean,
-  friends: [String],
+  friends: [{
+    type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+}],
+  firendRequests:[{
+    type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+}],
   nowListening: {
 		  type: mongoose.Schema.Types.ObjectId,
           ref: 'music'

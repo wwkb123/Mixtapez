@@ -94,7 +94,10 @@ var userType = new GraphQLObjectType({
                 type: GraphQLBoolean
             },
             friends:{
-                type: GraphQLList(GraphQLString)
+                type: GraphQLList(userType)
+            },
+            friendRequests:{
+                type: GraphQLList(userType)
             },
             nowListening:{
                 type: musicType
