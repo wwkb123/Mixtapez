@@ -91,7 +91,9 @@ class FriendScreen extends Component {
                 }else{
                     friend_cards = this.state.friends.map((user, index) => {
                         return (<div key={index}>
-                            <FriendCard user={user}></FriendCard>
+                            <Link to={"/chat/"+user._id}>
+                                <FriendCard user={user}></FriendCard>
+                            </Link>
                         </div>)
                     })
                 }

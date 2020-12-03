@@ -16,23 +16,21 @@ class FriendCard extends Component {
             userID = this.props.user._id;
         }
         return (
-            <Link to={"/chat/"+userID}>
-                <div className="m-5">
-                    <Container>
-                        <Row>
-                            <Col xs={3} className="content-center">
-                            <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                                <BsPersonSquare/>
-                            </IconContext.Provider>
-                            </Col>
-                            <Col xs={9}>
-                                <h4>{username}</h4>
-                                <h6>Now Playing: Hasodaodihdoash</h6>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-            </Link>
+            <div className="m-3">
+                <Container>
+                    <Row style={{'border': '3px solid', 'padding': '30px', 'borderRadius': '5px'}}>
+                        <Col xs={3} className="content-center">
+                        <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
+                            <BsPersonSquare/>
+                        </IconContext.Provider>
+                        </Col>
+                        <Col xs={9}>
+                            <h4>{username}</h4>
+                            <h6>Now Playing: Hasodaodihdoash</h6>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         );
     }
 }

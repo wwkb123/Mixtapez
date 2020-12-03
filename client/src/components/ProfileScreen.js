@@ -71,15 +71,22 @@ class ProfileScreen extends Component {
                 return (<ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>)
             })
         }
+        var friend_btns = ""
+        var selfID = localStorage.getItem('userId');
+        if(userID !== selfID){
+            friend_btns =
+            <div>
+                <Button className="search-btn bg-gray">Remove Friend</Button>
+            </div>
+        }
         if(user){
             console.log();
             return (
                 <div>
                     <br/>
                     <h1>Profile</h1>
-                    {/* <FriendCard name={data.users[userID].nickName}/> */}
-                    <FriendCard name={user.nickName}/>
-                    <Button className="search-btn bg-gray">Remove Friend</Button><br/><br/>
+                    <FriendCard user={user}/>
+                    { friend_btns }
                     <div className="grid-container">
                         { playlist_cards }
                     </div>
