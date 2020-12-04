@@ -237,7 +237,7 @@ export default function SongCard(props){
                 <Container>
                     <Row className="border-bottom-accent">
                         <Col xs={1}>
-                            &#9825;
+                            {/* &#9825; */}
                         </Col>
                         <Col xs={3}>
                             {/* {data.music[id].musicName} */}
