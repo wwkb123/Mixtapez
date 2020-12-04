@@ -113,19 +113,43 @@ class ProfileScreen extends Component {
         var user = this.state.user;
 
         if(self && user){
-            try{
-                const response = await UserAPI.post("/removeFriend", {  // remove a friend
-                    userID: self._id,
-                    target_userID: user._id
-                });
-                if(response.data.status == "success"){
-                    this.setState({user: response.data.target_user});
-                    this.setState({self: response.data.user});
+            if(localStorage.getItem('isSignedIn')){
+                var modal = document.getElementById("main_modal");
+                if(modal){
+                    modal.style.display = "block";
+                    var updateModalContentHandler = this.props.updateModalContentHandler;
+                    var content = <div>
+                        <h3>Are you sure remove this friend?</h3>
+                        <Button className="search-btn" onClick={(e) => this.onRemoveFriendConfirm(e, self, user)}>Confirm</Button>
+                        <Button className="cancel-btn" onClick={this.closeModal}>Cancel</Button>
+                        </div>
+                    updateModalContentHandler(content);
                 }
-            }catch(err){
-                console.log(err);
+            }else{
+                alert("Please sign in first!");
             }
         }
+    }
+
+    onRemoveFriendConfirm = async (e, self, user) => {
+        try{
+            const response = await UserAPI.post("/removeFriend", {  // remove a friend
+                userID: self._id,
+                target_userID: user._id
+            });
+            if(response.data.status == "success"){
+                this.setState({user: response.data.target_user});
+                this.setState({self: response.data.user});
+            }
+        }catch(err){
+            console.log(err);
+        }
+        this.closeModal();
+    }
+
+    closeModal = () =>{
+        var modal = document.getElementById("main_modal");
+        modal.style.display = "none";
     }
 
     render() {

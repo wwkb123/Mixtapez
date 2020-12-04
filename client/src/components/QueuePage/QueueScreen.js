@@ -79,7 +79,8 @@ export default function QueueScreen(props){
             setPage(1);
             var music_length = 0;
             for(let i = 0; i < queue.length; i++){
-                music_length += queue[i].length;
+                if(queue[i])
+                    music_length += queue[i].length;
             }
             setTotalLength(music_length);
         }
@@ -89,7 +90,8 @@ export default function QueueScreen(props){
       useEffect(() => {
         var music_length = 0;
         for(let i = 0; i < musics.length; i++){
-            music_length += musics[i].length;
+            if(musics[i])
+                music_length += musics[i].length;
         }
         setTotalLength(music_length);
       }, [musics]);
@@ -362,18 +364,26 @@ export default function QueueScreen(props){
         }else if(musics && musics.length > 0){
             // console.log('musics are '+ musics);
             songcards = <div>{musics.slice((page-1)*10,page*10)
-                .map((music, index) => (
-                <div key={music._id} >
-                    <QueueSongCard
-                    reorder_mode={reorder_mode}
-                    updateModalContentHandler={updateModalContentHandler}
-                    song={music}
-                    index={index}
-                    onSongCardClick={onSongCardClick}
-                    updateMusicsHandler={updateMusicsHandler}
-                    ></QueueSongCard>
-                    </div>
-            ))}</div>
+                .map((music, index) => {
+                    if(music){
+                        return (
+                            <div key={music._id} >
+                                <QueueSongCard
+                                reorder_mode={reorder_mode}
+                                updateModalContentHandler={updateModalContentHandler}
+                                song={music}
+                                index={index}
+                                onSongCardClick={onSongCardClick}
+                                updateMusicsHandler={updateMusicsHandler}
+                                ></QueueSongCard>
+                                </div>
+                        )
+                    }
+                    
+                }
+                
+                
+            )}</div>
         }
         var hours = 0;
         hours = Math.floor(total_length / 3600);

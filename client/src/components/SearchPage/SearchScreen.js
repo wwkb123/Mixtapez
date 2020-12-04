@@ -214,7 +214,8 @@ class SearchScreen extends Component{
                     return (
                     <SongCard 
                     updateModalContentHandler={this.updateModalContentHandler}
-                    childSongIdHandler={this.childSongIdHandler} 
+                    childSongIdHandler={this.childSongIdHandler}
+                    loadQueueIndexToAudioPlayer={this.props.loadQueueIndexToAudioPlayer}
                     key={result.id} song={result}></SongCard>
                     );
                 });

@@ -35,8 +35,30 @@ class FriendRequestCard extends Component {
         }
     }
 
-    onDeclineClick = () => {
-
+    onDeclineClick = async () => {
+        var target_userID = "";
+        var selfID = localStorage.getItem('userId');  // self ID
+        if(this.props.user){
+            target_userID = this.props.user._id;
+        }
+        if(target_userID && selfID){
+            try{
+                const response = await UserAPI.post("/declineFriendRequest", {
+                    userID: selfID,
+                    target_userID: target_userID
+                });
+                if(response.data.status == "success"){
+                    // set parent's state
+                    var user = response.data.user;
+                    var childSetFriendsAndRequest = this.props.childSetFriendsAndRequest;
+                    if(childSetFriendsAndRequest){
+                        childSetFriendsAndRequest(user);
+                    }
+                }
+            }catch(err){
+                console.log(err);
+            }  
+        }
     }
 
     render() {

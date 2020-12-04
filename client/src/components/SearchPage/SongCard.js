@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import {MdMoreHoriz} from "react-icons/md";
+import {MdMoreHoriz, MdPlayCircleOutline} from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
@@ -33,6 +33,53 @@ export default function SongCard(props){
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const onPlayClick = async () => {
+        let musicName = song.name;
+        let artist = song.artists[0].name;
+        let URI = song.id;
+        let album = song.album.name;
+        let length = Math.round(song.duration_ms/1000);
+        try{
+            const create_response = await UserAPI.post("/createMusic", {musicName,
+                URI,
+                album,
+                length,
+                artist});
+            if (create_response.data.status == "success") {
+                var loadQueueIndexToAudioPlayer = props.loadQueueIndexToAudioPlayer;
+                var queue = localStorage.getItem('queue');
+                if(queue){
+                    queue = JSON.parse(queue);
+                }else{
+                    queue = [];
+                }
+                const song_response = await UserAPI.get("/music/"+create_response.data.musicId);
+                if(song_response.data.status == "success"){
+                    let found = false;
+                    let index = queue.length-1;
+                    for(let i = 0; i < queue.length; i++){
+                        if(queue[i])
+                            if(queue[i]._id === song_response.data.music._id){
+                                found = true;
+                                index = i;
+                            }
+                    }
+                    if(!found){ // if the song is not in the queue
+                        queue.push(song_response.data.music);
+                    }else{  // same song already exists, play from that index
+
+                    }
+                    
+                    localStorage.setItem('queue', JSON.stringify(queue));
+                    loadQueueIndexToAudioPlayer(index);
+                }
+                
+            }
+        }catch(err){
+
+        }
+    }
 
     const addSongToMusicList = async (e, song, musicListID) => {
         let musicName = song.name;
@@ -195,9 +242,19 @@ export default function SongCard(props){
                             {/* {data.music[id].album} */}
                             { album }
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={1}>
                             {/* 0{data.music[id].length / 60}:{data.music[id].length % 60}0 */}
                             { minutes }:{ seconds }
+                        </Col>
+                        <Col xs={1}>
+                            <IconButton
+                                aria-label="play-song"
+                                onClick={(e) => onPlayClick(e)}
+                            >
+                                <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
+                                    <MdPlayCircleOutline/>
+                                </IconContext.Provider>
+                            </IconButton>
                         </Col>
                         <Col xs={1}>
                         <IconButton

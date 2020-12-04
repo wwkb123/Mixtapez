@@ -115,13 +115,13 @@ class App extends Component{
                                 <Route exact path='/' component={HomeScreen} />
                                 <Route path='/friends' component={FriendScreen} />
                                 <Route path='/chat/:id' component={ChatScreen} />
-                                <Route path='/profile/:id' component={ProfileScreen} />
+                                <Route path='/profile/:id' render={(props) => <ProfileScreen {...props} updateModalContentHandler={this.updateModalContentHandler}/>} />
                                 {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen updateModalContentHandler={this.updateModalContentHandler} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen updateMainModalContentHandler={this.updateModalContentHandler} loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/likedsongs' component={LikedSongsScreen} />
-                                <Route path='/search' render={(props) => <SearchScreen userId={this.state.userId} {...props} isAuthed={true}/>}  />
+                                <Route path='/search' render={(props) => <SearchScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 {/* <Route path='/popup' component={Popup} /> */}
                                 <Route path='/signin'  render={(props) => <SignInScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
