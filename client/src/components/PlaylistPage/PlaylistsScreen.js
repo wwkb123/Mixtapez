@@ -95,27 +95,34 @@ export default function PlaylistsScreen(props){
         props.history.push('/signin');
     }
     if(playlists){
+        var playlists_cards = ""
+        if(playlists.length > 0){
+            playlists_cards = playlists.filter(musicList => musicList.musicListName.toLowerCase().includes(filter_criteria.toLowerCase())).map( (musicList) => 
+            <PlaylistCard
+            key={musicList._id}
+            isPublic={musicList.isPublic}
+            userId={userId}
+            musicListId={musicList._id}
+            musicListName={musicList.musicListName}
+            ownerId={musicList.owner}
+            updateModalContentHandler={props.updateModalContentHandler}
+            handler={handler}/>
+            ) 
+        }else{
+            playlists_cards = <div>You don't have any playlist. Click "Create Playlist" to make a new one.</div>
+        }
+        
         return (
             <div>
                 
                 <br/><h1>All Playlists</h1>
-
+                
                 <div style={{"padding":"5px"}}>
                     <TextField size="small" placeholder="Filter..." variant="outlined" 
                     id="filter" onChange={handleFilter}/>
                 </div>
-
-                {playlists.filter(musicList => musicList.musicListName.toLowerCase().includes(filter_criteria.toLowerCase())).map( (musicList) => 
-                    <PlaylistCard
-                    key={musicList._id}
-                    isPublic={musicList.isPublic}
-                    userId={userId}
-                    musicListId={musicList._id}
-                    musicListName={musicList.musicListName}
-                    ownerId={musicList.owner}
-                    updateModalContentHandler={props.updateModalContentHandler}
-                    handler={handler}/>
-                )}   
+                { playlists_cards }
+                 
             </div>
         );
     }else{

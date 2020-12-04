@@ -206,6 +206,7 @@ class ProfileScreen extends Component {
                     { user_card }
                     { friend_btns }
                     <hr></hr>
+                    <h2>Public Playlists</h2>
                     <div className="grid-container">
                         { playlist_cards }
                     </div>
