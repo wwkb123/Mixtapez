@@ -16,7 +16,7 @@ class AudioPlayerBar extends Component {
     constructor(props){
         super(props);
         this.state={
-            volume: 100,
+            volume: 20,
             track_url: "",
             track_data: null,
             progress: 0,
@@ -34,6 +34,8 @@ class AudioPlayerBar extends Component {
         this.state.audioTag.addEventListener('ended', (event) => {  // when the music ends
             this.onNextSong();
         });
+
+        this.changeVolumn(20);  // default volume
     }
 
     componentDidMount() {
@@ -174,6 +176,13 @@ class AudioPlayerBar extends Component {
         }else{
             console.log("errored")
         } 
+    }
+
+    changeVolumn = (value) => {
+        if(this.state.audioTag){
+            this.state.audioTag.volume = value / 100;
+            this.setState({volume: value});
+        }
     }
 
     handleChange = (e, newValue) => {

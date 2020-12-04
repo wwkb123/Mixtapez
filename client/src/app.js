@@ -30,6 +30,10 @@ import ErrorScreen from './components/ErrorScreen';
 import Banner from './components/Banner'
 import UserAPI from './apis/UserAPI';
 
+import { MdMusicNote } from "react-icons/md";
+import IconButton from '@material-ui/core/IconButton';
+import { IconContext } from "react-icons";
+
 class App extends Component{
     constructor(){
         super()
@@ -96,6 +100,10 @@ class App extends Component{
         this.audioPlayer.loadQueueIndexAndPlay(index);
     }
 
+    onScrollButtonClick = () => {
+        window.scrollTo(0,document.body.scrollHeight);
+    }
+
     render(){
         return(
             <div className="primary-bg" style={{"borderTop":"15px solid #F6D8FC"}}>
@@ -138,6 +146,30 @@ class App extends Component{
                         </Col>
                     </Row>
                 </Container>
+                <div id="scroll-to-audio-right">
+                    <IconButton
+                        style={{'backgroundColor':'#F06E9C'}}
+                        aria-label="scroll"
+                        onClick={this.onScrollButtonClick}
+                    >
+                        <IconContext.Provider value={{ color: "white", size: '50px' }}>
+                            <MdMusicNote/>
+                        </IconContext.Provider>
+                    </IconButton>
+                </div>
+
+                {/* <div id="scroll-to-audio-left">
+                    <IconButton
+                        style={{'backgroundColor':'#F06E9C'}}
+                        aria-label="scroll"
+                        onClick={this.onScrollButtonClick}
+                    >
+                        <IconContext.Provider value={{ color: "white", size: '50px' }}>
+                            <MdMusicNote/>
+                        </IconContext.Provider>
+                    </IconButton>
+                </div> */}
+
                 <AudioPlayerBar onRef={ref => (this.audioPlayer = ref)} />
                 <div id="main_modal" className="modal">
                     <div className="modal-content">
