@@ -163,12 +163,17 @@ class ProfileScreen extends Component {
 
         if(this.state.publicPlaylists){
             publicPlaylists = this.state.publicPlaylists;
-            playlist_cards = publicPlaylists.map((playlist, index) => {
-                return (<div key={index}>
-                    <ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>
-                </div>
-                )
-            })
+            if(publicPlaylists.length > 0){
+                playlist_cards = publicPlaylists.map((playlist, index) => {
+                    return (<div key={index}>
+                        <ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>
+                    </div>
+                    )
+                })
+            }else{
+                playlist_cards = <div>No public playlists available yet.</div>
+            }
+            
         }
         var friend_btns = ""
         if(this.state.self && this.state.user){

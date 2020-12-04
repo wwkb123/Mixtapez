@@ -261,6 +261,12 @@ class AudioPlayerBar extends Component {
         }
     }
 
+    checkSignIn = () => {
+        if(!localStorage.getItem('isSignedIn')){
+            alert("Please sign in to use this function.");
+        }
+    }
+
     render() {
         var play_pause_icon = <MdPlayArrow />
         if(this.state.isPlaying){
@@ -307,7 +313,7 @@ class AudioPlayerBar extends Component {
                             <Col xs={2} className="content-center">
                                 <Link
                                 to={path_to_queue}
-                                
+                                onClick={this.checkSignIn}
                                 style={{'color':'#ed4e85'}}><MdPlaylistPlay />Queue</Link>
                             </Col>
                             <Col xs={2} className="content-center">

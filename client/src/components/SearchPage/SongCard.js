@@ -35,6 +35,10 @@ export default function SongCard(props){
     };
 
     const onPlayClick = async () => {
+        if(!localStorage.getItem('isSignedIn')){
+            alert("Please sign in to use this function.");
+            return;
+        }
         let musicName = song.name;
         let artist = song.artists[0].name;
         let URI = song.id;
@@ -117,6 +121,7 @@ export default function SongCard(props){
         setAnchorEl(null);
         if(!localStorage.getItem('isSignedIn')){
             alert("Please sign in to use this function.");
+            return;
         }
         if(index === 0){  // add to queue
             if(song && userId){
