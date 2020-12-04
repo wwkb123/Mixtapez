@@ -13,7 +13,7 @@ import UserAPI from "../../apis/UserAPI";
 
 const options = [
     'Add to Queue',
-    'Save to Liked Songs',
+    // 'Save to Liked Songs',
     'Add to Playlist',
     'Share'
   ];
@@ -171,9 +171,11 @@ export default function SongCard(props){
                     console.log(error)
                 }
             }
-        }else if(index === 1){ // add to liked songs
+        }
+        // else if(index === 1){ // add to liked songs
 
-        }else if(index === 2){ // add to playlist
+        // }
+        else if(index === 1){ // add to playlist
             if(song && userId){
                 // alert("hi" + song.name);
                 // console.log(song.name, "asdad");
@@ -211,7 +213,7 @@ export default function SongCard(props){
                 }
                     
             }
-        }else if(index === 3){ // share
+        }else if(index === 2){ // share
 
         }
     };

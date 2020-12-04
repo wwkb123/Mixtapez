@@ -112,7 +112,8 @@ class NavigationBar extends Component{
                         //</Link>
                     )}
                 </Mutation>
-                <Link to="/likedsongs">
+
+                {/* <Link to="/likedsongs">
                     <Button className="nav-btn" size="lg">
                         <Row>
                             <Col xs={2}>
@@ -125,7 +126,8 @@ class NavigationBar extends Component{
                             </Col>
                         </Row>
                     </Button>
-                </Link>
+                </Link> */}
+
                 <Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>
                     <Row>
                         <Col xs={2}>

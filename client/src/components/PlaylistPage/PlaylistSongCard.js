@@ -15,7 +15,7 @@ import UserAPI from "../../apis/UserAPI";
 
 var options = [
     'Add to Queue',
-    'Save to Liked Songs',
+    // 'Save to Liked Songs',
     'Add to Playlist',
     'Share',
     'Remove from this Playlist'
@@ -68,13 +68,17 @@ export default function PlaylistSongCard(props){
         // normal playlist
         if(index === 0){  // add to queue
             mode = "add_queue";
-        }else if(index === 1){ // add to liked songs
-            mode = "add_like";
-        }else if(index === 2){ // add to playlist
+        }
+        
+        // else if(index === 1){ // add to liked songs
+        //     mode = "add_like";
+        // }
+        
+        else if(index === 1){ // add to playlist
             mode = "add_playlist";
-        }else if(index === 3){ // share
+        }else if(index === 2){ // share
             mode = "share";
-        }else if(index === 4){  // remove
+        }else if(index === 3){  // remove
             mode = "remove";
         }
         

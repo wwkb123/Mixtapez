@@ -52,7 +52,7 @@ const REMOVE_MUSICLIST = gql`
 
 var options = [
     'Make Private',  // should toggle with Make Public
-    'Edit Details',
+    // 'Edit Details',
     // 'Delete',
     'Share'
   ];
@@ -360,7 +360,7 @@ export default function DisplayPlaylistScreen(props){
             if(userId === owner._id){
                 options = [
                     'Make Private',  // should toggle with Make Public
-                    'Edit Details',
+                    // 'Edit Details',
                     // 'Delete',
                     'Share'
                   ];

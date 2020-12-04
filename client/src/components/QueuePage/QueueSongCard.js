@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 
 var options = [
-    'Save to Liked Songs',
+    // 'Save to Liked Songs',
     'Add to Playlist',
     'Share',
     'Remove from Queue'
@@ -65,13 +65,15 @@ export default function QueueSongCard(props){
         setAnchorEl(null);
         var mode = ""
         
-        if(index === 0){ // add to liked songs
-            mode = "add_like";
-        }else if(index === 1){ // add to playlist
+        // if(index === 0){ // add to liked songs
+        //     mode = "add_like";
+        // }else 
+        
+        if(index === 0){ // add to playlist
             mode = "add_playlist";
-        }else if(index === 2){ // share
+        }else if(index === 1){ // share
             mode = "share";
-        }else if(index === 3){  // remove
+        }else if(index === 2){  // remove
             mode = "remove";
         }
 
