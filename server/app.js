@@ -143,9 +143,9 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
 // verify a user after they click verify button
 app.post('/api/verify', async (req, res) => {
   await UserModel.findByIdAndUpdate(req.body.id, {verified: true}, function (err, result) {
-    console.log("result is ", result);
+    // console.log("result is ", result);
     if(result){ // user found
-      console.log("user", result);
+      // console.log("user", result);
       res.status(200).json({
           status: "success",
           nickName: result.nickName,
@@ -164,7 +164,7 @@ app.post('/api/verify', async (req, res) => {
 // check if sign in credentials are correct
 app.post('/api/signin', async (req, res) => {
   UserModel.find({ 'userName': req.body.email }, 'nickName password verified', function (err, result) {
-    console.log("result is ", result);
+    // console.log("result is ", result);
     if(result.length > 0){  // user exists
       // todo: make password hashed
       if(result[0].password == req.body.password){ // correct password
@@ -281,7 +281,7 @@ app.post('/api/createMusicList', async (req, res) => {
                                              owner: req.body.userId,
                                              isPublic: true,
                                              lastUpdate: new Date()});
-  console.log(musicListModel)
+  // console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
   });
@@ -303,7 +303,7 @@ app.post('/api/createMusicListWithMusics', async (req, res) => {
                                              owner: req.body.userId,
                                              isPublic: true,
                                              lastUpdate: new Date()});
-  console.log(musicListModel)
+  // console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
   });
@@ -325,7 +325,7 @@ app.post('/api/createMusic', async (req, res) => {
                                   URI: req.body.URI,
                                   album: req.body.album,
                                   artist: req.body.artist}).exec();
-  console.log(music);
+  // console.log(music);
   if(music.length > 0){
     res.status(200).json({
       status: "success",
@@ -340,7 +340,7 @@ app.post('/api/createMusic', async (req, res) => {
                                       length: req.body.length,
                                       artist: req.body.artist,
                                       lastUpdate: new Date()});
-    console.log(musicModel)
+    // console.log(musicModel)
     musicModel.save((err)=>{
       if (err) return handleError(err);
     });
@@ -361,7 +361,7 @@ app.post('/api/search/song', async (req, res) => {
 
   spotifyApi.searchTracks(req.body.search_text)
     .then(function(data) {
-      console.log("data", data)
+      // console.log("data", data)
       res.status(200).json({
         status: "success",
         results: data.body.tracks.items
@@ -410,7 +410,7 @@ app.post('/api/search/album', async (req, res) => {
 
 app.post('/api/search/user', async (req, res) => {
   await UserModel.find({ 'nickName': { $regex: req.body.search_text, $options: "i"} }, '_id nickName', function (err, result) {
-    console.log("search user result is ", result);
+    // console.log("search user result is ", result);
     res.status(200).json({
       status: "success",
       results: result
@@ -421,7 +421,7 @@ app.post('/api/search/user', async (req, res) => {
 
 app.post('/api/search/playlist', async (req, res) => {
   await MusicListModel.find({ 'musicListName': { $regex: req.body.search_text, $options: "i" }, isPublic: true }, function (err, result) {
-    console.log("search playlist result is ", result);
+    // console.log("search playlist result is ", result);
     res.status(200).json({
       status: "success",
       results: result
@@ -466,7 +466,7 @@ app.get('/api/user/:id', async (req, res) => {
 // return the nickname with a given id
 app.post('/api/user/nickName', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, 'nickName', function (err, user) {
-    console.log(user);
+    // console.log(user);
     if(user){
       res.status(200).json({
         status: "success",
@@ -713,9 +713,9 @@ app.get('/api/randomPlaylists', async (req, res) => {
 // get the audio source of a song
 app.post('/api/getSongAudio', async (req, res) => {
   // spotifyApi
-  console.log(req.body.URI)
+  // console.log(req.body.URI)
   spotifyApi.getTrack(req.body.URI).then(function(data) {
-    console.log(data.body)
+    // console.log(data.body)
     res.status(200).json({
       status: "success",
       track: data.body
@@ -760,7 +760,7 @@ app.post('/api/sendFriendRequest', async (req, res) => {
       }
 
       if(userFriendRequests.includes(target_userID)){  // if self friendRequests already contains target_user's ID
-        console.log("This guy ", target_userID, " already sent you a request");
+        // console.log("This guy ", target_userID, " already sent you a request");
         // remove id from both user's friendRequests,
         
         var indexOfTarget = userFriendRequests.indexOf(target_userID);
