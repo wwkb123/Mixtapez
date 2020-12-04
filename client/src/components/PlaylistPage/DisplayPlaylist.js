@@ -173,7 +173,8 @@ export default function DisplayPlaylistScreen(props){
     const onPlayClick = () =>{
         var queue = [];
         queue = Array.from(musics);
-        localStorage.setItem('queue', JSON.stringify(queue));
+        if(queue && queue.length > 0)
+            localStorage.setItem('queue', JSON.stringify(queue));
         var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
         if(queue && queue.length > 0)
             loadQueueSongsToAudioPlayerCallBack(queue[0].URI);
