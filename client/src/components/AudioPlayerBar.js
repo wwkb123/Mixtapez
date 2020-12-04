@@ -62,19 +62,26 @@ class AudioPlayerBar extends Component {
         this.state.audioTag.pause();
         if (this.state.track_data) {
             let index = 0;
+            let found = false;
             for (index = 0; index < queue.length; index++) {
                 if (queue[index].URI === this.state.track_data.id){
+                    found = true;
                     break;
                 }
             }
-            if (this.state.isShuffle) {
-                index = Math.floor(Math.random()* queue.length)
-            } else if (index == (queue.length - 1)){
-                console.log("loop to beginning")
-                index = 0;
-            } else{
-                index = index + 1
+            if(!found){
+                index = 0;  // not found, start from first song
+            }else{
+                if (this.state.isShuffle) {
+                    index = Math.floor(Math.random()* queue.length)
+                } else if (index == (queue.length - 1)){
+                    console.log("loop to beginning")
+                    index = 0;
+                } else{
+                    index = index + 1
+                }
             }
+            
             console.log("updated index:"+index)
             if (index < queue.length) {
                 let URI = queue[index]? queue[index].URI : null;
@@ -118,6 +125,7 @@ class AudioPlayerBar extends Component {
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
         if(!queue) return;
+        if(index >= queue.length) return;
         this.loadSongAndplay(queue[index].URI, index);
     }
 

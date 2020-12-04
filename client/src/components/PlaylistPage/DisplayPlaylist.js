@@ -92,6 +92,15 @@ export default function DisplayPlaylistScreen(props){
         
     }
 
+    const onSongCardClick = (index) => {
+        var queue = [];
+        queue = Array.from(musics);
+        localStorage.setItem('queue', JSON.stringify(queue));
+        var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
+        if(queue && index < queue.length )
+            loadQueueSongsToAudioPlayerCallBack(queue[index].URI);
+    }
+
     const updatePlaylist = async () => {  // use setstate to trigger re-render
         try{
             const response = await UserAPI.get("/musicList/"+props.match.params.id);
@@ -166,7 +175,7 @@ export default function DisplayPlaylistScreen(props){
         queue = Array.from(musics);
         localStorage.setItem('queue', JSON.stringify(queue));
         var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
-        if(queue.length > 0)
+        if(queue && queue.length > 0)
             loadQueueSongsToAudioPlayerCallBack(queue[0].URI);
     }
 
@@ -469,7 +478,9 @@ export default function DisplayPlaylistScreen(props){
                         reorder_mode={reorder_mode}
                         updateModalContentHandler={updateModalContentHandler}
                         updatePlaylist={updatePlaylist}
-                        musicListId={musicList._id} 
+                        musicListId={musicList._id}
+                        index={index}
+                        onSongCardClick={onSongCardClick}
                         song={music}>
                     </PlaylistSongCard></div>
             ))}</div>

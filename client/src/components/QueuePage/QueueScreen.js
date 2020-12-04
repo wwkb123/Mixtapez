@@ -309,7 +309,7 @@ export default function QueueScreen(props){
             modal.style.display = "none";
     }
 
-    const onSongCardClick = (e, index) => {
+    const onSongCardClick = (index) => {
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
         var loadQueueIndexToAudioPlayerCallBack = props.loadQueueIndexToAudioPlayer;
@@ -363,11 +363,13 @@ export default function QueueScreen(props){
             // console.log('musics are '+ musics);
             songcards = <div>{musics.slice((page-1)*10,page*10)
                 .map((music, index) => (
-                <div key={music._id} style={{'cursor':'pointer'}} onClick={(e) => onSongCardClick(e, index)}>
+                <div key={music._id} >
                     <QueueSongCard
                     reorder_mode={reorder_mode}
                     updateModalContentHandler={updateModalContentHandler}
-                    song={music} 
+                    song={music}
+                    index={index}
+                    onSongCardClick={onSongCardClick}
                     updateMusicsHandler={updateMusicsHandler}
                     ></QueueSongCard>
                     </div>

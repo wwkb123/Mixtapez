@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import {MdMoreHoriz, MdDragHandle} from "react-icons/md";
+import { MdPlayCircleOutline, MdMoreHoriz, MdDragHandle} from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
@@ -34,6 +34,12 @@ export default function QueueSongCard(props){
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const onPlayClick = () => {
+        var index = props.index;
+        var onSongCardClick = props.onSongCardClick;
+        onSongCardClick(index);
+    }
 
     const addSongToMusicList = async (e, songID, musicListID) => {
         console.log(songID + " " + musicListID);
@@ -180,9 +186,19 @@ export default function QueueSongCard(props){
                             {/* {data.music[id].album} */}
                             { album }
                         </Col>
-                        <Col xs={2}>
+                        <Col xs={1}>
                             {/* 0{data.music[id].length / 60}:{data.music[id].length % 60}0 */}
                             { minutes }:{ seconds }
+                        </Col>
+                        <Col xs={1}>
+                            <IconButton
+                                aria-label="play-song"
+                                onClick={(e) => onPlayClick(e)}
+                            >
+                                <IconContext.Provider value={{ color: "#F06E9C", size: '30px' }}>
+                                    <MdPlayCircleOutline/>
+                                </IconContext.Provider>
+                            </IconButton>
                         </Col>
                         <Col xs={1}>
                         <IconButton
