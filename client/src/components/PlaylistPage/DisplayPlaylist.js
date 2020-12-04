@@ -471,19 +471,30 @@ export default function DisplayPlaylistScreen(props){
                 ))}
             </Reorder>
         }else{
-            songcards = <div>{musics.slice((page-1)*10,page*10)
-                .map((music, index) => (
-                <div key={music._id}>
-                    <PlaylistSongCard
-                        reorder_mode={reorder_mode}
-                        updateModalContentHandler={updateModalContentHandler}
-                        updatePlaylist={updatePlaylist}
-                        musicListId={musicList._id}
-                        index={index}
-                        onSongCardClick={onSongCardClick}
-                        song={music}>
-                    </PlaylistSongCard></div>
-            ))}</div>
+            if(musics.length > 0){
+                songcards = <div>{musics.slice((page-1)*10,page*10)
+                    .map((music, index) => (
+                    <div key={music._id}>
+                        <PlaylistSongCard
+                            reorder_mode={reorder_mode}
+                            updateModalContentHandler={updateModalContentHandler}
+                            updatePlaylist={updatePlaylist}
+                            musicListId={musicList._id}
+                            index={index}
+                            onSongCardClick={onSongCardClick}
+                            song={music}>
+                        </PlaylistSongCard></div>
+                ))}</div>
+            }else{
+                songcards =
+                <div>
+                    <center>
+                    <h2>This playlist is empty.</h2>
+                    <Link to="/search"><Button style={{'color':'white'}} className="search-btn">Go find some songs</Button></Link>
+                    </center>
+                </div>
+            }
+           
         }
         var playlist_type = "";
         if(userId === owner._id){
