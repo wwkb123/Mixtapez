@@ -18,8 +18,10 @@ class FriendRequestCard extends Component {
 
     render() {
         var username = ""
+        var userID = ""
         if(this.props.user){
             username = this.props.user.nickName;
+            userID = this.props.user._id;
         }
         return (
             <div className="m-5">
@@ -31,7 +33,7 @@ class FriendRequestCard extends Component {
                         </IconContext.Provider>
                         </Col>
                         <Col xs={9}>
-                            <h4>{username}</h4>
+                            <Link to={"/profile/"+userID}><h4>{username}</h4></Link>
                             <Button onClick={this.onAcceptClick} className="search-btn">Accept</Button>
                             <Button  onClick={this.onDeclineClick} className="search-btn">Decline</Button>
                         </Col>

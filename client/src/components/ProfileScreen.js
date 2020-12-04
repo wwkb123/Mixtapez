@@ -88,11 +88,27 @@ class ProfileScreen extends Component {
         }
     }
 
-    onAddFriendClick = () => {
-        
+    onAddFriendClick = async () => {
+        var self = this.state.self;
+        var user = this.state.user;
+
+        if(self && user){
+            try{
+                const response = await UserAPI.post("/sendFriendRequest", {  // add self id to user's friendRequests
+                    userID: self._id,
+                    target_userID: user._id
+                });
+                if(response.data.status == "success"){
+                    this.setState({user: response.data.target_user});
+                    this.setState({self: response.data.user});
+                }
+            }catch(err){
+                console.log(err);
+            }
+        }
     }
 
-    onRemoveFriendClick = () => {
+    onRemoveFriendClick = async () => {
 
     }
 
@@ -115,7 +131,7 @@ class ProfileScreen extends Component {
             })
         }
         var friend_btns = ""
-        if(this.state.self){
+        if(this.state.self && this.state.user){
             self = this.state.self;
             selfID = this.state.self._id;
             if(userID !== selfID){ // if not self
@@ -130,7 +146,7 @@ class ProfileScreen extends Component {
                         <Button onClick={this.onAddFriendClick} className="add-friend-btn">Add Friend</Button>
                     </div>
                 }
-                if(self.friendRequests.includes(userID)){  // if request is sent
+                if(user.friendRequests.includes(selfID)){  // if request is sent
                     friend_btns =
                     <div>
                         <Button style={{'cursor':'default'}} className="pending-friend-btn">Request sent</Button>

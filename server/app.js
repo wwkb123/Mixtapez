@@ -728,6 +728,216 @@ app.post('/api/getSongAudio', async (req, res) => {
   });
 });
 
+// add a user's id (userID) to another user's (target_userID) friendRequests array
+app.post('/api/sendFriendRequest', async (req, res) => {
+  var user = await UserModel.findOne({'_id': req.body.userID }).exec();
+  await UserModel.findOne({'_id': req.body.target_userID }, function (err, target_user) {
+    var target_userID = req.body.target_userID;
+    var userID = req.body.userID;
+    if(target_user && user){
+      var targetFriendRequests = [];
+      for(let i = 0; i < target_user.friendRequests.length; i++){
+        var id = String(target_user.friendRequests[i]);
+        targetFriendRequests.push(id);
+      }
+      
+      var targetFriends = [];
+      for(let i = 0; i < target_user.friends.length; i++){
+        var id = String(target_user.friends[i]);
+        targetFriends.push(id);
+      }
+
+      var userFriendRequests = [];
+      for(let i = 0; i < user.friendRequests.length; i++){
+        var id = String(user.friendRequests[i]);
+        userFriendRequests.push(id);
+      }
+
+      var userFriends = [];
+      for(let i = 0; i < user.friends.length; i++){
+        var id = String(user.friends[i]);
+        userFriends.push(id);
+      }
+
+      if(userFriendRequests.includes(target_userID)){  // if self friendRequests already contains target_user's ID
+        console.log("This guy ", target_userID, " already sent you a request");
+        // remove id from both user's friendRequests,
+        
+        var indexOfTarget = userFriendRequests.indexOf(target_userID);
+        if (indexOfTarget > -1) {
+          userFriendRequests.splice(indexOfTarget, 1);
+        }
+        var indexOfUser = targetFriendRequests.indexOf(userID);
+        if (indexOfUser > -1) {
+          targetFriendRequests.splice(indexOfUser, 1);
+        }
+
+        // add id to both user's friends
+        
+        userFriends.push(target_userID);
+        targetFriends.push(userID);
+
+        user.friends = [...userFriends];
+        user.friendRequests = [...userFriendRequests];
+        target_user.friends = [...targetFriends];
+        target_user.friendRequests = [...targetFriendRequests];
+
+        user.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+              res.status(200).json({
+                status: "error"
+              });
+            }
+        });
+
+        target_user.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+              res.status(200).json({
+                status: "error"
+              });
+            }
+        });
+      }
+      else if(!targetFriendRequests.includes(req.body.userID) && !targetFriends.includes(req.body.userID)){  // if the user is not a friend of target_user, and a request is not sent yet
+        targetFriendRequests.push(req.body.userID);
+        target_user.friendRequests = [...targetFriendRequests];
+        target_user.save(function (err) {
+          if(err) {
+              console.error('ERROR!');
+              res.status(200).json({
+                status: "error"
+              });
+            }
+        });
+      }
+      
+      res.status(200).json({
+        status: "success",
+        target_user: target_user,
+        user: user
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });
+});
+
+// add userIDs (userID, target_userID) to both of their friends array, remove their IDs from each of their friendRequests
+app.post('/api/acceptFriendRequest', async (req, res) => {
+  var user = await UserModel.findOne({'_id': req.body.userID }).exec();
+  await UserModel.findOne({'_id': req.body.target_userID }, function (err, target_user) {
+    var target_userID = req.body.target_userID;
+    var userID = req.body.userID;
+    if(target_user && user){
+      var targetFriendRequests = [];
+      for(let i = 0; i < target_user.friendRequests.length; i++){
+        var id = String(target_user.friendRequests[i]);
+        targetFriendRequests.push(id);
+      }
+      
+      var targetFriends = [];
+      for(let i = 0; i < target_user.friends.length; i++){
+        var id = String(target_user.friends[i]);
+        targetFriends.push(id);
+      }
+
+      var userFriendRequests = [];
+      for(let i = 0; i < user.friendRequests.length; i++){
+        var id = String(user.friendRequests[i]);
+        userFriendRequests.push(id);
+      }
+
+      var userFriends = [];
+      for(let i = 0; i < user.friends.length; i++){
+        var id = String(user.friends[i]);
+        userFriends.push(id);
+      }
+
+      // remove id from both user's friendRequests,
+        
+      var indexOfTarget = userFriendRequests.indexOf(target_userID);
+      if (indexOfTarget > -1) {
+        userFriendRequests.splice(indexOfTarget, 1);
+      }
+      var indexOfUser = targetFriendRequests.indexOf(userID);
+      if (indexOfUser > -1) {
+        targetFriendRequests.splice(indexOfUser, 1);
+      }
+
+      // add id to both user's friends
+      userFriends.push(target_userID);
+      targetFriends.push(userID);
+
+      user.friends = [...userFriends];
+      user.friendRequests = [...userFriendRequests];
+      target_user.friends = [...targetFriends];
+      target_user.friendRequests = [...targetFriendRequests];
+
+      user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+
+      target_user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+
+      res.status(200).json({
+        status: "success",
+        target_user: target_user,
+        user: user
+      });
+    }
+  });
+});
+
+// remove targetID from self friendRequests
+app.post('/api/declineFriendRequest', async (req, res) => {
+  await UserModel.findOne({'_id': req.body.userID }, function (err, user) {
+    var target_userID = req.body.target_userID;
+    if(user){
+      var userFriendRequests = [];
+      for(let i = 0; i < user.friendRequests.length; i++){
+        var id = String(user.friendRequests[i]);
+        userFriendRequests.push(id);
+      }
+
+      // remove id from both user's friendRequests,
+      var indexOfTarget = userFriendRequests.indexOf(target_userID);
+      if (indexOfTarget > -1) {
+        userFriendRequests.splice(indexOfTarget, 1);
+      }
+      user.friendRequests = [...userFriendRequests];
+      user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+      res.status(200).json({
+        status: "success",
+        user: user
+      });
+    }
+  });
+});
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
