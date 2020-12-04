@@ -938,6 +938,66 @@ app.post('/api/declineFriendRequest', async (req, res) => {
 });
 
 
+// remove userIDs (userID, target_userID) from both of their friends array
+app.post('/api/removeFriend', async (req, res) => {
+  var user = await UserModel.findOne({'_id': req.body.userID }).exec();
+  await UserModel.findOne({'_id': req.body.target_userID }, function (err, target_user) {
+    var target_userID = req.body.target_userID;
+    var userID = req.body.userID;
+    if(target_user && user){
+      var targetFriends = [];
+      for(let i = 0; i < target_user.friends.length; i++){
+        var id = String(target_user.friends[i]);
+        targetFriends.push(id);
+      }
+
+      var userFriends = [];
+      for(let i = 0; i < user.friends.length; i++){
+        var id = String(user.friends[i]);
+        userFriends.push(id);
+      }
+
+      // remove id from both user's friends,
+        
+      var indexOfTarget = userFriends.indexOf(target_userID);
+      if (indexOfTarget > -1) {
+        userFriends.splice(indexOfTarget, 1);
+      }
+      var indexOfUser = targetFriends.indexOf(userID);
+      if (indexOfUser > -1) {
+        targetFriends.splice(indexOfUser, 1);
+      }
+
+      user.friends = [...userFriends];
+      target_user.friends = [...targetFriends];
+
+      user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+
+      target_user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+
+      res.status(200).json({
+        status: "success",
+        target_user: target_user,
+        user: user
+      });
+    }
+  });
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

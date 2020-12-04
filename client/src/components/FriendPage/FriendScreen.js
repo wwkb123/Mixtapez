@@ -17,11 +17,18 @@ class FriendScreen extends Component {
         this.state = {
             friends: [],
             friendRequests: [],
-            isLoaded: false
+            isLoaded: false,
+            user: null
         }
+        this.childSetFriendsAndRequest = this.childSetFriendsAndRequest.bind(this);
     }
 
-    getFriendsAndRequests = async () => {
+    childSetFriendsAndRequest = (user) => {
+        this.setState({user});
+        this.getFriendsAndRequests();
+    }
+
+    getUser = async () => {
         var userID = localStorage.getItem('userId');
         if(userID){
             try{
@@ -29,41 +36,47 @@ class FriendScreen extends Component {
                     id: userID
                 });
                 if(response.data.status == "success"){
-                    let friends_IDs = response.data.user.friends;
-                    let friends = [];
-                    for(let i = 0; i < friends_IDs.length; i++){
-                        const user_response = await UserAPI.post("/user", {
-                            id: friends_IDs[i]
-                        });
-                        if(user_response.data.status == "success"){
-                            friends.push(user_response.data.user);
-                        }
-                    }
-
-                    let friendRequests_IDs = response.data.user.friendRequests;
-                    let friendRequests = [];
-                    for(let i = 0; i < friendRequests_IDs.length; i++){
-                        const user_response = await UserAPI.post("/user", {
-                            id: friendRequests_IDs[i]
-                        });
-                        if(user_response.data.status == "success"){
-                            friendRequests.push(user_response.data.user);
-                        }
-                    }
-                    this.setState({friends: Array.from(friends)});
-                    this.setState({friendRequests:  Array.from(friendRequests)});
-                    // console.log(response.data.user);
+                    this.setState({user: response.data.user});
+                    this.getFriendsAndRequests();
                 }
-                this.setState({isLoaded: true});
             }catch(err){
-                console.log(err);
+
             }
         }
-        
+    }
+
+    getFriendsAndRequests = async () => {
+        var user = this.state.user;
+        if(user){
+            let friends_IDs = user.friends;
+            let friends = [];
+            for(let i = 0; i < friends_IDs.length; i++){
+                const user_response = await UserAPI.post("/user", {
+                    id: friends_IDs[i]
+                });
+                if(user_response.data.status == "success"){
+                    friends.push(user_response.data.user);
+                }
+            }
+
+            let friendRequests_IDs = user.friendRequests;
+            let friendRequests = [];
+            for(let i = 0; i < friendRequests_IDs.length; i++){
+                const user_response = await UserAPI.post("/user", {
+                    id: friendRequests_IDs[i]
+                });
+                if(user_response.data.status == "success"){
+                    friendRequests.push(user_response.data.user);
+                }
+            }
+            this.setState({friends: Array.from(friends)});
+            this.setState({friendRequests:  Array.from(friendRequests)});
+            this.setState({isLoaded: true});
+        }
     }
 
     componentDidMount() {
-        this.getFriendsAndRequests();
+        this.getUser();
     }
 
     onAccordionClick = () => {
@@ -107,7 +120,11 @@ class FriendScreen extends Component {
                     friend_request_cards = friendRequests.map((user, index) => {
                         return (
                             <div key={index}>
-                                <FriendRequestCard user={user}></FriendRequestCard>
+                                <FriendRequestCard
+                                childSetFriendsAndRequest={this.childSetFriendsAndRequest}
+                                user={user}
+                                >
+                                </FriendRequestCard>
                             </div>
                         
                         )

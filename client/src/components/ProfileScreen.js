@@ -109,7 +109,23 @@ class ProfileScreen extends Component {
     }
 
     onRemoveFriendClick = async () => {
+        var self = this.state.self;
+        var user = this.state.user;
 
+        if(self && user){
+            try{
+                const response = await UserAPI.post("/removeFriend", {  // remove a friend
+                    userID: self._id,
+                    target_userID: user._id
+                });
+                if(response.data.status == "success"){
+                    this.setState({user: response.data.target_user});
+                    this.setState({self: response.data.user});
+                }
+            }catch(err){
+                console.log(err);
+            }
+        }
     }
 
     render() {
