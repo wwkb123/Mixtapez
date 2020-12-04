@@ -67,6 +67,7 @@ export default function SongCard(props){
                     }
                     if(!found){ // if the song is not in the queue
                         queue.push(song_response.data.music);
+                        index = queue.length-1;
                     }else{  // same song already exists, play from that index
 
                     }
@@ -114,6 +115,9 @@ export default function SongCard(props){
     const handleMenuItemClick = async (event, index) => {
         setSelectedIndex(index);
         setAnchorEl(null);
+        if(!localStorage.getItem('isSignedIn')){
+            alert("Please sign in to use this function.");
+        }
         if(index === 0){  // add to queue
             if(song && userId){
                 let queue = localStorage.getItem('queue');
