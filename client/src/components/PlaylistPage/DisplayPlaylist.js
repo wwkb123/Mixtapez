@@ -372,6 +372,46 @@ export default function DisplayPlaylistScreen(props){
             }
         }
       }, [owner])
+
+      // re render when new props received
+      useEffect(() => {
+        async function fetchData() {
+            try {
+                setPage(1);
+                const response = await UserAPI.get("/musicList/"+props.match.params.id);
+                if(response.data.status == "success"){ // search success
+                    // console.log("success");
+                    // console.log("musiclist is", response.data.musicList);
+                    setMusicList(response.data.musicList);
+                    var musics = [];
+                    var music_length = 0;
+                    for(let i = 0; i < response.data.musicList.musics.length; i++){
+                        let id = response.data.musicList.musics[i];
+                        const song_response = await UserAPI.get("/music/"+id);
+                        if(song_response.data.status == "success"){ // search success
+                            musics.push(song_response.data.music);
+                            music_length += song_response.data.music.length;
+                        }else{
+                            console.log("error searching song", id);
+                        }
+                    }
+                    // console.log(musics);
+                    setMusics(Array.from(musics)); // deep copy
+                    setTotalLength(music_length);
+                    const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                    if(owner_response.data.status == "success"){ // search success
+                        setOwner(owner_response.data.user);
+                    }
+                    // console.log(owner_response.data.user);
+                }else{ // somehow failed
+    
+                }
+            }catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData();
+      }, [props.match.params.id]);
     
     function onReorder (event, previousIndex, nextIndex, fromId, toId) {
         setMusics(reorder(musics, previousIndex, nextIndex));
