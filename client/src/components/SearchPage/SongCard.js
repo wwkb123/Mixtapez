@@ -1,6 +1,4 @@
-import React, { Component, useState } from 'react';
-import Button from 'react-bootstrap/Button'
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -50,7 +48,7 @@ export default function SongCard(props){
                 album,
                 length,
                 artist});
-            if (create_response.data.status == "success") {
+            if (create_response.data.status === "success") {
                 var loadQueueIndexToAudioPlayer = props.loadQueueIndexToAudioPlayer;
                 var queue = localStorage.getItem('queue');
                 if(queue){
@@ -59,7 +57,7 @@ export default function SongCard(props){
                     queue = [];
                 }
                 const song_response = await UserAPI.get("/music/"+create_response.data.musicId);
-                if(song_response.data.status == "success"){
+                if(song_response.data.status === "success"){
                     let found = false;
                     let index = queue.length-1;
                     for(let i = 0; i < queue.length; i++){
@@ -99,7 +97,7 @@ export default function SongCard(props){
                 album,
                 length,
                 artist});
-            if (create_response.data.status == "success") {
+            if (create_response.data.status === "success") {
                 let songID = create_response.data.musicId
                 const addSong_response = await UserAPI.post("/addSong", {
                     musicListID,
@@ -142,12 +140,12 @@ export default function SongCard(props){
                         album,
                         length,
                         artist});
-                    if (create_response.data.status == "success") {
+                    if (create_response.data.status === "success") {
                         console.log(create_response.data.musicId)
                         let id = create_response.data.musicId
                         const song_response = await UserAPI.get("/music/"+id);
                         console.log(id);
-                        if(song_response.data.status == "success"){
+                        if(song_response.data.status === "success"){
                             if (queue.length > 0) {
                                 let contains = queue.map((music)=>{
                                     if (music._id === song_response.data.music._id) {

@@ -1,18 +1,13 @@
-import React, { Component, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
+import React, { useEffect } from 'react';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
 import { MdPlayCircleOutline, MdMoreHoriz} from "react-icons/md";
-import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
-import { Grid, Paper } from '@material-ui/core';
-import { pink } from '@material-ui/core/colors';
-import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsTrashFill } from "react-icons/bs";
 import gql from 'graphql-tag'
-import {Query, Mutation} from 'react-apollo'
+import {Mutation} from 'react-apollo'
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -112,7 +107,7 @@ export default function DisplayPlaylistScreen(props){
                 for(let i = 0; i < response.data.musicList.musics.length; i++){
                     let id = response.data.musicList.musics[i];
                     const song_response = await UserAPI.get("/music/"+id);
-                    if(song_response.data.status == "success"){ // search success
+                    if(song_response.data.status === "success"){ // search success
                         musics.push(song_response.data.music);
                         music_length += song_response.data.music.length;
                     }else{
@@ -122,7 +117,7 @@ export default function DisplayPlaylistScreen(props){
                 setMusics(Array.from(musics)); // deep copy
                 setTotalLength(music_length);
                 const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
-                if(owner_response.data.status == "success"){ // search success
+                if(owner_response.data.status === "success"){ // search success
                     setOwner(owner_response.data.user);
                 }
                 console.log("owner", owner_response.data.user);
@@ -321,7 +316,7 @@ export default function DisplayPlaylistScreen(props){
             try {
                 setPage(1);
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
-                if(response.data.status == "success"){ // search success
+                if(response.data.status === "success"){ // search success
                     // console.log("success");
                     // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
@@ -330,7 +325,7 @@ export default function DisplayPlaylistScreen(props){
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
                         let id = response.data.musicList.musics[i];
                         const song_response = await UserAPI.get("/music/"+id);
-                        if(song_response.data.status == "success"){ // search success
+                        if(song_response.data.status === "success"){ // search success
                             musics.push(song_response.data.music);
                             music_length += song_response.data.music.length;
                         }else{
@@ -341,7 +336,7 @@ export default function DisplayPlaylistScreen(props){
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
-                    if(owner_response.data.status == "success"){ // search success
+                    if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
                     // console.log(owner_response.data.user);
@@ -380,7 +375,7 @@ export default function DisplayPlaylistScreen(props){
             try {
                 setPage(1);
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
-                if(response.data.status == "success"){ // search success
+                if(response.data.status === "success"){ // search success
                     // console.log("success");
                     // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
@@ -389,7 +384,7 @@ export default function DisplayPlaylistScreen(props){
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
                         let id = response.data.musicList.musics[i];
                         const song_response = await UserAPI.get("/music/"+id);
-                        if(song_response.data.status == "success"){ // search success
+                        if(song_response.data.status === "success"){ // search success
                             musics.push(song_response.data.music);
                             music_length += song_response.data.music.length;
                         }else{
@@ -400,7 +395,7 @@ export default function DisplayPlaylistScreen(props){
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
-                    if(owner_response.data.status == "success"){ // search success
+                    if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
                     // console.log(owner_response.data.user);

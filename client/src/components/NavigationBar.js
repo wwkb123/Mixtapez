@@ -7,7 +7,7 @@ import UserAPI from "../apis/UserAPI";
 import { withRouter } from "react-router-dom";
 import { TextField } from '@material-ui/core';
 import { MdHome, MdSearch, MdPerson, MdPeople, 
-    MdQueueMusic, MdPlaylistAdd, MdFavorite, MdExitToApp, MdAssignment
+    MdQueueMusic, MdPlaylistAdd, MdAssignment
 } from "react-icons/md";
 import { CgLogIn, CgLogOut } from "react-icons/cg";
 import { IconContext } from "react-icons";
@@ -217,7 +217,7 @@ class NavigationBar extends Component{
                 userId,
                 musicListName
             });
-            if (create_response.data.status == "success") {
+            if (create_response.data.status === "success") {
             //    console.log(this.props.userId)
             //    console.log(create_response.data.musicListId)
                 addNewPlaylist({

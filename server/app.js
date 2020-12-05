@@ -1091,4 +1091,17 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
+const socketio = require('socket.io');
+const io = socketio(server);
+
+io.on('connection', function(socket){
+  console.log("made socket connection", socket.id);
+
+  socket.on('chat', function(data, callback){
+      io.emit('chat', data);
+      callback('success');
+  });
+
+})
+
 module.exports = app;

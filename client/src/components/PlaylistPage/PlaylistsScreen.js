@@ -1,11 +1,6 @@
-import React, { Component, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import PlaylistCard from './PlaylistCard';
 import gql from 'graphql-tag'
-import {Query} from 'react-apollo'
 import UserAPI from "../../apis/UserAPI";
 import { TextField } from '@material-ui/core';
 

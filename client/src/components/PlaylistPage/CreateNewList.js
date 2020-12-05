@@ -4,10 +4,9 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
 import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
-import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
-import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 /*
 class playPauseButton extends Component {
     constructor(props) {

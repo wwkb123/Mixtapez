@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { BsPersonSquare } from "react-icons/bs";
 import { IconContext } from "react-icons";
-import { Link } from 'react-router-dom';
 
 class FriendCard extends Component {
 

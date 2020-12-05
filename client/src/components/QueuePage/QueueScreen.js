@@ -1,21 +1,11 @@
 import React, { Component, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
 import { MdPlayCircleOutline, MdMoreHoriz} from "react-icons/md";
-import {IoMdHeartEmpty} from "react-icons/io"
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
-import { Grid, Paper } from '@material-ui/core';
-import { pink } from '@material-ui/core/colors';
-import { AiFillPlusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { BsTrashFill } from "react-icons/bs";
-import gql from 'graphql-tag'
-import {Query, Mutation} from 'react-apollo'
 import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
 import QueueSongCard from "./QueueSongCard.js";
 import SongTitleCard from './SongTitleCard';
