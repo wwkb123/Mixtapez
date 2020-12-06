@@ -77,6 +77,11 @@ app.use('/graphql', cors(), graphqlHTTP({
   graphiql: true,
 }));
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -1081,6 +1086,25 @@ app.post('/api/sendMessage', async (req, res) => {
  
 });
 
+// get the messages of a conversation ID
+app.post('/api/getMessages', async (req, res) => {
+  var conv = await ConversationModel.findOne({'_id': req.body.conversation_id}).exec();
+
+  if(conv){
+    res.status(200).json({
+      status: "success",
+      conv_id: conv._id,
+      messages: conv.messages
+    });
+  }else{
+    res.status(200).json({
+      status: "failed"
+    });
+  }
+ 
+});
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -1171,14 +1195,33 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 const socketio = require('socket.io');
-const io = socketio(server);
+const io = socketio(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+});
+
 
 io.on('connection', function(socket){
   console.log("made socket connection", socket.id);
 
-  socket.on('chat', function(data, callback){
-      io.emit('chat', data);
-      callback('success');
+  socket.on('joinRoom', ({ room }) => {
+    console.log(socket.id, "has enter the chat", room)
+    socket.join(room);
+  });
+
+  socket.on('chat', function(data){
+    console.log('receive chat data', data);
+    // io.emit('chat', data);
+    io.to(data.conversation_id).emit('chat', data.conversation_id);
+  });
+
+  // Runs when client disconnects
+  socket.on('disconnect', () => {
+    console.log(socket.id, "has left the chat")
   });
 
 })

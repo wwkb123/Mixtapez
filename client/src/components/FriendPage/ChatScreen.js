@@ -7,7 +7,7 @@ import FriendCard from './FriendCard.js'
 import { TextField } from '@material-ui/core';
 import Button from 'react-bootstrap/Button'
 import UserAPI from "../../apis/UserAPI";
-import { timingSafeEqual } from 'crypto';
+import io from "socket.io-client";
 
 
 class ChatScreen extends Component {
@@ -18,7 +18,8 @@ class ChatScreen extends Component {
             isFriend: false,
             conversation_id: "",
             messages: [],
-            message_to_send: ""
+            message_to_send: "",
+            socket: null,
         }
     }
 
@@ -61,7 +62,9 @@ class ChatScreen extends Component {
                     var conversation_id = conversation_response.data.conv_id;
                     var messages = conversation_response.data.messages;
                     // console.log(conversation_id, messages);
-                    this.setState({conversation_id});
+                    this.setState({conversation_id}, () => {
+                        this.connectToSocket();  // connect to socket after getting a conversation_id
+                    });
                     this.setState({messages});
                 }
             }
@@ -84,13 +87,62 @@ class ChatScreen extends Component {
                 var messages = response.data.messages;
                 this.setState({messages});
                 this.setState({message_to_send:""})
+                // emit chat event to socket
+                if(this.state.socket){
+                    this.state.socket.emit('chat', {
+                        conversation_id
+                    });
+                }
             }
         }
         
     }
 
+    connectToSocket = async () => {
+        if(this.state.socket == null){
+            // Make connection
+
+            // var url = "https://guguwagwag.herokuapp.com";
+            var url = "http://localhost:3001";
+            const socket = io(url, {
+                withCredentials: true,
+                extraHeaders: {
+                    "my-custom-header": "abcd"
+                }
+            });
+            this.setState({socket}, ()=>{
+                console.log(this.state.socket);
+                // connect to room
+                if(this.state.socket && this.state.conversation_id){
+                    this.state.socket.emit('joinRoom', {
+                        room: this.state.conversation_id
+                    });
+                }
+
+                if(this.state.socket && this.state.conversation_id){  // listen to socket's chat event
+                    this.state.socket.on('chat', async (data) => {
+                        console.log('from socket:', data);
+                        // query database to update messages
+                        const response = await UserAPI.post("/getMessages", {
+                            conversation_id: data
+                        });
+                        if(response.data.status === "success"){
+                            var messages = response.data.messages;
+                            this.setState({messages});
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     componentDidMount() {
         this.loadFriend();
+    }
+
+    componentWillUnmount() {
+        if(this.state.socket)
+            this.state.socket.close();
     }
 
     render() {

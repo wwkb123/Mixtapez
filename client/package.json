@@ -22,7 +22,8 @@
     "react-reorder": "^3.0.0-alpha.7",
     "react-router-dom": "^5.0.0",
     "react-script": "^2.0.5",
-    "react-scripts": "^2.1.8"
+    "react-scripts": "^2.1.8",
+    "socket.io-client": "^3.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
