@@ -66,6 +66,9 @@ class ChatScreen extends Component {
                         this.connectToSocket();  // connect to socket after getting a conversation_id
                     });
                     this.setState({messages});
+                    var dialog = document.getElementById('dialog');
+                    if(dialog)
+                        dialog.scrollTop = dialog.scrollHeight;
                 }
             }
         }catch(err){
@@ -129,6 +132,9 @@ class ChatScreen extends Component {
                         if(response.data.status === "success"){
                             var messages = response.data.messages;
                             this.setState({messages});
+                            var dialog = document.getElementById('dialog');
+                            if(dialog)
+                                dialog.scrollTop = dialog.scrollHeight;
                         }
                     });
                 }
@@ -178,7 +184,7 @@ class ChatScreen extends Component {
                 <Link to={'/profile/' + friendID} key={friendID}>
                     <FriendCard user={friend}/>
                 </Link>
-                <div className="dialog-area">
+                <div className="dialog-area" id="dialog">
                     { dialog_cards }
                     {/* <div className="friend-dialog">Hi How are you</div>
                     <div className="self-dialog">Good</div>

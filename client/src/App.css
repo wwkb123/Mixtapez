@@ -146,6 +146,7 @@ body {
   margin: 5px;
   width: fit-content;
   position: relative;
+  overflow-wrap: break-word;
 }
 
 .self-dialog{
@@ -155,13 +156,18 @@ body {
   margin: 5px;
   width: fit-content;
   position: relative;
-  left: 90%;
+  margin-left:auto;
+  margin-right:0;
+  overflow-wrap: break-word;
 }
 
 .dialog-area{
   width: 100%;
   border-top: 1px solid #ed4e85;
   padding: 8px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 50vh;
 }
 
 .input-message{
