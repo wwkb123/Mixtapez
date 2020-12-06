@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
+import default_image from '../../tempData/default_image.png'
 import { MdPauseCircleOutline, MdMoreHoriz} from "react-icons/md";
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
@@ -36,7 +37,7 @@ class CreateNewListScreen extends Component{
             <div>
                 <Container>
                     <Row>
-                        <img src={Image} width={175} height={175} alt="">
+                        <img className="playlist-image" src={default_image} width={175} height={175} alt="">
                         </img>
                         <Col>
                             <Col xs={10} className="content-left">

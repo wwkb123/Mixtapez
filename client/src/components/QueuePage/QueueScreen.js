@@ -2,6 +2,7 @@ import React, { Component, useEffect } from 'react';
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from '../../tempData/AbbeyRoad.jpg'
+import default_image from '../../tempData/default_image.png'
 import { MdPlayCircleOutline, MdMoreHoriz} from "react-icons/md";
 import { IconContext } from "react-icons";
 import Button from 'react-bootstrap/Button'
@@ -388,7 +389,7 @@ export default function QueueScreen(props){
         return(
             <div>
                 <Row>
-                    <img src={Image} width={175} height={175} alt="">
+                    <img className="playlist-image" src={default_image} width={175} height={175} alt="">
                     </img>
                     <Col>
                         <h1 style={{fontWeight: "bold"}} > Queue </h1>              

@@ -351,3 +351,8 @@ a, a:hover {
   top: 85%;
   left: 2%;
 }
+
+.playlist-image{
+  margin: 15px;
+  border-radius: 5px;
+}

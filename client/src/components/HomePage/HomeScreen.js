@@ -3,6 +3,7 @@ import Carousel from 'react-bootstrap/Carousel'
 import Image from '../../tempData/AbbeyRoad.jpg'
 import image2 from '../../tempData/album2.jpg'
 import image3 from '../../tempData/album3.jpg'
+import default_image from '../../tempData/default_image.png'
 import ProfilePlaylistCard from '../ProfilePlaylistCard';
 import UserAPI from '../../apis/UserAPI';
 
