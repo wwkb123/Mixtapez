@@ -1006,13 +1006,17 @@ app.post('/api/removeFriend', async (req, res) => {
 
 // get the conversation between the user and his/her friend
 app.post('/api/getConversation', async (req, res) => {
-  var conv1 = await ConversationModel.findOne({'user1_id': req.body.id}).exec();
-  console.log("conv is", conv1);
-  if(!conv1){
+  var conv1 = await ConversationModel.findOne({'user1_id': req.body.userID, 'user2_id': req.body.friendID}).exec();
+  var conv2 = await ConversationModel.findOne({'user2_id': req.body.userID, 'user1_id': req.body.friendID}).exec();
+  
+  console.log("conv1 is", conv1);
+  console.log("conv2 is", conv2);
+
+  if(!conv1 && !conv2){  // conversation doesn't exist, create a new one
     const conversationModel = new ConversationModel(
         {
-          user1_id: req.body.id,
-          user2_id: req.body.id,
+          user1_id: req.body.userID,
+          user2_id: req.body.friendID,
           messages: []
         });
     conversationModel.save((err)=>{
@@ -1024,12 +1028,57 @@ app.post('/api/getConversation', async (req, res) => {
         status: "failed"
       });
     }
+    
+    res.status(200).json({
+      status: "success",
+      conv_id: conversationModel._id,
+      messages: conversationModel.messages
+    });
+
+  }
+  if(conv1){
+    res.status(200).json({
+      status: "success",
+      conv_id: conv1._id,
+      messages: conv1.messages
+    });
   }
 
-  res.status(200).json({
-    status: "success"
-  });
+  if(conv2){
+    res.status(200).json({
+      status: "success",
+      conv_id: conv2._id,
+      messages: conv2.messages
+    });
+  }
 
+});
+
+// append a message to the conversation between the user and his/her friend
+app.post('/api/sendMessage', async (req, res) => {
+  var conv = await ConversationModel.findOne({'_id': req.body.conversation_id}).exec();
+  var message = req.body.message;
+
+  if(conv){
+    var messages = conv.messages
+    messages.push(message);
+    conv.messages = [...messages];
+    conv.save(function (err) {
+      if(err) {
+          console.error('ERROR!');
+        }
+    });
+    res.status(200).json({
+      status: "success",
+      conv_id: conv._id,
+      messages: conv.messages
+    });
+  }else{
+    res.status(200).json({
+      status: "failed"
+    });
+  }
+ 
 });
 
 // catch 404 and forward to error handler
