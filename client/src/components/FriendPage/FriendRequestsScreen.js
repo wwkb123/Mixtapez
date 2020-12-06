@@ -24,11 +24,11 @@ class FriendRequestsScreen extends Component {
         var friendRequests = ""
         var friend_request_cards = ""
         if(this.state.isLoaded){
-            console.log(this.state.friendRequests, this.state.friendRequests==true)
+            console.log(this.state.friendRequests, this.state.friendRequests===true)
             if(this.state.friendRequests){
                 friendRequests = this.state.friendRequests;
                 console.log(friendRequests.length, "asd");
-                if(friendRequests.length == 0){
+                if(friendRequests.length === 0){
                     friend_request_cards = <div>You have no friend requests.</div>
                 }else{
                     

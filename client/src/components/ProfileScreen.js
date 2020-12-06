@@ -20,7 +20,7 @@ class ProfileScreen extends Component {
             const response = await UserAPI.post("/user", {
                 id: selfID
             });
-            if(response.data.status == "success"){ // search success
+            if(response.data.status === "success"){ // search success
                 var self = response.data.user;
                 this.setState({self});
             }
@@ -36,12 +36,12 @@ class ProfileScreen extends Component {
             const response = await UserAPI.post("/user", {
                 id: id
             });
-            if(response.data.status == "success"){ // search success
+            if(response.data.status === "success"){ // search success
                 console.log("success");
                 user = response.data.user;
                 
                 const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
-                if(playlists_response.data.status == "success"){
+                if(playlists_response.data.status === "success"){
                     var musicLists = playlists_response.data.musicLists;  // list of playlist ids
                     var publicPlaylists = [];
                     for(let i = 0; i < musicLists.length; i++){
@@ -95,7 +95,7 @@ class ProfileScreen extends Component {
                     userID: self._id,
                     target_userID: user._id
                 });
-                if(response.data.status == "success"){
+                if(response.data.status === "success"){
                     this.setState({user: response.data.target_user});
                     this.setState({self: response.data.user});
                 }
@@ -134,7 +134,7 @@ class ProfileScreen extends Component {
                 userID: self._id,
                 target_userID: user._id
             });
-            if(response.data.status == "success"){
+            if(response.data.status === "success"){
                 this.setState({user: response.data.target_user});
                 this.setState({self: response.data.user});
             }

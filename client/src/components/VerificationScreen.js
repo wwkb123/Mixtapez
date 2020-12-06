@@ -9,7 +9,7 @@ class VerificationScreen extends Component{
             const response = await UserAPI.post("/verify", {
                 id: this.props.match.params.id
             });
-            if(response.data.status == "success"){
+            if(response.data.status === "success"){
                 console.log("success");
                 this.props.signedIn(response.data.nickName, response.data.userId);
                 this.props.history.push('/');

@@ -21,7 +21,7 @@ class FriendRequestCard extends Component {
                     userID: selfID,
                     target_userID: target_userID
                 });
-                if(response.data.status == "success"){
+                if(response.data.status === "success"){
                     // set parent's state
                     var user = response.data.user;
                     var childSetFriendsAndRequest = this.props.childSetFriendsAndRequest;
@@ -47,7 +47,7 @@ class FriendRequestCard extends Component {
                     userID: selfID,
                     target_userID: target_userID
                 });
-                if(response.data.status == "success"){
+                if(response.data.status === "success"){
                     // set parent's state
                     var user = response.data.user;
                     var childSetFriendsAndRequest = this.props.childSetFriendsAndRequest;

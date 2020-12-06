@@ -98,7 +98,7 @@ class SearchScreen extends Component{
                 const response = await UserAPI.post("/search/"+search_for, {
                     search_text
                 });
-                if(response.data.status == "success"){ // search success
+                if(response.data.status === "success"){ // search success
                     console.log("success");
                     // this.props.signedIn(response.data.nickName);
                     // this.props.history.push('/');
@@ -140,18 +140,18 @@ class SearchScreen extends Component{
                                                                     album,
                                                                     length,
                                                                     artist});
-            if (create_response.data.status == "success") {
+            if (create_response.data.status === "success") {
                console.log(this.props.userId)
                console.log(create_response.data.musicId)
                const request_musicList = await UserAPI.get("/musicList/"+musicListId);
                if (request_musicList.data.status == "success") {
                  let musicList = request_musicList.data.musicList.musics;
                  console.log(musicList);
-                 console.log(musicList.map((mus)=> {return(mus == create_response.data.musicId)}))
+                 console.log(musicList.map((mus)=> {return(mus === create_response.data.musicId)}))
                  if (musicList.length > 0) {
                     let control = true;
                     musicList.forEach(mus => {
-                        if(mus == create_response.data.musicId){
+                        if(mus === create_response.data.musicId){
                             control = false;
                         }
                     });

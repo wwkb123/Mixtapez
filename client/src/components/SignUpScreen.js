@@ -86,7 +86,7 @@ class SignUpScreen extends Component{
         var email = this.state.email;
         var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         var validate_result = regex.test(email);
-        if(validate_result == false){
+        if(validate_result === false){
             alert("Please enter an email address with correct format.");
             return;
         }
@@ -98,7 +98,7 @@ class SignUpScreen extends Component{
                     const register_response = await UserAPI.post("/register", {
                         email
                     });
-                    if(register_response.data.status == "success"){  // email can be used
+                    if(register_response.data.status === "success"){  // email can be used
                         var toast = document.getElementById("loading_toast");
                         toast.className = "show"; // show the toast
                         // After 3 seconds, remove the show class from toast
@@ -114,7 +114,7 @@ class SignUpScreen extends Component{
                         const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
                             email
                         });
-                        if(sendEmail_response.data.status == "success"){
+                        if(sendEmail_response.data.status === "success"){
                             console.log("success");
                             // this.props.signedIn("NewUser");
                             this.props.history.push('/emailsent');

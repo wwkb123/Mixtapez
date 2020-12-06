@@ -32,7 +32,7 @@ class FriendScreen extends Component {
                 const response = await UserAPI.post("/user", {
                     id: userID
                 });
-                if(response.data.status == "success"){
+                if(response.data.status === "success"){
                     this.setState({user: response.data.user});
                     this.getFriendsAndRequests();
                 }
@@ -51,7 +51,7 @@ class FriendScreen extends Component {
                 const user_response = await UserAPI.post("/user", {
                     id: friends_IDs[i]
                 });
-                if(user_response.data.status == "success"){
+                if(user_response.data.status === "success"){
                     friends.push(user_response.data.user);
                 }
             }
@@ -62,7 +62,7 @@ class FriendScreen extends Component {
                 const user_response = await UserAPI.post("/user", {
                     id: friendRequests_IDs[i]
                 });
-                if(user_response.data.status == "success"){
+                if(user_response.data.status === "success"){
                     friendRequests.push(user_response.data.user);
                 }
             }
@@ -96,7 +96,7 @@ class FriendScreen extends Component {
         let friend_request_cards = ""
         if(this.state.isLoaded){
             if(this.state.friends){
-                if(this.state.friends.length == 0){
+                if(this.state.friends.length === 0){
                     friend_cards = <div>You have no friend yet. Go to search page and search for users.</div>
                 }else{
                     friend_cards = this.state.friends.map((user, index) => {
@@ -111,7 +111,7 @@ class FriendScreen extends Component {
             }
             if(this.state.friendRequests){
                 friendRequests = this.state.friendRequests;
-                if(friendRequests.length == 0){
+                if(friendRequests.length === 0){
                     friend_request_cards = <div>You have no friend requests.</div>
                 }else{
                     friend_request_cards = friendRequests.map((user, index) => {

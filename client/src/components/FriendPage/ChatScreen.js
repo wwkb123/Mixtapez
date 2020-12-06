@@ -25,7 +25,7 @@ class ChatScreen extends Component {
         const response = await UserAPI.post("/user", {
             id: userID
         });
-        if(response.data.status == "success"){
+        if(response.data.status === "success"){
             friends_IDs = response.data.user.friends;
         }
         if(!friends_IDs.includes(friendID)){
@@ -36,7 +36,7 @@ class ChatScreen extends Component {
             const response = await UserAPI.post("/user", {
                 id: friendID
             });
-            if(response.data.status == "success"){
+            if(response.data.status === "success"){
                 this.setState({friend: response.data.user});
                 this.setState({isFriend: true});
             }

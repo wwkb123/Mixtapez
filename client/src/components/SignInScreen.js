@@ -34,13 +34,13 @@ class SignInScreen extends Component{
                     email,
                     password
                 });
-                if(response.data.status == "success"){
+                if(response.data.status === "success"){
                     console.log("success");
                     this.props.signedIn(response.data.nickName, response.data.userId);
                     this.props.history.push('/');
-                }else if(response.data.status == "failed"){
+                }else if(response.data.status === "failed"){
                     alert("Wrong credentials. Please try again.");
-                }else if(response.data.status == "not verified"){
+                }else if(response.data.status === "not verified"){
                     console.log("not verified");
                     // console.log(response.data)
                     // this.props.signedIn(response.data.nickName, response.data.userId);

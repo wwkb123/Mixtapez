@@ -570,7 +570,7 @@ app.post('/api/addSong', async (req, res) => {
       var musics = musicList.musics;
       if (musics.length>0) {
         let contains = musics.map((music)=>{
-          if (music == req.body.songID) {
+          if (music === req.body.songID) {
             return true
           } else {
             return false

@@ -19,7 +19,7 @@ class PlaylistCard extends Component{
             const response = await UserAPI.post("/user/nickName", {
                 id: id
             });
-            if(response.data.status == "success"){ // search success
+            if(response.data.status === "success"){ // search success
                 console.log("success");
                 owner = response.data.nickName;
                 this.setState({owner});

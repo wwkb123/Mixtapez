@@ -76,7 +76,7 @@ class AudioPlayerBar extends Component {
             }else{
                 if (this.state.isShuffle) {
                     index = Math.floor(Math.random()* queue.length)
-                } else if (index == (queue.length - 1)){
+                } else if (index === (queue.length - 1)){
                     console.log("loop to beginning")
                     index = 0;
                 } else{
@@ -134,7 +134,7 @@ class AudioPlayerBar extends Component {
     loadSongAndplay = async (URI, index) =>{
         const getSong_response = await UserAPI.post("/getSongAudio", {
             URI});
-        if (getSong_response.data.status == "success") {
+        if (getSong_response.data.status === "success") {
             console.log("successful load the track information")
             console.log("track url:"+getSong_response.data.track.preview_url)
             if (getSong_response.data.track.preview_url) {
