@@ -52,6 +52,8 @@ refreshTokenInterval = setInterval(getNewToken, 1000 * 60 * 30);  // refresh it 
 var UserModel = require('./models/user');
 var MusicListModel = require('./models/musicList');
 var MusicModel = require('./models/music');
+var ConversationModel = require('./models/conversation');
+
 const { use } = require('./routes/index');
 var app = express();
 
@@ -1000,6 +1002,34 @@ app.post('/api/removeFriend', async (req, res) => {
       });
     }
   });
+});
+
+// get the conversation between the user and his/her friend
+app.post('/api/getConversation', async (req, res) => {
+  var conv1 = await ConversationModel.findOne({'user1_id': req.body.id}).exec();
+  console.log("conv is", conv1);
+  if(!conv1){
+    const conversationModel = new ConversationModel(
+        {
+          user1_id: req.body.id,
+          user2_id: req.body.id,
+          messages: []
+        });
+    conversationModel.save((err)=>{
+    if (err) return handleError(err);
+    });
+
+    if (!conversationModel) {
+      res.status(200).json({
+        status: "failed"
+      });
+    }
+  }
+
+  res.status(200).json({
+    status: "success"
+  });
+
 });
 
 // catch 404 and forward to error handler

@@ -11,7 +11,27 @@ var GraphQLDate = require('graphql-date');
 var MusicModel = require('../models/music');
 var MusicListModel = require('../models/musicList');
 var UserModel = require('../models/user');
+var ConversationModel = require('../models/conversation');
 
+var conversationType = new GraphQLObjectType({
+    name: 'conversation',
+    fields: function () {
+        return {
+            _id: {
+                type: GraphQLString
+            },
+            user1_id: {
+                type: userType
+            },
+            user2_id: {
+                type: userType
+            },
+            messages: {
+                type: GraphQLList(GraphQLString)
+            }
+        }
+    }
+});
 
 var musicType = new GraphQLObjectType({
     name: 'music',
@@ -69,6 +89,9 @@ var musicListType = new GraphQLObjectType({
             },
             lastUpdate: {
                 type: GraphQLDate
+            },
+            image:{
+                type: GraphQLString
             }
         }
     }

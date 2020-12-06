@@ -28,17 +28,20 @@ class ChatScreen extends Component {
         if(response.data.status === "success"){
             friends_IDs = response.data.user.friends;
         }
-        if(!friends_IDs.includes(friendID)){
+        if(!friends_IDs.includes(friendID)){  // not user's friend
             return;
         }
        
         try{
-            const response = await UserAPI.post("/user", {
+            const response = await UserAPI.post("/user", {  // get friend's info
                 id: friendID
             });
             if(response.data.status === "success"){
                 this.setState({friend: response.data.user});
                 this.setState({isFriend: true});
+                const conversation_response = await UserAPI.post("/getConversation", {  // get friend's info
+                    id: userID
+                });
             }
         }catch(err){
             console.log(err);
