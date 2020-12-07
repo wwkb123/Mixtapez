@@ -8,7 +8,7 @@ import { TextField } from '@material-ui/core';
 import Button from 'react-bootstrap/Button'
 import UserAPI from "../../apis/UserAPI";
 import io from "socket.io-client";
-
+import {url} from '../../config'
 
 class ChatScreen extends Component {
     constructor(props){
@@ -105,10 +105,8 @@ class ChatScreen extends Component {
     connectToSocket = async () => {
         if(this.state.socket == null){
             // Make connection
-
-            // var url = "https://guguwagwag.herokuapp.com";
-            var url = "http://localhost:3001";
-            const socket = io(url, {
+            var server_url = url.server;
+            const socket = io(server_url, {
                 withCredentials: true,
                 extraHeaders: {
                     "my-custom-header": "abcd"

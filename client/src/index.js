@@ -36,9 +36,10 @@ import './toast.css';
 // import EmailSentScreen from './components/EmailSentScreen';
 // import ErrorScreen from './components/ErrorScreen';
 import App from './app';
+import { url } from './config'
 
-const client = new ApolloClient({ uri: 'http://localhost:3001/graphql' });
-
+const client = new ApolloClient({ uri: url.server+'/graphql' });
+// console.log(url);
 ReactDOM.render(
     <ApolloProvider client={client}>
         <Router>

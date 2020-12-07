@@ -55,6 +55,7 @@ var MusicModel = require('./models/music');
 var ConversationModel = require('./models/conversation');
 
 const { use } = require('./routes/index');
+const { url } = require('./config');
 var app = express();
 
 // view engine setup
@@ -116,7 +117,7 @@ app.post('/api/sendVerifyEmail', async (req, res) => {
     console.log("send email result is ", result);
     if(result.length > 0){ // email found
       userID = result[0]._id
-      var link = `http://localhost:3000/verification/${userID}`;
+      var link = `${url.client}/verification/${userID}`;
       console.log("preparing email...");
       var mailOptions = {
         from: 'mixtapez416@gmail.com',
@@ -226,7 +227,7 @@ app.post('/api/forgetPassword', async (req, res) => {
     if (err) return handleError(err);
   });
   if(userID !== ""){
-    var link = `http://localhost:3001/changepassword/${userID}`;
+    var link = `${url.client}/changepassword/${userID}`;
     var mailOptions = {
       from: 'mixtapez416@gmail.com',
       to: req.body.email,
@@ -1214,7 +1215,7 @@ server.on('listening', onListening);
 const socketio = require('socket.io');
 const io = socketio(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: url.client,
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true

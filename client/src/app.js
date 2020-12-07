@@ -36,6 +36,7 @@ import { IconContext } from "react-icons";
 
 import io from "socket.io-client";
 import SongDetailScreen from './components/SongDetailPage/SongDetailScreen';
+import { url } from './config'
 
 class App extends Component{
     constructor(){
@@ -64,9 +65,8 @@ class App extends Component{
 
     connectToSocket = () => {
         if(!this.state.main_socket){
-            // var url = "https://guguwagwag.herokuapp.com";
-            var url = "http://localhost:3001";
-            const socket = io(url, {
+            var server_url = url.server;
+            const socket = io(server_url, {
                 withCredentials: true,
                 extraHeaders: {
                     "my-custom-header": "abcd"
