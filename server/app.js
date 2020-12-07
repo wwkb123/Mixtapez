@@ -87,9 +87,7 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build', '/index.html'));
-});
+
 app.use(bodyParser.json());
 app.unsubscribe(bodyParser.urlencoded({ extended: false }))
 
@@ -1141,6 +1139,10 @@ app.post('/api/updateNowPlaying', async (req, res) => {
  
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build', '/index.html'));
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -1223,6 +1225,8 @@ function onError(error) {
 //     : 'port ' + addr.port;
 //   debug('Listening on ' + bind);
 // }
+
+
 
 app.set('port', port);
 var server = http.createServer(app);
