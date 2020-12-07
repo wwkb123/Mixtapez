@@ -574,21 +574,15 @@ app.post('/api/addSong', async (req, res) => {
             status: "error"
           });
       }
-      var musics = musicList.musics;
-      if (musics.length>0) {
-        let contains = musics.map((music)=>{
-          if (music === req.body.songID) {
-            return true
-          } else {
-            return false
-          }
-        }).reduce((a,b)=> {return(a||b)})
-        console.log(contains)
-        if (!contains) {
-          musics.push(req.body.songID);
-        }
-      }else{
+      var musics = [];
+      for(let i = 0; i < musicList.musics.length; i++){
+        var id = String(musicList.musics[i]);
+        musics.push(id);
+      }
+      if(!musics.includes(req.body.songID)){
         musics.push(req.body.songID);
+      }else{
+        console.log('contains this song already')
       }
       musicList.musics = [...musics];
       musicList.save(function (err) {

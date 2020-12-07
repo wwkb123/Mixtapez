@@ -5,12 +5,14 @@ import Col from 'react-bootstrap/Col'
 import { BsPersonSquare } from "react-icons/bs";
 import { IconContext } from "react-icons";
 import UserAPI from '../../apis/UserAPI'
+import { Link } from 'react-router-dom';
 
 class FriendCard extends Component {
     constructor(){
         super()
         this.state = {
-            now_playing: "none"
+            now_playing: "none",
+            now_playing_ID: ""
         }
     }
     componentDidMount() {
@@ -35,6 +37,7 @@ class FriendCard extends Component {
         if(now_playing_ID){
             const song_response = await UserAPI.get("/music/"+now_playing_ID);
             if(song_response.data.status === "success"){ // search success
+                this.setState({now_playing_ID});
                 this.setState({now_playing: song_response.data.music.musicName});
             }else{
                 console.log("error searching song");
@@ -55,7 +58,12 @@ class FriendCard extends Component {
         var now_playing_card = ""
         if(this.state.now_playing){
             // console.log('now playing', this.props.now_playing);
-            now_playing_card = <h6>Now Playing: {now_playing}</h6>
+            if(now_playing !== "none"){
+                now_playing_card = <Link to={'/song/'+this.state.now_playing_ID}><h6>Last Playing: {now_playing}</h6></Link>
+            }else{
+                now_playing_card = <h6>Last Playing: {now_playing}</h6>
+            }
+            
         }
         if(this.props.isOffline){
             user_icon = <IconContext.Provider value={{ color: "#ACACAC", size: '50px' }}>
@@ -67,7 +75,11 @@ class FriendCard extends Component {
             user_icon = <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                 <BsPersonSquare/>
             </IconContext.Provider>
-            now_playing_card = <h6>Last Playing: {now_playing}</h6>
+            if(now_playing !== "none"){
+                now_playing_card = <Link to={'/song/'+this.state.now_playing_ID}><h6>Last Playing: {now_playing}</h6></Link>
+            }else{
+                now_playing_card = <h6>Last Playing: {now_playing}</h6>
+            }
         }
         
         return (

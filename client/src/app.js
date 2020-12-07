@@ -35,6 +35,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 
 import io from "socket.io-client";
+import SongDetailScreen from './components/SongDetailPage/SongDetailScreen';
 
 class App extends Component{
     constructor(){
@@ -177,6 +178,7 @@ class App extends Component{
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen updateModalContentHandler={this.updateModalContentHandler} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen updateMainModalContentHandler={this.updateModalContentHandler} loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
+                                <Route path='/song/:id' render={(props) => <SongDetailScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 {/* <Route path='/likedsongs' component={LikedSongsScreen} /> */}
                                 <Route path='/search' render={(props) => <SearchScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>}  />
                                 {/* <Route path='/popup' component={Popup} /> */}
