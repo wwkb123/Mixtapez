@@ -18,19 +18,28 @@ class FriendCard extends Component {
     componentDidMount() {
         if(this.props.user.nowListening !== "none"){
             this.updateNowPlaying(this.props.user.nowListening);
+        }else{
+            this.setState({now_playing: 'none'});
         }
         if(this.props.now_playing !== "none"){
             this.updateNowPlaying(this.props.now_playing);
+        }else{
+            this.setState({now_playing: 'none'});
         }
     }
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.user.nowListening !== "none"){
             this.updateNowPlaying(nextProps.user.nowListening);
+        }else{
+            this.setState({now_playing: 'none'});
         }
         if(nextProps.now_playing !== "none"){
             this.updateNowPlaying(nextProps.now_playing);
+        }else{
+            this.setState({now_playing: 'none'});
         }
+        // console.log(nextProps.user)
     }
 
     updateNowPlaying = async (now_playing_ID) => {

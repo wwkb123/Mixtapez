@@ -32,13 +32,13 @@ class ProfileScreen extends Component {
 
     getUser = async (id) => {
         var user = "";
-        console.log("looking for user", id);
+        // console.log("looking for user", id);
         try {
             const response = await UserAPI.post("/user", {
                 id: id
             });
             if(response.data.status === "success"){ // search success
-                console.log("success");
+                // console.log("success");
                 user = response.data.user;
                 
                 const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
@@ -75,7 +75,7 @@ class ProfileScreen extends Component {
             this.getUser(userID);
             this.getSelf();
         }
-        // console.log('props is', this.props);
+        console.log('props is', this.props);
         if(this.props.now_playing){
             this.setState({now_playing: this.props.now_playing});
         }
