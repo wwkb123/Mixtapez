@@ -1014,8 +1014,8 @@ app.post('/api/getConversation', async (req, res) => {
   var conv1 = await ConversationModel.findOne({'user1_id': req.body.userID, 'user2_id': req.body.friendID}).exec();
   var conv2 = await ConversationModel.findOne({'user2_id': req.body.userID, 'user1_id': req.body.friendID}).exec();
   
-  console.log("conv1 is", conv1);
-  console.log("conv2 is", conv2);
+  // console.log("conv1 is", conv1);
+  // console.log("conv2 is", conv2);
 
   if(!conv1 && !conv2){  // conversation doesn't exist, create a new one
     const conversationModel = new ConversationModel(
@@ -1101,6 +1101,26 @@ app.post('/api/getMessages', async (req, res) => {
       status: "failed"
     });
   }
+ 
+});
+
+// update the now playing song id of a user
+app.post('/api/updateNowPlaying', async (req, res) => {
+  await UserModel.findOne({'_id': req.body.id }, function (err, user) {
+    user.nowListening = req.body.musicID;
+    user.save(function (err) {
+      if(err) {
+          console.error('ERROR!');
+          res.status(200).json({
+            status: "failed"
+          });
+        }
+    });
+    res.status(200).json({
+      status: "success",
+      user: user
+    });
+  });
  
 });
 

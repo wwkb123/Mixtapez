@@ -198,7 +198,7 @@ export default function SongCard(props){
                             }
                             modal_content = musicLists.map((musicList, index) => {
                                 return(
-                                    <div onClick={(e)=> addSongToMusicList(e, song, musicList._id)} className="playlist-card">
+                                    <div key={index} onClick={(e)=> addSongToMusicList(e, song, musicList._id)} className="playlist-card">
                                         <div>{musicList.musicListName}</div>
                                     </div>
                                 )

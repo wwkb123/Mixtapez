@@ -57,7 +57,7 @@ class AudioPlayerBar extends Component {
     }
 
     onNextSong = async () => {
-        console.log("next music");
+        // console.log("next music");
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
         if(!queue) return;
@@ -77,18 +77,19 @@ class AudioPlayerBar extends Component {
                 if (this.state.isShuffle) {
                     index = Math.floor(Math.random()* queue.length)
                 } else if (index === (queue.length - 1)){
-                    console.log("loop to beginning")
+                    // console.log("loop to beginning")
                     index = 0;
                 } else{
                     index = index + 1
                 }
             }
             
-            console.log("updated index:"+index)
+            // console.log("updated index:"+index)
             if (index < queue.length) {
-                let URI = queue[index]? queue[index].URI : null;
-                console.log("URI:"+URI)
-                this.loadSongAndplay(URI, index);
+                // let URI = queue[index]? queue[index].URI : null;
+                let song = queue[index];
+                // console.log("URI:"+URI)
+                this.loadSongAndplay(song, index);
             }
         } else {
             this.onPlayClick();
@@ -97,7 +98,7 @@ class AudioPlayerBar extends Component {
     }
 
     onPrevSong = async () => {
-        console.log("previous music");
+        // console.log("previous music");
         
         let index = this.state.currentIndex;
         let queue = localStorage.getItem('queue');
@@ -111,12 +112,13 @@ class AudioPlayerBar extends Component {
                 }
             }
             if (index != 0){
-                console.log("current index before update:"+index)
+                // console.log("current index before update:"+index)
                 index = index - 1;
-                console.log("current index after update:"+index)
-                let URI = queue[index]? queue[index].URI : null;
-                console.log("URI:"+URI)
-                this.loadSongAndplay(URI, index);
+                // console.log("current index after update:"+index)
+                // let URI = queue[index]? queue[index].URI : null;
+                // console.log("URI:"+URI)
+                let song = queue[index];
+                this.loadSongAndplay(song, index);
             }
         } else {
             this.onPlayClick();
@@ -128,15 +130,32 @@ class AudioPlayerBar extends Component {
         queue = JSON.parse(queue);
         if(!queue) return;
         if(index >= queue.length) return;
-        this.loadSongAndplay(queue[index].URI, index);
+        this.loadSongAndplay(queue[index], index);
     }
 
-    loadSongAndplay = async (URI, index) =>{
+    loadSongAndplay = async (song, index) =>{
+        // console.log("song is", song);
+        var id = localStorage.getItem('userId');
+        if(!song){
+            return;
+        }
+        var URI = song.URI;
         const getSong_response = await UserAPI.post("/getSongAudio", {
             URI});
         if (getSong_response.data.status === "success") {
-            console.log("successful load the track information")
-            console.log("track url:"+getSong_response.data.track.preview_url)
+            // console.log("successful load the track information")
+            // console.log("track url:"+getSong_response.data.track.preview_url)
+            if(id){
+                const updateNowPlaying_response = await UserAPI.post("/updateNowPlaying", {
+                    id: id,
+                    musicID: song._id
+                });
+                if(updateNowPlaying_response.data.status === "success") {
+                    var updateNowPlaying = this.props.updateNowPlaying;
+                    updateNowPlaying(updateNowPlaying_response.data.user.nowListening);
+                }
+            }
+            
             if (getSong_response.data.track.preview_url) {
                 let interval = this.state.interval;
                 if(!interval){
@@ -153,7 +172,7 @@ class AudioPlayerBar extends Component {
                 this.state.audioTag.src = getSong_response.data.track.preview_url;
                 this.state.audioTag.play();
             }else{
-                console.log("no sample music aviliable")
+                // console.log("no sample music aviliable")
                 let interval = this.state.interval;
                 if(!interval){
                     interval = setInterval(this.tick, 100);
@@ -195,8 +214,8 @@ class AudioPlayerBar extends Component {
     }
 
     handleAudioSlider = (e, newValue) => {
-        console.log('new', newValue);
-        console.log('current time', this.state.audioTag.currentTime);
+        // console.log('new', newValue);
+        // console.log('current time', this.state.audioTag.currentTime);
         if (this.state.audioTag) {
             this.state.audioTag.currentTime = newValue/100 * 30;
             this.setState({progress: newValue/100 * 30});
@@ -204,7 +223,7 @@ class AudioPlayerBar extends Component {
     }
 
     onPlayClick = async () =>{
-        console.log("clicked play")
+        // console.log("clicked play")
         let queue = localStorage.getItem('queue');
         queue = JSON.parse(queue);
         if(!queue) return;
@@ -224,9 +243,9 @@ class AudioPlayerBar extends Component {
             }
         }else{
             if(queue.length > 0){
-                let URI = queue[0]? queue[0].URI : null;
-                console.log("URI:"+URI)
-                this.loadSongAndplay(URI, 0);
+                // let URI = queue[0]? queue[0].URI : null;
+                // console.log("URI:"+URI)
+                this.loadSongAndplay(queue[0], 0);
             }
         }
     }

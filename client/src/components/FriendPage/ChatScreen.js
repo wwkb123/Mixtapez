@@ -20,7 +20,8 @@ class ChatScreen extends Component {
             messages: [],
             message_to_send: "",
             socket: null,
-        }
+        };
+        
     }
 
     handleChange = (e) => {
@@ -114,7 +115,7 @@ class ChatScreen extends Component {
                 }
             });
             this.setState({socket}, ()=>{
-                console.log(this.state.socket);
+                // console.log(this.state.socket);
                 // connect to room
                 if(this.state.socket && this.state.conversation_id){
                     this.state.socket.emit('joinRoom', {
@@ -140,6 +141,12 @@ class ChatScreen extends Component {
                 }
             });
         }
+    }
+
+    onKeyUp = (e) => {
+        e.preventDefault();
+        if(e.key !== "Enter") return;
+        this.onSendClick();
     }
 
     componentDidMount() {
@@ -192,9 +199,9 @@ class ChatScreen extends Component {
                     <div className="friend-dialog">Good</div> */}
                 </div>
                 
-                <div className="input-message">
+                <div className="input-message" id="input_area">
                     <div style={{"verticalAlign":"middle","display":"table-cell"}}>Your Message: </div>
-                    <TextField value={this.state.message_to_send} id="message_to_send" onChange={this.handleChange} style={{"width":"90%"}} placeholder="Aa" variant="outlined" />
+                    <TextField onKeyUp={this.onKeyUp} value={this.state.message_to_send} id="message_to_send" onChange={this.handleChange} style={{"width":"90%"}} placeholder="Aa" variant="outlined" />
                     <div style={{"verticalAlign":"middle","display":"table-cell"}}>
                         <Button style={{"fontSize":"16px"}} onClick={this.onSendClick} className="nav-btn">Send</Button>
                     </div>

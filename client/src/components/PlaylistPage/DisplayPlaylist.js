@@ -94,7 +94,7 @@ export default function DisplayPlaylistScreen(props){
         localStorage.setItem('queue', JSON.stringify(queue));
         var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
         if(queue && index < queue.length )
-            loadQueueSongsToAudioPlayerCallBack(queue[index].URI);
+            loadQueueSongsToAudioPlayerCallBack(queue[index]);
     }
 
     const updatePlaylist = async () => {  // use setstate to trigger re-render
@@ -173,7 +173,7 @@ export default function DisplayPlaylistScreen(props){
             localStorage.setItem('queue', JSON.stringify(queue));
         var loadQueueSongsToAudioPlayerCallBack = props.loadQueueSongsToAudioPlayer;
         if(queue && queue.length > 0)
-            loadQueueSongsToAudioPlayerCallBack(queue[0].URI);
+            loadQueueSongsToAudioPlayerCallBack(queue[0]);
     }
 
     const onDeleteClick = (e, removePlaylist, removeMusicList) => {

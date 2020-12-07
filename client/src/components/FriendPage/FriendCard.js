@@ -4,27 +4,70 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import { BsPersonSquare } from "react-icons/bs";
 import { IconContext } from "react-icons";
+import UserAPI from '../../apis/UserAPI'
 
 class FriendCard extends Component {
+    constructor(){
+        super()
+        this.state = {
+            now_playing: "none"
+        }
+    }
+    componentDidMount() {
+        if(this.props.user.nowListening !== "none"){
+            this.updateNowPlaying(this.props.user.nowListening);
+        }
+        if(this.props.now_playing !== "none"){
+            this.updateNowPlaying(this.props.now_playing);
+        }
+    }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.user.nowListening !== "none"){
+            this.updateNowPlaying(nextProps.user.nowListening);
+        }
+        if(nextProps.now_playing !== "none"){
+            this.updateNowPlaying(nextProps.now_playing);
+        }
+    }
+
+    updateNowPlaying = async (now_playing_ID) => {
+        if(now_playing_ID){
+            const song_response = await UserAPI.get("/music/"+now_playing_ID);
+            if(song_response.data.status === "success"){ // search success
+                this.setState({now_playing: song_response.data.music.musicName});
+            }else{
+                console.log("error searching song");
+            }
+        }
+        
+    }
     render() {
         var username = ""
         var userID = ""
+        var now_playing = this.state.now_playing;
         if(this.props.user){
             username = this.props.user.nickName;
             userID = this.props.user._id;
         }
         var user_icon = ""
         var container_style = {}
+        var now_playing_card = ""
+        if(this.state.now_playing){
+            // console.log('now playing', this.props.now_playing);
+            now_playing_card = <h6>Now Playing: {now_playing}</h6>
+        }
         if(this.props.isOffline){
             user_icon = <IconContext.Provider value={{ color: "#ACACAC", size: '50px' }}>
                 <BsPersonSquare/>
             </IconContext.Provider>
             container_style = {'color':'#ACACAC'}
+            now_playing_card = <h6 style={{'color':'#ACACAC'}}>Offline</h6>
         }else{
             user_icon = <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
                 <BsPersonSquare/>
             </IconContext.Provider>
+            now_playing_card = <h6>Last Playing: {now_playing}</h6>
         }
         
         return (
@@ -36,7 +79,7 @@ class FriendCard extends Component {
                         </Col>
                         <Col xs={9}>
                             <h4>{username}</h4>
-                            <h6>Now Playing: Hasodaodihdoash</h6>
+                            { now_playing_card }
                         </Col>
                     </Row>
                 </Container>

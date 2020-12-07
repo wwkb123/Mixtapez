@@ -10,7 +10,8 @@ class ProfileScreen extends Component {
         this.state = {
             user: null,
             publicPlaylists: [],
-            self: null
+            self: null,
+            now_playing: "none"
         }
     }
 
@@ -74,6 +75,10 @@ class ProfileScreen extends Component {
             this.getUser(userID);
             this.getSelf();
         }
+        // console.log('props is', this.props);
+        if(this.props.now_playing){
+            this.setState({now_playing: this.props.now_playing});
+        }
     }
 
     // if only the props is updated
@@ -82,6 +87,9 @@ class ProfileScreen extends Component {
         if(userID !== ""){
             this.getUser(userID);
             this.getSelf();
+        }
+        if(nextProps.now_playing){
+            this.setState({now_playing: nextProps.now_playing});
         }
     }
 
@@ -195,9 +203,9 @@ class ProfileScreen extends Component {
                     </div>
                 }
                 
-                user_card = <FriendCard user={user}/>
+                user_card = <FriendCard now_playing={this.state.now_playing} user={user}/>
             }else{ // if self
-                user_card = <FriendCard user={self}/>
+                user_card = <FriendCard now_playing={this.state.now_playing} user={self}/>
             }
         }
         if(user){

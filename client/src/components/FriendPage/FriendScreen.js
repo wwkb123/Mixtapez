@@ -80,7 +80,7 @@ class FriendScreen extends Component {
     }
 
     updateOnlineFriends = (online_users) =>{
-        console.log('friend screen online users is', online_users);
+        // console.log('friend screen online users is', online_users);
         
         if(this.state.friends && this.state.friends.length > 0){
 
@@ -102,8 +102,8 @@ class FriendScreen extends Component {
                     }
                 }
             }
-            console.log("online friends", online_friends);
-            console.log("offline friends", offline_friends);
+            // console.log("online friends", online_friends);
+            // console.log("offline friends", offline_friends);
             this.setState({online_friends});
             this.setState({offline_friends});
         }
@@ -121,7 +121,7 @@ class FriendScreen extends Component {
 
     // if only the props is updated
     componentWillReceiveProps(nextProps) {
-        console.log("new props is", nextProps)
+        // console.log("new props is", nextProps)
         if(nextProps.online_users && nextProps.online_users.length > 0){
             let online_users = nextProps.online_users;
             this.updateOnlineFriends(online_users);

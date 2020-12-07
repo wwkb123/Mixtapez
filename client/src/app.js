@@ -47,8 +47,13 @@ class App extends Component{
                         queue: [],
                         modal_content: null,
                         main_socket: null,
-                        online_users: []
+                        online_users: [],
+                        now_playing: "none"
                     };
+    }
+
+    updateNowPlaying = (songID) => {
+        this.setState({now_playing: songID})
     }
 
     onModalClose = () =>{
@@ -67,7 +72,7 @@ class App extends Component{
                 }
             });
             this.setState({main_socket: socket}, ()=>{
-                console.log(this.state.main_socket);
+                // console.log(this.state.main_socket);
                 // connected to server, push online status
                 if(this.state.main_socket){
                     var id = localStorage.getItem('userId');
@@ -75,10 +80,8 @@ class App extends Component{
                         user_id: id
                     });
                     this.state.main_socket.on('online_users', async (data) => {
-                        console.log('app online users is', data);
+                        // console.log('app online users is', data);
                         this.setState({online_users: data});
-                        // if(this.friendScreen)
-                        //     this.friendScreen.updateOnlineFriends(data);
                     });
                 }
             });
@@ -138,8 +141,8 @@ class App extends Component{
         this.setState({modal_content:content});
     }
 
-    loadQueueSongsToAudioPlayer = (URI) =>{
-        this.audioPlayer.loadSongAndplay(URI, 0);
+    loadQueueSongsToAudioPlayer = (song) =>{
+        this.audioPlayer.loadSongAndplay(song, 0);
     }
 
     loadQueueIndexToAudioPlayer = (index) => {
@@ -169,7 +172,7 @@ class App extends Component{
                                 <Route exact path='/' component={HomeScreen} />
                                 <Route path='/friends' render={(props) => <FriendScreen {...props} online_users={this.state.online_users} />} />
                                 <Route path='/chat/:id' component={ChatScreen} />
-                                <Route path='/profile/:id' render={(props) => <ProfileScreen {...props} updateModalContentHandler={this.updateModalContentHandler}/>} />
+                                <Route path='/profile/:id' render={(props) => <ProfileScreen {...props} now_playing={this.state.now_playing} updateModalContentHandler={this.updateModalContentHandler}/>} />
                                 {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen updateModalContentHandler={this.updateModalContentHandler} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen updateMainModalContentHandler={this.updateModalContentHandler} loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
@@ -216,7 +219,7 @@ class App extends Component{
                     </IconButton>
                 </div> */}
 
-                <AudioPlayerBar onRef={ref => (this.audioPlayer = ref)} />
+                <AudioPlayerBar onRef={ref => (this.audioPlayer = ref)} updateNowPlaying={this.updateNowPlaying} />
                 <div id="main_modal" className="modal">
                     <div className="modal-content">
                         <span onClick={this.onModalClose} className="close">&times;</span>
