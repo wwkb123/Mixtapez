@@ -15,7 +15,9 @@ class FriendScreen extends Component {
             friends: [],
             friendRequests: [],
             isLoaded: false,
-            user: null
+            user: null,
+            online_friends: [],
+            offline_friends: []
         }
         this.childSetFriendsAndRequest = this.childSetFriendsAndRequest.bind(this);
     }
@@ -66,14 +68,64 @@ class FriendScreen extends Component {
                     friendRequests.push(user_response.data.user);
                 }
             }
-            this.setState({friends: Array.from(friends)});
+            this.setState({friends: Array.from(friends)}, () => {
+                if(this.props.online_users && this.props.online_users.length > 0){
+                    let online_users = this.props.online_users;
+                    this.updateOnlineFriends(online_users);
+                }
+            });
             this.setState({friendRequests:  Array.from(friendRequests)});
             this.setState({isLoaded: true});
         }
     }
 
+    updateOnlineFriends = (online_users) =>{
+        console.log('friend screen online users is', online_users);
+        
+        if(this.state.friends && this.state.friends.length > 0){
+
+            var online_users_ids = [];
+            for(let i = 0; i < online_users.length; i++){  // extract only the user_ids
+                if(online_users[i])
+                    online_users_ids.push(online_users[i].user_id)
+            }
+
+            var online_friends = [];
+            var offline_friends = [];
+
+            for(let i = 0; i < this.state.friends.length; i++){
+                if(this.state.friends[i]){
+                    if(online_users_ids.includes(this.state.friends[i]._id)){  // put friends in online_users to online friends
+                        online_friends.push(this.state.friends[i]);
+                    }else{  // otherwise put to offline friends
+                        offline_friends.push(this.state.friends[i]);
+                    }
+                }
+            }
+            console.log("online friends", online_friends);
+            console.log("offline friends", offline_friends);
+            this.setState({online_friends});
+            this.setState({offline_friends});
+        }
+    }
+
     componentDidMount() {
         this.getUser();
+        // console.log("props is", this.props)
+        
+    }
+
+    componentWillUnmount() {
+        // this.props.onRef(undefined)
+    }
+
+    // if only the props is updated
+    componentWillReceiveProps(nextProps) {
+        console.log("new props is", nextProps)
+        if(nextProps.online_users && nextProps.online_users.length > 0){
+            let online_users = nextProps.online_users;
+            this.updateOnlineFriends(online_users);
+        }
     }
 
     onAccordionClick = () => {
@@ -91,6 +143,8 @@ class FriendScreen extends Component {
     }
 
     render() {
+        let online_friend_cards = ""
+        let offline_friend_cards = ""
         let friend_cards = ""
         let friendRequests = ""
         let friend_request_cards = ""
@@ -99,13 +153,40 @@ class FriendScreen extends Component {
                 if(this.state.friends.length === 0){
                     friend_cards = <div>You have no friend yet. Go to search page and search for users.</div>
                 }else{
-                    friend_cards = this.state.friends.map((user, index) => {
+                    var online_num = 0;
+                    if(this.state.online_friends){
+                        online_num = this.state.online_friends.length;
+                    }
+                    var online_title = <h2>Online Friends ({online_num})</h2>
+                    online_friend_cards = this.state.online_friends.map((user, index) => {
                         return (<div key={index}>
                             <Link to={"/chat/"+user._id}>
                                 <FriendCard user={user}></FriendCard>
                             </Link>
                         </div>)
                     })
+
+                    var offline_num = 0;
+                    if(this.state.offline_friends){
+                        offline_num = this.state.offline_friends.length;
+                    }
+                    var offline_title = <h2 style={{'color':'#ACACAC'}}>Offline Friends ({offline_num})</h2>
+                    offline_friend_cards = this.state.offline_friends.map((user, index) => {
+                        return (<div key={index}>
+                            <Link to={"/chat/"+user._id}>
+                                <FriendCard isOffline={true} user={user}></FriendCard>
+                            </Link>
+                        </div>)
+                    })
+
+                    friend_cards = 
+                    <div>
+                        { online_title }
+                        { online_friend_cards }
+                        <hr/>
+                        { offline_title }
+                        { offline_friend_cards }
+                    </div>
                 }
                 
             }

@@ -1203,15 +1203,49 @@ const io = socketio(server, {
     credentials: true
   }
 });
+const online_users = [];
+
+function userOnline(socket_id, user_id) {
+  const user = { socket_id, user_id };
+  online_users.push(user);
+
+  // return user;
+}
+
+function userOnline(socket_id, user_id) {
+  const user = { socket_id, user_id };
+  online_users.push(user);
+
+  // return user;
+}
+
+// User leaves chat
+function userOffline(socket_id) {
+  const index = online_users.findIndex(user => user.socket_id === socket_id);
+
+  if (index !== -1) {
+    return online_users.splice(index, 1)[0];
+  }
+}
 
 
 io.on('connection', function(socket){
   console.log("made socket connection", socket.id);
 
+  socket.on('online', ({ user_id }) => {
+    console.log(user_id, "has online, socket:", socket.id);
+    userOnline(socket.id, user_id);
+    io.emit('online_users', online_users);
+  });
+
   socket.on('joinRoom', ({ room }) => {
     console.log(socket.id, "has enter the chat", room)
     socket.join(room);
   });
+
+  // socket.on('getOnlineUsers', () => {
+  //   io.emit('online_users', online_users);
+  // });
 
   socket.on('chat', function(data){
     console.log('receive chat data', data);
@@ -1220,8 +1254,15 @@ io.on('connection', function(socket){
   });
 
   // Runs when client disconnects
-  socket.on('disconnect', () => {
+  socket.on('exitRoom', () => {
     console.log(socket.id, "has left the chat")
+  });
+
+  // Runs when client disconnects
+  socket.on('disconnect', () => {
+    userOffline(socket.id);
+    console.log("user with "+ socket.id +" has offline");
+    io.emit('online_users', online_users);
   });
 
 })

@@ -34,6 +34,8 @@ import { MdMusicNote } from "react-icons/md";
 import IconButton from '@material-ui/core/IconButton';
 import { IconContext } from "react-icons";
 
+import io from "socket.io-client";
+
 class App extends Component{
     constructor(){
         super()
@@ -43,13 +45,44 @@ class App extends Component{
                         userId: "",
                         musicListId: "",
                         queue: [],
-                        modal_content: null
+                        modal_content: null,
+                        main_socket: null,
+                        online_users: []
                     };
     }
 
     onModalClose = () =>{
         var modal = document.getElementById("main_modal");
         modal.style.display = "none";
+    }
+
+    connectToSocket = () => {
+        if(!this.state.main_socket){
+            // var url = "https://guguwagwag.herokuapp.com";
+            var url = "http://localhost:3001";
+            const socket = io(url, {
+                withCredentials: true,
+                extraHeaders: {
+                    "my-custom-header": "abcd"
+                }
+            });
+            this.setState({main_socket: socket}, ()=>{
+                console.log(this.state.main_socket);
+                // connected to server, push online status
+                if(this.state.main_socket){
+                    var id = localStorage.getItem('userId');
+                    this.state.main_socket.emit('online', {
+                        user_id: id
+                    });
+                    this.state.main_socket.on('online_users', async (data) => {
+                        console.log('app online users is', data);
+                        this.setState({online_users: data});
+                        // if(this.friendScreen)
+                        //     this.friendScreen.updateOnlineFriends(data);
+                    });
+                }
+            });
+        }
     }
 
     signedIn = async (name,id) =>{
@@ -69,6 +102,7 @@ class App extends Component{
         // }catch(err){
         //     console.log(err);
         // }
+        this.connectToSocket();
         this.setState({signedUp: true,
                         nickName: name,
                         userId: id,
@@ -77,6 +111,8 @@ class App extends Component{
 
     signedOut = () =>{
         console.log("signed out");
+        if(this.state.main_socket)
+            this.state.main_socket.close();
         window.location.href = '/';
         localStorage.removeItem('isSignedIn');  // remove from session
         localStorage.removeItem('userId');
@@ -86,6 +122,16 @@ class App extends Component{
                         nickName: "",
                         userId: "",
                         queue:[]});
+    }
+
+    componentDidMount() {
+        if(!this.state.main_socket && localStorage.getItem('isSignedIn'))
+            this.connectToSocket();
+    }
+
+    componentWillUnmount() {
+        if(this.state.main_socket)
+            this.state.main_socket.close();
     }
 
     updateModalContentHandler = (content) => {
@@ -121,7 +167,7 @@ class App extends Component{
                         <Col xs={9} className="white-bg" style={{'height':'90vh', 'overflow':'scroll', 'overflowX': 'hidden'}}>
                             <Switch>
                                 <Route exact path='/' component={HomeScreen} />
-                                <Route path='/friends' component={FriendScreen} />
+                                <Route path='/friends' render={(props) => <FriendScreen {...props} online_users={this.state.online_users} />} />
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' render={(props) => <ProfileScreen {...props} updateModalContentHandler={this.updateModalContentHandler}/>} />
                                 {/* <Route path='/create' component={CreateNewList} /> */}

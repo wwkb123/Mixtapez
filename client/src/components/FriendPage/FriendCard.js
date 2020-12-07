@@ -14,14 +14,25 @@ class FriendCard extends Component {
             username = this.props.user.nickName;
             userID = this.props.user._id;
         }
+        var user_icon = ""
+        var container_style = {}
+        if(this.props.isOffline){
+            user_icon = <IconContext.Provider value={{ color: "#ACACAC", size: '50px' }}>
+                <BsPersonSquare/>
+            </IconContext.Provider>
+            container_style = {'color':'#ACACAC'}
+        }else{
+            user_icon = <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
+                <BsPersonSquare/>
+            </IconContext.Provider>
+        }
+        
         return (
-            <div className="m-3">
+            <div className="m-3" style={container_style}>
                 <Container>
                     <Row style={{'border': '3px solid', 'padding': '30px', 'borderRadius': '5px'}}>
                         <Col xs={3} className="content-center">
-                        <IconContext.Provider value={{ color: "#F06E9C", size: '50px' }}>
-                            <BsPersonSquare/>
-                        </IconContext.Provider>
+                            { user_icon }
                         </Col>
                         <Col xs={9}>
                             <h4>{username}</h4>

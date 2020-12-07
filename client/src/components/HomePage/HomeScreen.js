@@ -36,7 +36,10 @@ class HomeScreen extends Component {
         var playlist_cards = ""
         if(this.state.publicPlaylists){
             playlist_cards = this.state.publicPlaylists.map((playlist, index) => {
-                return (<ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>)
+                return (<div key={index}>
+                <ProfilePlaylistCard className="grid-item" playlist={playlist}></ProfilePlaylistCard>
+                </div>
+                )
             })
         }
         return (

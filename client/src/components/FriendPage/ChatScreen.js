@@ -122,8 +122,8 @@ class ChatScreen extends Component {
                     });
                 }
 
-                if(this.state.socket && this.state.conversation_id){  // listen to socket's chat event
-                    this.state.socket.on('chat', async (data) => {
+                if(this.state.socket && this.state.conversation_id){  
+                    this.state.socket.on('chat', async (data) => {  // listen to socket's chat event
                         console.log('from socket:', data);
                         // query database to update messages
                         const response = await UserAPI.post("/getMessages", {
