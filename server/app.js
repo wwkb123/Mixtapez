@@ -58,6 +58,20 @@ const { use } = require('./routes/index');
 const { url } = require('./config');
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use(
+  cors({
+      origin: "*", // allow to server to accept request from different origin
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      credentials: true // allow session cookie from browser to pass through
+  })
+);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -69,10 +83,11 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 // Static files
-app.use(express.static(path.join(__dirname, '../client/build')));
 
+
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '../client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../client/build', '/index.html'));
 });
 
 app.use('/', indexRouter);
@@ -85,10 +100,7 @@ app.use('/graphql', cors(), graphqlHTTP({
   graphiql: true,
 }));
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',

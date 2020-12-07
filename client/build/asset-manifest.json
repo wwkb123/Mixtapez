@@ -1,0 +1,20 @@
+{
+  "main.css": "/static/css/main.8ea1b5fe.chunk.css",
+  "main.js": "/static/js/main.4d8ff16b.chunk.js",
+  "main.js.map": "/static/js/main.4d8ff16b.chunk.js.map",
+  "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+  "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+  "static/css/2.4de5e3d0.chunk.css": "/static/css/2.4de5e3d0.chunk.css",
+  "static/js/2.34aec8a5.chunk.js": "/static/js/2.34aec8a5.chunk.js",
+  "static/js/2.34aec8a5.chunk.js.map": "/static/js/2.34aec8a5.chunk.js.map",
+  "index.html": "/index.html",
+  "precache-manifest.849265d26162bb22d62087ffdebb2877.js": "/precache-manifest.849265d26162bb22d62087ffdebb2877.js",
+  "service-worker.js": "/service-worker.js",
+  "static/css/2.4de5e3d0.chunk.css.map": "/static/css/2.4de5e3d0.chunk.css.map",
+  "static/css/main.8ea1b5fe.chunk.css.map": "/static/css/main.8ea1b5fe.chunk.css.map",
+  "static/media/AbbeyRoad.jpg": "/static/media/AbbeyRoad.2328f774.jpg",
+  "static/media/album2.jpg": "/static/media/album2.d2a4d59b.jpg",
+  "static/media/album3.jpg": "/static/media/album3.d87defa9.jpg",
+  "static/media/default.mp3": "/static/media/default.34a8da70.mp3",
+  "static/media/default_image.png": "/static/media/default_image.0ca2cfb4.png"
+}
