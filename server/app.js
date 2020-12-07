@@ -8,6 +8,7 @@ var graphqlHTTP = require('express-graphql');
 var schema = require('./graphql/ummSchemas');
 var cors = require("cors");
 var nodemailer = require('nodemailer');  // to send emails
+const bodyParser = require("body-parser");
 
 // var debug = require('debug')('server:server');
 var http = require('http');
@@ -72,9 +73,9 @@ app.use(
   })
 );
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// // view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 // app.use(logger('dev'));
 app.use(express.json());
@@ -84,14 +85,16 @@ app.use(cookieParser());
 
 // Static files
 
-
 app.use(express.static(path.join(__dirname, '../client/build')));
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build', '/index.html'));
 });
+app.use(bodyParser.json());
+app.unsubscribe(bodyParser.urlencoded({ extended: false }))
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
 app.use(cors());
 app.use('*', cors());
 app.use('/graphql', cors(), graphqlHTTP({
@@ -1225,6 +1228,7 @@ app.set('port', port);
 var server = http.createServer(app);
 
 server.listen(port);
+
 // server.on('error', onError);
 // server.on('listening', onListening);
 

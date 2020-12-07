@@ -2,7 +2,7 @@
   "name": "416_mixtapez",
   "version": "1.0.0",
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
+  "main": "./server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "client-local": "cd client && npm start",
@@ -25,6 +25,7 @@
   "homepage": "https://github.com/wwkb123/416_Mixtapez#readme",
   "dependencies": {
     "concurrently": "^5.3.0",
+    "create-react-app": "^4.0.1",
     "react-reorder": "^3.0.0-alpha.7"
   }
 }
