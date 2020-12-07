@@ -10,7 +10,8 @@
     "client": "cd client && npm install && npm start",
     "server": "cd server && npm install && node app",
     "start-local": "concurrently \"npm run client-local\" \"npm run server-local\"",
-    "start": "concurrently \"npm run client\" \"npm run server\""
+    "start": "npm run server",
+    "heroku-postbuild": "npm run client"
   },
   "repository": {
     "type": "git",
