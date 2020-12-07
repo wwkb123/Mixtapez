@@ -9,7 +9,7 @@ var schema = require('./graphql/ummSchemas');
 var cors = require("cors");
 var nodemailer = require('nodemailer');  // to send emails
 
-var debug = require('debug')('server:server');
+// var debug = require('debug')('server:server');
 var http = require('http');
 var port = normalizePort(process.env.PORT || '3001');
 
@@ -62,7 +62,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -1197,20 +1197,20 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+// function onListening() {
+//   var addr = server.address();
+//   var bind = typeof addr === 'string'
+//     ? 'pipe ' + addr
+//     : 'port ' + addr.port;
+//   debug('Listening on ' + bind);
+// }
 
 app.set('port', port);
 var server = http.createServer(app);
 
 server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+// server.on('error', onError);
+// server.on('listening', onListening);
 
 const socketio = require('socket.io');
 const io = socketio(server, {
