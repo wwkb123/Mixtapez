@@ -88,7 +88,8 @@ class HomeScreen extends Component {
                         </Carousel.Caption>
                     </Carousel.Item>
                     </Carousel>
-                    <h1>Trending Playlists</h1>
+                    <br/>
+                    <h1>Recommended Playlists</h1>
                     <div className="border-bottom-accent"></div>
                     <div className="grid-container">
                         { playlist_cards }
