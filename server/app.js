@@ -350,6 +350,65 @@ app.post('/api/createMusicListWithMusics', async (req, res) => {
   });
 });
 
+app.post('/api/forkMusicList', async (req, res) => {
+  const originMusicList = await MusicListModel.findById(req.body.musicListId);
+  if(!originMusicList){
+    res.status(200).json({
+      status: "failed"
+    });
+  }
+  let forkFrom = originMusicList.owner;
+  let musics = originMusicList.musics;
+  let musicListName = originMusicList.musicListName;
+  let image = originMusicList.image;
+  
+  const musicListModel = new MusicListModel({musicListName: musicListName,
+                                             musics: musics,
+                                             owner: req.body.userId,
+                                             isPublic: true,
+                                             image: image,
+                                             forkFrom: forkFrom,
+                                             lastUpdate: new Date()});
+  // console.log(musicListModel)
+  musicListModel.save((err)=>{
+    if (err) return handleError(err);
+  });
+  if (!musicListModel) {
+      res.status(200).json({
+        status: "failed"
+      });
+  }
+  await UserModel.findOne({'_id': req.body.userId }, function (err, user) {
+    if(user){
+      if (err) {
+          console.log("Something wrong when adding musicList "+req.body.musicListId+"!");
+          res.status(200).json({
+            status: "error"
+          });
+      }
+      var musicLists = user.musicLists;
+      musicLists.push(req.body.musicListId);
+      user.musicLists = [...musicLists];
+      user.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+            res.status(200).json({
+              status: "error"
+            });
+          }
+      });
+      res.status(200).json({
+        status: "success",
+        musicListId: musicListModel._id
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });  
+});
+
 
 // create a new music and return its Id
 app.post('/api/createMusic', async (req, res) => {

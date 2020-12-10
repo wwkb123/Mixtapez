@@ -41,10 +41,13 @@ import { url } from './config'
 class App extends Component{
     constructor(){
         super()
+        let userId = localStorage.getItem('userId');  // store to session
+        let signedIn = localStorage.getItem('isSignedIn');
+        let nickName = localStorage.getItem('userNickName');
         this.state = {
-                        signedUp: false,
-                        nickName: "",
-                        userId: "",
+                        signedUp: signedIn?signedIn:false,
+                        nickName: nickName?nickName:"",
+                        userId: userId?userId:"",
                         musicListId: "",
                         queue: [],
                         modal_content: null,

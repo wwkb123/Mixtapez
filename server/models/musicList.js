@@ -7,6 +7,8 @@ var MusicListSchema = new mongoose.Schema({
       ref: 'user' },
   isPublic: Boolean,
   image: String,
+  forkFrom:{type: mongoose.Schema.Types.ObjectId,
+    ref: 'user' },
   musics: [{
           type: mongoose.Schema.Types.ObjectId,
           ref: 'music'
