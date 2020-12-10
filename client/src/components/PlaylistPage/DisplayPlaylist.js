@@ -212,7 +212,9 @@ export default function DisplayPlaylistScreen(props){
             }
             
         }else if(mode === "Fork"){ // Fork
-            console.log(props);
+            console.log("will fork");
+            console.log("userId:"+props.userId);
+            console.log("musicList:"+musicList._id);
             try {
                 const response = await UserAPI.post('/forkMusicList',{
                     userId: props.userId,
@@ -220,7 +222,8 @@ export default function DisplayPlaylistScreen(props){
                 });
                 if (response.data.status === "success") {
                     console.log("fork successful");
-                    props.history.push("/playlist/"+response.data.musicListId);
+                    console.log(response.data.musicList)
+                    props.history.push("/playlist/"+response.data.musicList._id);
                 }
             } catch (err) {
                 console.log(err);
