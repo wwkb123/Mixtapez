@@ -13,6 +13,7 @@ class ProfilePlaylistCard extends Component {
                     <div className="album-card">
                         <img className="playlist-image" src={default_image} width={150} height={150} alt=""/>
                         <div>{playlist.musicListName}</div>
+                        {/* <div style={{'fontSize':'12px', 'color':'#ACACAC'}}>By {playlist.owner}</div> */}
                     </div>
                 </Link>
             </div>

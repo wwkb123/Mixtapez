@@ -233,6 +233,7 @@ class App extends Component{
                 </div>
                 <div id="loading_toast">Loading...</div>
                 <div id="no_song_toast">This song doesn't have a preview. Playing our default song instead...</div>
+                <div id="copied_toast">The link has been copied to clipboard.</div>
             </div>
         );
     }
