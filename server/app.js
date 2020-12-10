@@ -357,7 +357,7 @@ app.post('/api/forkMusicList', async (req, res) => {
       status: "failed"
     });
   }
-  let forkFrom = originMusicList.owner;
+  let forkFrom = req.body.musicListId;
   let musics = originMusicList.musics;
   let musicListName = originMusicList.musicListName;
   let image = originMusicList.image;
@@ -381,13 +381,13 @@ app.post('/api/forkMusicList', async (req, res) => {
   await UserModel.findOne({'_id': req.body.userId }, function (err, user) {
     if(user){
       if (err) {
-          console.log("Something wrong when adding musicList "+req.body.musicListId+"!");
+          console.log("Something wrong when adding musicList "+musicListModel._id+"!");
           res.status(200).json({
             status: "error"
           });
       }
       var musicLists = user.musicLists;
-      musicLists.push(req.body.musicListId);
+      musicLists.push(musicListModel._id);
       user.musicLists = [...musicLists];
       user.save(function (err) {
         if(err) {
@@ -399,7 +399,7 @@ app.post('/api/forkMusicList', async (req, res) => {
       });
       res.status(200).json({
         status: "success",
-        musicListId: musicListModel._id
+        musicList: musicListModel
       });
     }else{
       res.status(200).json({
