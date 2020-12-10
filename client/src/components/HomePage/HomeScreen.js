@@ -56,8 +56,8 @@ class HomeScreen extends Component {
                         </div>
                         
                         <Carousel.Caption>
-                        <h3>First slide label</h3>
-                        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                        <h3>Mixtapez</h3>
+                        <p>Enjoy music for free. No ads.</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -70,8 +70,8 @@ class HomeScreen extends Component {
                         </div>
 
                         <Carousel.Caption>
-                        <h3>Second slide label</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>Become an artist</h3>
+                        <p>Search songs. Make your own mixtapes.</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item>
@@ -83,8 +83,8 @@ class HomeScreen extends Component {
                             />
                         </div>
                         <Carousel.Caption>
-                        <h3>Third slide label</h3>
-                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                        <h3>Social</h3>
+                        <p>Chat with friends. Interact with others.</p>
                         </Carousel.Caption>
                     </Carousel.Item>
                     </Carousel>

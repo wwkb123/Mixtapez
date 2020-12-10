@@ -96,10 +96,12 @@ class FriendCard extends Component {
                 <Container>
                     <Row style={{'border': '3px solid', 'padding': '30px', 'borderRadius': '5px'}}>
                         <Col xs={3} className="content-center">
+                            <br/>
                             { user_icon }
                         </Col>
                         <Col xs={9}>
                             <h4>{username}</h4>
+                            <br/>
                             { now_playing_card }
                         </Col>
                     </Row>

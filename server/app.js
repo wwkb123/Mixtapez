@@ -1211,6 +1211,36 @@ app.post('/api/updateNowPlaying', async (req, res) => {
  
 });
 
+
+// return a speific playlist object of that id
+app.post('/api/updatePlaylistImage', async (req, res) => {
+  await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
+    if(musicList){
+      musicList.image = req.body.imageURL;
+      musicList.save(function (err) {
+        if(err) {
+            console.error('ERROR!');
+          }
+      });
+
+      res.status(200).json({
+        status: "success",
+        musicList: musicList
+      });
+    }else{
+      res.status(200).json({
+        status: "error"
+      });
+    }
+  });
+});
+
+
+
+
+
+
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build', '/index.html'));
 });
