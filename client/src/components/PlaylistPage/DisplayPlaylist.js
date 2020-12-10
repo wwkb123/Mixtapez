@@ -80,6 +80,9 @@ export default function DisplayPlaylistScreen(props){
     const [time_ascending, setTimeAscending] = React.useState(true);
     const [modal_content, setModalContent] = React.useState(null);
     const [page, setPage] = React.useState(0);
+    const [forkFromID, setForkFromID] = React.useState(null);
+    const [forkFromName, setForkFromName] = React.useState(null);
+    const [forkOwnerName, setForkOwnerName] = React.useState(null);
 
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
@@ -405,6 +408,32 @@ export default function DisplayPlaylistScreen(props){
                     if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
+
+                    // get fork info
+                    var fork_from = ""
+                    var fork_owner = ""
+                    if(response.data.musicList.forkFrom && response.data.musicList.forkOwner){
+                        fork_from = response.data.musicList.forkFrom;
+                        fork_owner = response.data.musicList.forkOwner;
+                        const fork_from_response = await UserAPI.get("/musicList/"+fork_from);
+                        if(fork_from_response.data.status === "success"){ // search success
+                            setForkFromID(fork_from);
+                            setForkFromName(fork_from_response.data.musicList.musicListName);
+                        }
+
+                        const fork_owner_response = await UserAPI.post("/user/nickName", {
+                            id: fork_owner
+                        });
+
+                        if(fork_owner_response.data.status === "success"){ // search success
+                            setForkOwnerName(fork_owner_response.data.nickName);
+                        }
+                    }else{
+                        setForkFromID(null);
+                        setForkFromName(null);
+                        setForkOwnerName(null);
+                    }
+                    
                     // console.log(owner_response.data.user);
                 }else{ // somehow failed
     
@@ -463,6 +492,31 @@ export default function DisplayPlaylistScreen(props){
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
                     if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
+                    }
+
+                    // get fork info
+                    var fork_from = ""
+                    var fork_owner = ""
+                    if(response.data.musicList.forkFrom && response.data.musicList.forkOwner){
+                        fork_from = response.data.musicList.forkFrom;
+                        fork_owner = response.data.musicList.forkOwner;
+                        const fork_from_response = await UserAPI.get("/musicList/"+fork_from);
+                        if(fork_from_response.data.status === "success"){ // search success
+                            setForkFromID(fork_from);
+                            setForkFromName(fork_from_response.data.musicList.musicListName);
+                        }
+
+                        const fork_owner_response = await UserAPI.post("/user/nickName", {
+                            id: fork_owner
+                        });
+
+                        if(fork_owner_response.data.status === "success"){ // search success
+                            setForkOwnerName(fork_owner_response.data.nickName);
+                        }
+                    }else{
+                        setForkFromID(null);
+                        setForkFromName(null);
+                        setForkOwnerName(null);
                     }
                     // console.log(owner_response.data.user);
                 }else{ // somehow failed
@@ -627,6 +681,12 @@ export default function DisplayPlaylistScreen(props){
         var seconds = 0;
         seconds = Math.floor(total_length % 60);
         if(seconds < 10) seconds = "0"+seconds;
+        var fork_info = ""
+        if(forkFromName && forkFromID && forkOwnerName){
+            fork_info = <div>
+            <span>forked from </span><Link to={"/playlist/"+forkFromID}><span style={{'fontSize':'20px'}}>{forkOwnerName}/{forkFromName}</span></Link>
+            </div>
+        }
         return(
             <div>
                 <Row>
@@ -634,7 +694,9 @@ export default function DisplayPlaylistScreen(props){
                     </img>
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
-                        <span>by </span><Link to={"/profile/"+owner._id}><span style={{'fontSize':'28px'}}>{owner.nickName}</span></Link>
+                        <span>by </span><Link to={"/profile/"+owner._id}><span style={{'fontSize':'28px'}}>{owner.nickName}</span></Link><br/>
+                        { fork_info }
+                        <br/>
                         <h4 style={{fontWeight: "bold"}} >{musics.length} Songs | {hours}h {minutes}m {seconds}s</h4>
                         <h4 style={{fontWeight: "bold"}}> {playlist_type}</h4>
                         
