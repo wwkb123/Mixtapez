@@ -772,6 +772,17 @@ app.get('/api/randomPlaylists', async (req, res) => {
   await MusicListModel.find({'isPublic': true}, function (err, result) {
     let n = 8;
     if(result){
+      var new_result = [];
+      for(let i = 0; i < result.length; i++){  // filter out empty playlists
+        if(result[i]){
+          if(result[i].musics){
+            if(result[i].musics.length > 0){
+              new_result.push(result[i]);
+            }
+          }
+        }
+      }
+      result = new_result;
       if(result.length <= n){
         res.status(200).json({
           status: "success",
