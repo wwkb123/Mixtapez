@@ -212,7 +212,19 @@ export default function DisplayPlaylistScreen(props){
             }
             
         }else if(mode === "Fork"){ // Fork
-
+            console.log(props);
+            try {
+                const response = await UserAPI.post('/forkMusicList',{
+                    userId: props.userId,
+                    musicListId: musicList._id
+                });
+                if (response.data.status === "success") {
+                    console.log("fork successful");
+                    props.history.push("/playlist/"+response.data.musicListId);
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
     };
 

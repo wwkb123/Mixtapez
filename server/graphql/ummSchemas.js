@@ -84,6 +84,9 @@ var musicListType = new GraphQLObjectType({
             owner:{
                 type: userType
             },
+            forkFrom:{
+                type: userType
+            },
             musics:{
                 type: GraphQLList(musicType)
             },
