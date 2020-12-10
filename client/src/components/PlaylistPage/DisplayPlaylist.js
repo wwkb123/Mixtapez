@@ -531,6 +531,7 @@ export default function DisplayPlaylistScreen(props){
         save_class = "search-btn disabled"
     }
     if(musicList && owner){
+        
         if (userId === owner._id) {
             deleteButton = <Mutation mutation={REMOVE_PLAYLIST}>
                     {(removePlaylist, { loading, error }) => 
@@ -606,6 +607,14 @@ export default function DisplayPlaylistScreen(props){
             }else{
                 playlist_type = "Public Playlist";
                 options[0] = "Make Private";
+            }
+        }else{
+            if(!musicList.isPublic){ // not the owner of private playlist
+                return(
+                    <div>
+                        You are not the owner of this private playlist.
+                    </div>
+                )
             }
         }
         
