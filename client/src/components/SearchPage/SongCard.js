@@ -13,7 +13,7 @@ const options = [
     'Add to Queue',
     // 'Save to Liked Songs',
     'Add to Playlist',
-    'Share'
+    // 'Share'
   ];
 
 export default function SongCard(props){

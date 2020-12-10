@@ -8,6 +8,20 @@ import { IconContext } from "react-icons";
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import UserAPI from "../../apis/UserAPI";
+import Button from 'react-bootstrap/Button'
+import { url } from '../../config';
+import {
+    EmailShareButton,
+    FacebookShareButton,
+    LinkedinShareButton,
+    RedditShareButton,
+    TwitterShareButton,
+    FacebookIcon,
+    TwitterIcon,
+    LinkedinIcon,
+    RedditIcon,
+    EmailIcon,
+  } from "react-share";
 
 var options = [
     // 'Save to Liked Songs',
@@ -32,6 +46,14 @@ export default function QueueSongCard(props){
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    const onCopyClick = (e, url) =>{
+        navigator.clipboard.writeText(url);
+        var toast = document.getElementById("copied_toast");
+        toast.className = "show"; // show the toast
+        // After 3 seconds, remove the show class from toast
+        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+    }
 
     const onPlayClick = () => {
         var index = props.index;
@@ -111,6 +133,38 @@ export default function QueueSongCard(props){
                 }   
             }
         }else if(mode === "share"){ // share
+            if(song){
+                var modal = document.getElementById("modal");
+                if(modal){
+                    modal.style.display = "block";
+                    var updateModalContentHandler = props.updateModalContentHandler;
+                    var curr_url = url.client + "/song/" + song._id;
+                    var content = 
+                    <div>
+                        <h3>Share this song</h3>
+                        <div >
+                            <div>{curr_url} <Button className="search-btn" onClick={(e) => onCopyClick(e, curr_url)}>Copy</Button></div>
+                            <br/>
+                            <EmailShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <EmailIcon size={40} round />
+                            </EmailShareButton>
+                            <FacebookShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <FacebookIcon size={40} round />
+                            </FacebookShareButton>
+                            <LinkedinShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <LinkedinIcon size={40} round />
+                            </LinkedinShareButton>
+                            <RedditShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <RedditIcon size={40} round />
+                            </RedditShareButton>
+                            <TwitterShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <TwitterIcon size={40} round />
+                            </TwitterShareButton>
+                        </div>
+                    </div>
+                    updateModalContentHandler(content);
+                }
+            }
 
         }else if(mode === "remove"){  // remove
             if(song){

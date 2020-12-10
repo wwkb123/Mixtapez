@@ -185,28 +185,28 @@ export default function DisplayPlaylistScreen(props){
             if(modal){
                 modal.style.display = "block";
                 var curr_url = window.location.href;
-                console.log(curr_url)
-                var content = <div>
-                    <h3>Share</h3>
-                    <div >
-                        <div>{curr_url} <Button className="search-btn" onClick={(e) => onCopyClick(e, curr_url)}>Copy</Button></div>
-                        <br/>
-                        <EmailShareButton style={{'padding':'5px'}} url={curr_url}>
-                            <EmailIcon size={40} round />
-                        </EmailShareButton>
-                        <FacebookShareButton style={{'padding':'5px'}} url={curr_url}>
-                            <FacebookIcon size={40} round />
-                        </FacebookShareButton>
-                        <LinkedinShareButton style={{'padding':'5px'}} url={curr_url}>
-                            <LinkedinIcon size={40} round />
-                        </LinkedinShareButton>
-                        <RedditShareButton style={{'padding':'5px'}} url={curr_url}>
-                            <RedditIcon size={40} round />
-                        </RedditShareButton>
-                        <TwitterShareButton style={{'padding':'5px'}} url={curr_url}>
-                            <TwitterIcon size={40} round />
-                        </TwitterShareButton>
-                    </div>
+                var content = 
+                    <div>
+                        <h3>Share this playlist</h3>
+                        <div >
+                            <div>{curr_url} <Button className="search-btn" onClick={(e) => onCopyClick(e, curr_url)}>Copy</Button></div>
+                            <br/>
+                            <EmailShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <EmailIcon size={40} round />
+                            </EmailShareButton>
+                            <FacebookShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <FacebookIcon size={40} round />
+                            </FacebookShareButton>
+                            <LinkedinShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <LinkedinIcon size={40} round />
+                            </LinkedinShareButton>
+                            <RedditShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <RedditIcon size={40} round />
+                            </RedditShareButton>
+                            <TwitterShareButton style={{'padding':'5px'}} url={curr_url}>
+                                <TwitterIcon size={40} round />
+                            </TwitterShareButton>
+                        </div>
                     </div>
                 updateModalContentHandler(content);
             }
