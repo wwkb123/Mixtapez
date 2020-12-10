@@ -358,6 +358,7 @@ app.post('/api/forkMusicList', async (req, res) => {
     });
   }
   let forkFrom = req.body.musicListId;
+  let forkOwner = originMusicList.owner;
   let musics = originMusicList.musics;
   let musicListName = originMusicList.musicListName;
   let image = originMusicList.image;
@@ -367,6 +368,7 @@ app.post('/api/forkMusicList', async (req, res) => {
                                              owner: req.body.userId,
                                              isPublic: true,
                                              image: image,
+                                             forkOwner: forkOwner,
                                              forkFrom: forkFrom,
                                              lastUpdate: new Date()});
   // console.log(musicListModel)
