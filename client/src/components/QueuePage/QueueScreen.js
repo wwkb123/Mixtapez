@@ -154,7 +154,9 @@ export default function QueueScreen(props){
 
     const closeModal = () =>{
         var modal = document.getElementById("main_modal");
-        modal.style.display = "none";
+        if(modal){
+            modal.style.display = "none";
+        }
     }
 
     const onSaveQueueClick = async () => {

@@ -1214,7 +1214,7 @@ app.post('/api/updateNowPlaying', async (req, res) => {
 
 // return a speific playlist object of that id
 app.post('/api/updatePlaylistImage', async (req, res) => {
-  await MusicListModel.findOne({_id: req.params.id}, function (err, musicList) {
+  await MusicListModel.findOne({_id: req.body.id}, function (err, musicList) {
     if(musicList){
       musicList.image = req.body.imageURL;
       musicList.save(function (err) {

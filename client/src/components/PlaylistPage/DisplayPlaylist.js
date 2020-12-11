@@ -17,6 +17,7 @@ import PlaylistSongCard from "./PlaylistSongCard.js";
 import SongTitleCard from './SongTitleCard';
 import Pagination from '@material-ui/lab/Pagination';
 import { Link } from 'react-router-dom';
+import { TextField } from '@material-ui/core';
 
 import {
     EmailShareButton,
@@ -61,7 +62,7 @@ const REMOVE_MUSICLIST = gql`
 
 var options = [
     'Make Private',  // should toggle with Make Public
-    // 'Edit Details',
+    'Change Cover Image',
     // 'Delete',
     'Share'
   ];
@@ -83,6 +84,8 @@ export default function DisplayPlaylistScreen(props){
     const [forkFromID, setForkFromID] = React.useState(null);
     const [forkFromName, setForkFromName] = React.useState(null);
     const [forkOwnerName, setForkOwnerName] = React.useState(null);
+    const [newImageText, setNewImageText] = React.useState("");
+    const [coverImageURL, setCoverImageURL] = React.useState("");
 
     var userId = localStorage.getItem('userId');
     const handleClick = (event) => {
@@ -215,24 +218,92 @@ export default function DisplayPlaylistScreen(props){
             }
             
         }else if(mode === "Fork"){ // Fork
-            console.log("will fork");
-            console.log("userId:"+props.userId);
-            console.log("musicList:"+musicList._id);
+            // console.log("will fork");
+            // console.log("userId:"+props.userId);
+            // console.log("musicList:"+musicList._id);
             try {
                 const response = await UserAPI.post('/forkMusicList',{
                     userId: props.userId,
                     musicListId: musicList._id
                 });
                 if (response.data.status === "success") {
-                    console.log("fork successful");
-                    console.log(response.data.musicList)
+                    // console.log("fork successful");
+                    // console.log(response.data.musicList)
                     props.history.push("/playlist/"+response.data.musicList._id);
                 }
             } catch (err) {
                 console.log(err);
             }
+        }else if(mode === "Change Cover Image"){
+            var modal = document.getElementById("modal");
+            if(modal){
+                modal.style.display = "block";
+                var content = 
+                    <div>
+                        <h3>Update Image URL</h3>
+                        <div>Leave it empty for default image.</div>
+                        <div >
+                            <TextField id="newImageText" size="small" placeholder="new image URL" variant="outlined" onChange={handleTextChange}/>
+                        </div>
+                        <br/>
+                        <Button className="search-btn" onClick={(e) => sendNewImageURL(e, musicList._id)}>Submit</Button>
+                        <Button className="cancel-btn" onClick={closeModal}>Cancel</Button>
+                    </div>
+                updateModalContentHandler(content);
+            }
         }
     };
+
+    const openChangeImageURLModal = () => {
+        var modal = document.getElementById("modal");
+        if(modal){
+            modal.style.display = "block";
+            var content = 
+                <div>
+                    <h3>Update Image URL</h3>
+                    <div>Leave it empty for default image.</div>
+                    <div >
+                        <TextField id="newImageText" size="small" placeholder="new image URL" variant="outlined" onChange={handleTextChange}/>
+                    </div>
+                    <br/>
+                    <Button className="search-btn" onClick={(e) => sendNewImageURL(e, musicList._id)}>Submit</Button>
+                    <Button className="cancel-btn" onClick={closeModal}>Cancel</Button>
+                </div>
+            updateModalContentHandler(content);
+        }
+    }
+
+    const handleTextChange = (e) => {
+        const {target} = e;
+        setNewImageText(target.value);
+    }
+
+    const sendNewImageURL = async (e, musicListId) => {
+        var textfield = document.getElementById('newImageText');
+        if(textfield){
+            var URL = textfield.value;
+            try{
+                const response = await UserAPI.post('/updatePlaylistImage', {
+                    id: musicListId,
+                    imageURL: URL
+                });
+                if(response.data.status === "success"){ // search success
+                    setMusicList(response.data.musicList);
+                }
+            }catch(err){
+                console.log(err);
+            }
+        }
+        closeModal();
+        window.location.reload();
+    }
+
+    const closeModal = () =>{
+        var modal = document.getElementById("modal");
+        if(modal){
+            modal.style.display = "none";
+        }
+    }
 
     const onPlayClick = () =>{
         var queue = [];
@@ -389,6 +460,10 @@ export default function DisplayPlaylistScreen(props){
                     // console.log("success");
                     // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
+                    if(response.data.musicList.image){
+                        setCoverImageURL(response.data.musicList.image);
+                    }
+                    
                     var musics = [];
                     var music_length = 0;
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
@@ -451,6 +526,7 @@ export default function DisplayPlaylistScreen(props){
                 options = [
                     'Make Private',  // should toggle with Make Public
                     // 'Edit Details',
+                    'Change Cover Image',
                     // 'Delete',
                     'Share'
                   ];
@@ -474,6 +550,9 @@ export default function DisplayPlaylistScreen(props){
                     // console.log("success");
                     // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
+                    if(response.data.musicList.image){
+                        setCoverImageURL(response.data.musicList.image);
+                    }
                     var musics = [];
                     var music_length = 0;
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
@@ -687,11 +766,30 @@ export default function DisplayPlaylistScreen(props){
             <span>forked from </span><Link to={"/playlist/"+forkFromID}><span style={{'fontSize':'20px'}}>{forkOwnerName}/{forkFromName}</span></Link>
             </div>
         }
+        var image_src = default_image
+        if(coverImageURL){
+            if(coverImageURL !== ""){
+                image_src = coverImageURL
+            }
+        }
+        var cover_card = ""
+        if(userId === owner._id){
+            cover_card = 
+            <div style={{'cursor':'pointer'}} onClick={openChangeImageURLModal}>
+                <img className="playlist-image" src={image_src} width={175} height={175} alt="">
+                </img>
+            </div>
+        }else{
+            cover_card = 
+            <div>
+                <img className="playlist-image" src={image_src} width={175} height={175} alt="">
+                </img>
+            </div>
+        }
         return(
             <div>
                 <Row>
-                    <img className="playlist-image" src={default_image} width={175} height={175} alt="">
-                    </img>
+                    { cover_card }
                     <Col>
                         <h1 style={{fontWeight: "bold"}} >{musicList.musicListName} </h1>              
                         <span>by </span><Link to={"/profile/"+owner._id}><span style={{'fontSize':'28px'}}>{owner.nickName}</span></Link><br/>

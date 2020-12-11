@@ -8,7 +8,8 @@ class ProfilePlaylistCard extends Component {
     constructor(props){
         super(props);
         this.state = {
-            owner: ""
+            owner: "",
+            coverImageURL: ""
         }
     }
 
@@ -30,10 +31,15 @@ class ProfilePlaylistCard extends Component {
         }
     }
 
+    setURL = (playlist) => {
+        this.setState({coverImageURL:playlist.image})
+    }
+
     componentDidMount() {
         var playlist = this.props.playlist;
         if(playlist){
             this.getNickName(playlist.owner);
+            this.setURL(playlist);
         }
         
     }
@@ -44,11 +50,17 @@ class ProfilePlaylistCard extends Component {
         if(this.state.owner){
             owner = this.state.owner
         }
+        var image_src = default_image
+        if(this.state.coverImageURL){
+            if(this.state.coverImageURL !== ""){
+                image_src = this.state.coverImageURL
+            }
+        }
         return (
             <div>
                 <Link to={"/playlist/"+playlist._id} style={{'color':'#ed4e85'}}>
                     <div className="album-card">
-                        <img className="playlist-image" src={default_image} width={150} height={150} alt=""/>
+                        <img className="playlist-image" src={image_src} width={150} height={150} alt=""/>
                         <div>{playlist.musicListName}</div>
                         <div style={{'fontSize':'12px', 'color':'#ACACAC'}}>By {owner}</div>
                     </div>
