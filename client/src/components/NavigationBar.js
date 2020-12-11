@@ -52,7 +52,7 @@ class NavigationBar extends Component{
             let userId = localStorage.getItem('userId');
             return(<div>
                 <Link to={"/profile/"+userId}>
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="profile" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -66,7 +66,7 @@ class NavigationBar extends Component{
                     </Button>
                 </Link>
                 <Link to="/friends">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="friends" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -80,7 +80,7 @@ class NavigationBar extends Component{
                     </Button>
                 </Link>
                 <Link to="/playlists">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="playlists" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -145,7 +145,7 @@ class NavigationBar extends Component{
         else{
             return(<div>
                 <Link to="/signin">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="signin" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -159,7 +159,7 @@ class NavigationBar extends Component{
                     </Button>
                 </Link>
                 <Link to="/signup">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="signup" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -240,7 +240,7 @@ class NavigationBar extends Component{
         return(
             <div>
                 <Link to="/">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="home" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>
@@ -254,7 +254,7 @@ class NavigationBar extends Component{
                     </Button>
                 </Link>
                 <Link to="/search">
-                    <Button className="nav-btn" size="lg">
+                    <Button className="nav-btn" id="search" size="lg">
                         <Row>
                             <Col xs={2}>
                                 <IconContext.Provider value={{ size: '30px' }}>

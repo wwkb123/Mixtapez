@@ -57,6 +57,25 @@ class SignUpScreen extends Component{
         }));
     }
 
+    updateNavBar = () => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "signup"){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
+        }
+    }
+
+    componentDidMount() {
+        this.updateNavBar();
+    }
+
     onCompleted = () => {
         
     //     fetch("test", 

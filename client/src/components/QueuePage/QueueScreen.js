@@ -76,6 +76,7 @@ export default function QueueScreen(props){
             setTotalLength(music_length);
         }
         fetchData();
+        updateNavBar();
       }, []);
 
       useEffect(() => {
@@ -103,6 +104,21 @@ export default function QueueScreen(props){
             setReOrderMode(false);  // turn off reorder_mode
         }else{
             console.log("won't able to save");
+        }
+    }
+
+    const updateNavBar = () => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "queue"){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
         }
     }
 

@@ -39,6 +39,21 @@ export default function SongDetailScreen(props){
         const {target} = e;
         setMusicListName(target.value);
     }
+
+    const updateNavBar = () => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "songdetail"){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
+        }
+    }
     
     useEffect(() => {
         async function fetchData() {
@@ -53,6 +68,7 @@ export default function SongDetailScreen(props){
             setLoadingFinished(true);
         }
         fetchData();
+        updateNavBar();
     }, []);
 
     const saveAsMusicListHandler = async (e, musicsIDs) => {

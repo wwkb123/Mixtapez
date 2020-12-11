@@ -24,6 +24,25 @@ class SignInScreen extends Component{
         }));
     }
 
+    updateNavBar = () => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "signin"){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
+        }
+    }
+
+    componentDidMount() {
+        this.updateNavBar();
+    }
+
     onSubmit = async (e) => {
         e.preventDefault();
         var email = this.state.email;

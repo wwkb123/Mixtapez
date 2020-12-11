@@ -68,14 +68,32 @@ class ProfileScreen extends Component {
             console.log(err);
         }
     }
+
+    updateNavBar = (props) => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        var selfID = localStorage.getItem("userId");
+        var userID = props.match.params.id;
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "profile" && selfID === userID){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
+        }
+    }
     
     componentDidMount() {
         var userID = this.props.match.params.id;
         if(userID !== ""){
             this.getUser(userID);
             this.getSelf();
+            this.updateNavBar(this.props);
         }
-        console.log('props is', this.props);
+        // console.log('props is', this.props);
         if(this.props.now_playing){
             this.setState({now_playing: this.props.now_playing});
         }
@@ -87,6 +105,7 @@ class ProfileScreen extends Component {
         if(userID !== ""){
             this.getUser(userID);
             this.getSelf();
+            this.updateNavBar(nextProps);
         }
         if(nextProps.now_playing){
             this.setState({now_playing: nextProps.now_playing});

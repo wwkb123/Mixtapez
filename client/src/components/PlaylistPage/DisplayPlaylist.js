@@ -451,6 +451,21 @@ export default function DisplayPlaylistScreen(props){
         }
     }
 
+    const updateNavBar = () => {
+        var navbtns = document.getElementsByClassName("nav-btn");
+        if(navbtns){
+            for(let i = 0; i < navbtns.length; i++){
+                if(navbtns[i]){
+                    if(navbtns[i].id === "playlists"){
+                        navbtns[i].classList.add("curr-page");
+                    }else{
+                        navbtns[i].classList.remove("curr-page");
+                    }
+                }
+            }
+        }
+    }
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -518,6 +533,7 @@ export default function DisplayPlaylistScreen(props){
             }
         }
         fetchData();
+        updateNavBar();
       }, []);
 
       useEffect(() => {

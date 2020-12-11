@@ -356,3 +356,10 @@ a, a:hover {
   margin: 15px;
   border-radius: 5px;
 }
+
+.curr-page, .curr-page:active, .curr-page:focus{
+  width: 100% !important;
+  height: 13vh !important;
+  font-size: 32px !important;
+  background-color: #eb2168 !important;
+}
