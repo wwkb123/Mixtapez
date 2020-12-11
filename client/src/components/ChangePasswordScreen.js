@@ -61,10 +61,10 @@ class ChangePasswordScreen extends Component{
             <div>
                 <br/><h1>Change Password</h1>
                     <form onSubmit={(e) => this.onSubmit(e)}>
-                    <h6>Old Password:</h6>
+                    {/* <h6>Old Password:</h6>
                     <div style={{"padding":"5px"}}>
                         <TextField id="oldPassword" size="small" type="password" placeholder="old password" variant="outlined" onChange={this.handleChange}/>
-                    </div>
+                    </div> */}
                     <h6>New Password:</h6>
                     <div style={{"padding":"5px"}}>
                         <TextField id="newPassword"  type="password" size="small" placeholder="new password" variant="outlined" onChange={this.handleChange}/>
