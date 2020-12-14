@@ -9,6 +9,7 @@ var schema = require('./graphql/ummSchemas');
 var cors = require("cors");
 var nodemailer = require('nodemailer');  // to send emails
 const bodyParser = require("body-parser");
+var passwordHash = require('password-hash');  // to hash passwords
 
 // var debug = require('debug')('server:server');
 var http = require('http');
@@ -127,6 +128,15 @@ app.post('/api/register', async (req, res) => {
   })
 });
 
+// given a password, return the hashed string of it
+app.post('/api/hashPassword', async (req, res) => {
+  var hashedPassword = passwordHash.generate(req.body.password);
+  res.status(200).json({
+    status: "success",
+    hashedPassword: hashedPassword
+  });
+});
+
 // send verification email to the user
 app.post('/api/sendVerifyEmail', async (req, res) => {
   var userID = "";
@@ -196,10 +206,9 @@ app.post('/api/verify', async (req, res) => {
 // check if sign in credentials are correct
 app.post('/api/signin', async (req, res) => {
   UserModel.find({ 'userName': req.body.email }, 'nickName password verified', function (err, result) {
-    // console.log("result is ", result);
     if(result.length > 0){  // user exists
       // todo: make password hashed
-      if(result[0].password == req.body.password){ // correct password
+      if(passwordHash.verify(req.body.password, result[0].password)){ // correct password
         if(result[0].verified){ // correct password and verified
           // const {password, ...rest} = result[0];
           // const userInfo = Object.assign({}, {...rest});
@@ -233,8 +242,8 @@ app.post('/api/signin', async (req, res) => {
 
 // send email to the user to change password
 app.post('/api/forgetPassword', async (req, res) => {
-  var userID = "";
-  await UserModel.find({ 'userName': req.body.email }, 'userName', function (err, result) {
+  
+  var user = await UserModel.find({ 'userName': req.body.email }, 'userName', function (err, result) {
     console.log("send email result is ", result);
     if(result.length > 0){ // email found
       userID = result[0]._id
@@ -243,7 +252,8 @@ app.post('/api/forgetPassword', async (req, res) => {
     }
     if (err) return handleError(err);
   });
-  if(userID !== ""){
+  if(user){
+    var userID = user[0]._id;
     var link = `${url.client}/changepassword/${userID}`;
     var mailOptions = {
       from: 'mixtapez416@gmail.com',
@@ -269,7 +279,7 @@ app.post('/api/forgetPassword', async (req, res) => {
       }
     });
   }else{ // empty ID, something is wrong
-    console.log("error");
+    console.log("error empty id in change password");
     res.status(200).json({
       status: "failed"
     });
@@ -281,7 +291,8 @@ app.post('/api/changePassword', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, function (err, user) {
     if(user){
       // if(user.password === req.body.oldPassword){  // old password match
-        user.password = req.body.newPassword;
+        var hashedPassword = passwordHash.generate(req.body.newPassword);
+        user.password = hashedPassword;
         user.save(function (err) {
           if(err) {
               console.error('ERROR!');

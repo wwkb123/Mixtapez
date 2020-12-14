@@ -60,7 +60,7 @@ class ChangePasswordScreen extends Component{
                     if(response.data.status === "success"){ // change password successfully
                         console.log("success");
                         alert("Password has changed successfully");
-                        this.props.history.push('/');
+                        this.props.history.push('/signin');
                     // }else if(response.data.status == "failed"){  // old password wrong
                     //     alert("Old password is incorrect. Please try again.");
                     }else{

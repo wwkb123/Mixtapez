@@ -44,6 +44,10 @@ class ForgetPasswordScreen extends Component{
         e.preventDefault();
         var email = this.state.email;
         if(email !== ""){
+            var toast = document.getElementById("loading_toast");
+            toast.className = "show"; // show the toast
+            // After 3 seconds, remove the show class from toast
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
             try {
                 const response = await UserAPI.post("/forgetPassword", {
                     email

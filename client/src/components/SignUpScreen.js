@@ -118,31 +118,35 @@ class SignUpScreen extends Component{
                         email
                     });
                     if(register_response.data.status === "success"){  // email can be used
-                        var toast = document.getElementById("loading_toast");
-                        toast.className = "show"; // show the toast
-                        // After 3 seconds, remove the show class from toast
-                        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-                        await addUser({
-                            variables: {
-                                userName: this.state.email,
-                                password: this.state.password,
-                                nickName: this.state.nickName,
-                                verified: false
-                            }
-                        })
-                        const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
-                            email
+                        const hashPassword_response = await UserAPI.post("/hashPassword", {
+                            password: this.state.password
                         });
-                        if(sendEmail_response.data.status === "success"){
-                            console.log("success");
-                            // this.props.signedIn("NewUser");
-                            this.props.history.push('/emailsent');
-                        }else{
+                        if(hashPassword_response.data.status === "success"){  // got hashed password
+                            var toast = document.getElementById("loading_toast");
+                            toast.className = "show"; // show the toast
+                            // After 3 seconds, remove the show class from toast
+                            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+                            await addUser({
+                                variables: {
+                                    userName: this.state.email,
+                                    password: hashPassword_response.data.hashedPassword,
+                                    nickName: this.state.nickName,
+                                    verified: false
+                                }
+                            })
+                            const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+                                email
+                            });
+                            if(sendEmail_response.data.status === "success"){
+                                console.log("success");
+                                // this.props.signedIn("NewUser");
+                                this.props.history.push('/emailsent');
+                            }else{
+                                this.props.history.push('/error');
+                            }
+                        }else{  // something wrong with hashing
                             this.props.history.push('/error');
                         }
-                        // if(sendEmail_response){
-                        //     this.setState({status: sendEmail_response.data.status});
-                        // }
                         
                     }else{
                         alert("This email has been registered.");
