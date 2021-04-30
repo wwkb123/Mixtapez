@@ -6,4 +6,4 @@ After all installations are finished, go to root folder, npm run start-local
 
 https://mixtapez416.herokuapp.com/
 
-![preview](preview.png)
+![preview](./preview.PNG)
