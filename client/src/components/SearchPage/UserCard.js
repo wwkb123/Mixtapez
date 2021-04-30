@@ -16,7 +16,6 @@ class UserCard extends Component{
                         <Container>
                             <Row className="border-bottom-accent">
                                 <Col xs={4}>
-                                    {/* {data.music[id].musicName} */}
                                     { user.nickName }
                                 </Col>
                             </Row>

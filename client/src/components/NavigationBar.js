@@ -95,8 +95,6 @@ class NavigationBar extends Component{
                 </Link>
                 <Mutation mutation={ADD_PLAYLIST}>
                     {(addNewPlaylist,{loading, error})=>(
-                        //<Link to={'/playlist/${this.state.playlist}'}>
-                            // <Button className="nav-btn" size="lg" onClick={(e) => this.handleCreateNewList(e, addNewPlaylist)}>
                             <Button className="nav-btn" size="lg" onClick={(e) => this.openModal(e, addNewPlaylist)}>
                                 <Row>
                                     <Col xs={2}>
@@ -112,21 +110,6 @@ class NavigationBar extends Component{
                         //</Link>
                     )}
                 </Mutation>
-
-                {/* <Link to="/likedsongs">
-                    <Button className="nav-btn" size="lg">
-                        <Row>
-                            <Col xs={2}>
-                                <IconContext.Provider value={{ size: '30px' }}>
-                                    <MdFavorite style={{'paddingBottom':'5px'}}/>
-                                </IconContext.Provider>
-                            </Col>
-                            <Col xs={10}>
-                                Liked Songs
-                            </Col>
-                        </Row>
-                    </Button>
-                </Link> */}
 
                 <Button className="nav-btn" size="lg" onClick={()=>{this.props.signedOut()}}>
                     <Row>
@@ -210,7 +193,6 @@ class NavigationBar extends Component{
     }
 
     handleCreateNewList = async (addNewPlaylist, musicListName) => {
-        // e.preventDefault();
         try {
             let userId = localStorage.getItem('userId');
             const create_response = await UserAPI.post("/createMusicList", {
@@ -218,8 +200,6 @@ class NavigationBar extends Component{
                 musicListName
             });
             if (create_response.data.status === "success") {
-            //    console.log(this.props.userId)
-            //    console.log(create_response.data.musicListId)
                 addNewPlaylist({
                     variables:{
                         id: userId,
@@ -268,8 +248,6 @@ class NavigationBar extends Component{
                     </Button>
                 </Link>
                 {this.selectButtons()}
-                {/* <Link to="/signin"><Button className="nav-btn" size="lg">Sign In</Button></Link>
-                <Link to="/signup"><Button className="nav-btn" size="lg">Sign Up</Button></Link> */}
             </div>
 
         );

@@ -38,7 +38,6 @@ class ProfileScreen extends Component {
                 id: id
             });
             if(response.data.status === "success"){ // search success
-                // console.log("success");
                 user = response.data.user;
                 
                 const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
@@ -93,7 +92,6 @@ class ProfileScreen extends Component {
             this.getSelf();
             this.updateNavBar(this.props);
         }
-        // console.log('props is', this.props);
         if(this.props.now_playing){
             this.setState({now_playing: this.props.now_playing});
         }

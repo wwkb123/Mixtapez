@@ -78,26 +78,6 @@ class SignUpScreen extends Component{
 
     onCompleted = () => {
         
-    //     fetch("test", 
-    //     {
-    //         method: 'POST',
-    //         headers: {
-    //         'Content-Type': 'application/json',
-    //         }
-    //       , body: JSON.stringify(email)})
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log(data)
-    //     // this.props.history.push('/emailsent');
-    //   })
-    //   .catch(err => console.log(err))
-        // if(this.state.status == "success"){
-            
-        // }
-        // else{
-        //     
-        // }
-        
     }
 
     onSubmit = async (e, addUser) => {
@@ -139,7 +119,6 @@ class SignUpScreen extends Component{
                             });
                             if(sendEmail_response.data.status === "success"){
                                 console.log("success");
-                                // this.props.signedIn("NewUser");
                                 this.props.history.push('/emailsent');
                             }else{
                                 this.props.history.push('/error');
@@ -195,9 +174,7 @@ class SignUpScreen extends Component{
                             id = "passwordConfirm" onChange={this.handleChange}/>
                         </div>
                         <br/>
-                        {/* <Link to="/verification"> */}
                             <Button type="submit" className="search-btn">Sign Up</Button>
-                        {/* </Link> */}
                         <br/><br/>
                         <div className="border-bottom-accent"></div>
                         </form>

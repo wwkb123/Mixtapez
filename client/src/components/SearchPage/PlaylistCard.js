@@ -52,7 +52,6 @@ class PlaylistCard extends Component{
                                     &#9825;
                                 </Col>
                                 <Col xs={3}>
-                                    {/* {data.music[id].musicName} */}
                                     { playlist.musicListName }
                                 </Col>
                                 <Col xs={3}>

@@ -113,7 +113,6 @@ class ChatScreen extends Component {
                 }
             });
             this.setState({socket}, ()=>{
-                // console.log(this.state.socket);
                 // connect to room
                 if(this.state.socket && this.state.conversation_id){
                     this.state.socket.emit('joinRoom', {
@@ -207,10 +206,6 @@ class ChatScreen extends Component {
                 </Link>
                 <div className="dialog-area" id="dialog">
                     { dialog_cards }
-                    {/* <div className="friend-dialog">Hi How are you</div>
-                    <div className="self-dialog">Good</div>
-                    <div className="self-dialog">How are you</div>
-                    <div className="friend-dialog">Good</div> */}
                 </div>
                 
                 <div className="input-message" id="input_area">

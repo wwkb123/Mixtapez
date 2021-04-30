@@ -371,7 +371,6 @@ export default function QueueScreen(props){
                 ))}
             </Reorder>
         }else if(musics && musics.length > 0){
-            // console.log('musics are '+ musics);
             songcards = <div>{musics.slice((page-1)*10,page*10)
                 .map((music, index) => {
                     if(music){

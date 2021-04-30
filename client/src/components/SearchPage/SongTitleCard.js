@@ -12,7 +12,6 @@ class SongTitleCard extends Component{
                 <Container>
                     <Row className="border-bottom-accent">
                         <Col xs={1}>
-                            {/* Like */}
                         </Col>
                         <Col xs={3}>
                             Title

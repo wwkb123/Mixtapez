@@ -8,7 +8,6 @@ class Banner extends Component{
 
     nickNameControl = () =>{
         var nickName = localStorage.getItem('userNickName');
-        // console.log("user is", user);
         if (nickName) {
             return <div>Welcome {nickName}</div>           
         }

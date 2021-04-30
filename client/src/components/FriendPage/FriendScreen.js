@@ -126,17 +126,15 @@ class FriendScreen extends Component {
 
     componentDidMount() {
         this.getUser();
-        // console.log("props is", this.props)
         this.updateNavBar();
     }
 
     componentWillUnmount() {
-        // this.props.onRef(undefined)
+
     }
 
     // if only the props is updated
     componentWillReceiveProps(nextProps) {
-        // console.log("new props is", nextProps)
         if(nextProps.online_users && nextProps.online_users.length > 0){
             let online_users = nextProps.online_users;
             this.updateOnlineFriends(online_users);

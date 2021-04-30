@@ -32,13 +32,7 @@ class VerificationScreen extends Component{
         return(
             <div>
                 <br/><h1>Verification</h1>
-                {/* <h6>Enter the 6-digit code sent to your email address:</h6>
-                <div style={{"padding":"5px"}}>
-                    <TextField size="small" placeholder="6-digit code" variant="outlined" />
-                </div> */}
-                {/* <Link to={link}> */}
                     <Button onClick={this.onClick} className="search-btn">Verify</Button>
-                {/* </Link> */}
                 <br/><br/>
                 <div className="border-bottom-accent"></div>
             </div>

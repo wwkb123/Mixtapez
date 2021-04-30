@@ -76,7 +76,6 @@ class App extends Component{
                 }
             });
             this.setState({main_socket: socket}, ()=>{
-                // console.log(this.state.main_socket);
                 // connected to server, push online status
                 if(this.state.main_socket){
                     var id = localStorage.getItem('userId');
@@ -84,7 +83,6 @@ class App extends Component{
                         user_id: id
                     });
                     this.state.main_socket.on('online_users', async (data) => {
-                        // console.log('app online users is', data);
                         this.setState({online_users: data});
                     });
                 }
@@ -101,14 +99,6 @@ class App extends Component{
         var queue = localStorage.getItem('queue');
         if(!queue)
             localStorage.setItem('queue', JSON.stringify([]));
-        // try{
-        //     const response = await UserAPI.get("/user/"+localStorage.getItem('userId'));
-        //     if(response.data.status === "success"){ // search success
-        //         localStorage.setItem('user', response.data.user);
-        //     }
-        // }catch(err){
-        //     console.log(err);
-        // }
         this.connectToSocket();
         this.setState({signedUp: true,
                         nickName: name,
@@ -177,25 +167,18 @@ class App extends Component{
                                 <Route path='/friends' render={(props) => <FriendScreen {...props} online_users={this.state.online_users} />} />
                                 <Route path='/chat/:id' component={ChatScreen} />
                                 <Route path='/profile/:id' render={(props) => <ProfileScreen {...props} now_playing={this.state.now_playing} updateModalContentHandler={this.updateModalContentHandler}/>} />
-                                {/* <Route path='/create' component={CreateNewList} /> */}
                                 <Route path='/playlists' render={(props) => <PlaylistsScreen updateModalContentHandler={this.updateModalContentHandler} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/playlist/:id' render={(props) => <DisplayPlaylistScreen updateMainModalContentHandler={this.updateModalContentHandler} loadQueueSongsToAudioPlayer={this.loadQueueSongsToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>} />
                                 <Route path='/queue' render={(props) => <QueueScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} queue={this.state.queue} userId={this.props.userId} {...props} isAuthed={true}/>}  />
                                 <Route path='/song/:id' render={(props) => <SongDetailScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} updateModalContentHandler={this.updateModalContentHandler} userId={this.props.userId} {...props} isAuthed={true}/>}  />
-                                {/* <Route path='/likedsongs' component={LikedSongsScreen} /> */}
                                 <Route path='/search' render={(props) => <SearchScreen loadQueueIndexToAudioPlayer={this.loadQueueIndexToAudioPlayer} userId={this.state.userId} {...props} isAuthed={true}/>}  />
-                                {/* <Route path='/popup' component={Popup} /> */}
                                 <Route path='/signin'  render={(props) => <SignInScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/signup' render={(props) => <SignUpScreen signedIn={this.signedIn} {...props} isAuthed={true}/>} />
                                 <Route path='/forgetpassword' component={ForgetPasswordScreen} />
                                 <Route path='/changepassword/:id' component={ChangePasswordScreen} />
                                 <Route path='/verification/:id' render={(props) => <VerificationScreen signedIn={this.signedIn} {...props} isAuthed={true}/>}/>
-                                {/* <Route path='/friendrequests' component={FriendRequestsScreen} /> */}
                                 <Route path='/emailsent' component={EmailSentScreen} />
                                 <Route path='/error' component={ErrorScreen} />
-                                {/* <Route path='/edit/:id' component={EditLogoScreen} />
-                                <Route path='/create' component={CreateLogoScreen} />
-                                <Route path='/view/:id' component={ViewLogoScreen} /> */}
                             </Switch>
                         </Col>
                     </Row>
@@ -211,19 +194,6 @@ class App extends Component{
                         </IconContext.Provider>
                     </IconButton>
                 </div>
-
-                {/* <div id="scroll-to-audio-left">
-                    <IconButton
-                        style={{'backgroundColor':'#F06E9C'}}
-                        aria-label="scroll"
-                        onClick={this.onScrollButtonClick}
-                    >
-                        <IconContext.Provider value={{ color: "white", size: '50px' }}>
-                            <MdMusicNote/>
-                        </IconContext.Provider>
-                    </IconButton>
-                </div> */}
-
                 <AudioPlayerBar onRef={ref => (this.audioPlayer = ref)} updateNowPlaying={this.updateNowPlaying} />
                 <div id="main_modal" className="modal">
                     <div className="modal-content">

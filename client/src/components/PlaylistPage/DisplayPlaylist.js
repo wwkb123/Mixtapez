@@ -183,8 +183,6 @@ export default function DisplayPlaylistScreen(props){
                 alert("you do not own the playlist")
             }
         }else if(mode === "Edit Details"){ // Edit Details
-
-        // }else if(index === 2){ // Delete this playlist
             
         }else if(mode === "Share"){ // share
             var modal = document.getElementById("modal");
@@ -218,17 +216,12 @@ export default function DisplayPlaylistScreen(props){
             }
             
         }else if(mode === "Fork"){ // Fork
-            // console.log("will fork");
-            // console.log("userId:"+props.userId);
-            // console.log("musicList:"+musicList._id);
             try {
                 const response = await UserAPI.post('/forkMusicList',{
                     userId: props.userId,
                     musicListId: musicList._id
                 });
                 if (response.data.status === "success") {
-                    // console.log("fork successful");
-                    // console.log(response.data.musicList)
                     props.history.push("/playlist/"+response.data.musicList._id);
                 }
             } catch (err) {
@@ -472,8 +465,6 @@ export default function DisplayPlaylistScreen(props){
                 setPage(1);
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
                 if(response.data.status === "success"){ // search success
-                    // console.log("success");
-                    // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
                     if(response.data.musicList.image){
                         setCoverImageURL(response.data.musicList.image);
@@ -491,7 +482,6 @@ export default function DisplayPlaylistScreen(props){
                             console.log("error searching song", id);
                         }
                     }
-                    // console.log(musics);
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
@@ -523,8 +513,6 @@ export default function DisplayPlaylistScreen(props){
                         setForkFromName(null);
                         setForkOwnerName(null);
                     }
-                    
-                    // console.log(owner_response.data.user);
                 }else{ // somehow failed
     
                 }
@@ -541,9 +529,7 @@ export default function DisplayPlaylistScreen(props){
             if(userId === owner._id){
                 options = [
                     'Make Private',  // should toggle with Make Public
-                    // 'Edit Details',
                     'Change Cover Image',
-                    // 'Delete',
                     'Share'
                   ];
             }else{
@@ -563,8 +549,6 @@ export default function DisplayPlaylistScreen(props){
                 setPage(1);
                 const response = await UserAPI.get("/musicList/"+props.match.params.id);
                 if(response.data.status === "success"){ // search success
-                    // console.log("success");
-                    // console.log("musiclist is", response.data.musicList);
                     setMusicList(response.data.musicList);
                     if(response.data.musicList.image){
                         setCoverImageURL(response.data.musicList.image);
@@ -581,7 +565,6 @@ export default function DisplayPlaylistScreen(props){
                             console.log("error searching song", id);
                         }
                     }
-                    // console.log(musics);
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
                     const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
@@ -613,7 +596,6 @@ export default function DisplayPlaylistScreen(props){
                         setForkFromName(null);
                         setForkOwnerName(null);
                     }
-                    // console.log(owner_response.data.user);
                 }else{ // somehow failed
     
                 }
@@ -645,9 +627,7 @@ export default function DisplayPlaylistScreen(props){
                     musics: musicIDs
                 });
                 if(response.data.status === "success"){ // search success
-                    // console.log("update isPublic success");
-                    // var updatePlaylist = props.updatePlaylist;
-                    // updatePlaylist();
+
                 }else{
                     console.log("error");
                 }
@@ -825,7 +805,6 @@ export default function DisplayPlaylistScreen(props){
                             <MdPlayCircleOutline/>
                         </IconButton>
                         { reorderButtons }
-                        {/* <AiOutlinePlusCircle/> */}
                         {deleteButton}
                         <IconButton
                         aria-label="more"

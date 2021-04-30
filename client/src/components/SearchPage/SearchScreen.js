@@ -118,10 +118,6 @@ class SearchScreen extends Component{
                     search_text
                 });
                 if(response.data.status === "success"){ // search success
-                    console.log("success");
-                    // this.props.signedIn(response.data.nickName);
-                    // this.props.history.push('/');
-                    console.log(response.data.results);
                     this.setState({search_results_mode: search_for});
                     this.setState({search_results: response.data.results});
                     
@@ -145,7 +141,6 @@ class SearchScreen extends Component{
         e.preventDefault();
         var songID = this.state.songID;
         if(songID !== ""){
-            console.log(musicListId, songID);
         }
         try {
             let musicName = this.state.songInfo.name;
@@ -222,7 +217,7 @@ class SearchScreen extends Component{
         var result_cards = "";
         var userId = localStorage.getItem('userId');
         console.log("select is", select);
-        if(search_results ){  // && search_results.length > 0
+        if(search_results ){ 
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>
                 result_cards = search_results.slice((this.state.page-1)*10,this.state.page*10).map(result => {

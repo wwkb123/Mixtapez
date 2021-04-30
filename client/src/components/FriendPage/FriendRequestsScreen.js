@@ -42,7 +42,6 @@ class FriendRequestsScreen extends Component {
                     <br/>
                     <h1>Friend Requests ({friendRequests.length})</h1>
                     { friend_request_cards }
-                    {/* <FriendRequestCard/> */}
                 </div>
             );
         }else{

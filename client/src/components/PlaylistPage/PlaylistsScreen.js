@@ -29,7 +29,6 @@ const GET_LIST_DETAIL = gql`
 export default function PlaylistsScreen(props){
     const [playlists, setPlaylists] = React.useState(null);
     const [filter_criteria, setFilterCriteria] = React.useState("");
-    // var userId = props.userId;
     var userId = localStorage.getItem('userId');
     
     const handler = async (musicLists) => {

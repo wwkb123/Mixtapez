@@ -20,7 +20,6 @@ class HomeScreen extends Component {
             const playlists_response = await UserAPI.get("/randomPlaylists");
             if(playlists_response.data.status === "success"){
                 var publicPlaylists = playlists_response.data.playlists;
-                // console.log(publicPlaylists);
                 this.setState({publicPlaylists: publicPlaylists});
             }
         }catch (err) {

@@ -39,7 +39,6 @@ class FriendCard extends Component {
         }else{
             this.setState({now_playing: 'none'});
         }
-        // console.log(nextProps.user)
     }
 
     updateNowPlaying = async (now_playing_ID) => {
@@ -66,7 +65,6 @@ class FriendCard extends Component {
         var container_style = {}
         var now_playing_card = ""
         if(this.state.now_playing){
-            // console.log('now playing', this.props.now_playing);
             if(now_playing !== "none"){
                 now_playing_card = <Link to={'/song/'+this.state.now_playing_ID}><h6>Last Playing: {now_playing}</h6></Link>
             }else{

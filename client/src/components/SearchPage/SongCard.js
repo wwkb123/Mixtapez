@@ -170,17 +170,11 @@ export default function SongCard(props){
                 }
             }
         }
-        // else if(index === 1){ // add to liked songs
-
-        // }
         else if(index === 1){ // add to playlist
             if(song && userId){
-                // alert("hi" + song.name);
-                // console.log(song.name, "asdad");
                 var modal = document.getElementById("modal");
                 if(modal){
                     var handler = props.childSongIdHandler;
-                    // console.log(handler)
                     modal.style.display = "block";
                     handler(song.id,song);
 
@@ -237,22 +231,17 @@ export default function SongCard(props){
                 <Container>
                     <Row className="border-bottom-accent">
                         <Col xs={1}>
-                            {/* &#9825; */}
                         </Col>
                         <Col xs={3}>
-                            {/* {data.music[id].musicName} */}
                             { song.name }
                         </Col>
                         <Col xs={2}>
-                            {/* {data.music[id].artist} */}
                             { artist }
                         </Col>
                         <Col xs={3}>
-                            {/* {data.music[id].album} */}
                             { album }
                         </Col>
                         <Col xs={1}>
-                            {/* 0{data.music[id].length / 60}:{data.music[id].length % 60}0 */}
                             { minutes }:{ seconds }
                         </Col>
                         <Col xs={1}>
