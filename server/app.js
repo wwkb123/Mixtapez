@@ -8,13 +8,15 @@ var graphqlHTTP = require('express-graphql');
 var schema = require('./graphql/ummSchemas');
 var cors = require("cors");
 const bodyParser = require("body-parser");
+const { use } = require('./routes/index');
+const { url, mongDB_URI } = require('./config');
 
 
 // var debug = require('debug')('server:server');
 var http = require('http');
 var port = normalizePort(process.env.PORT || '3001');
 
-const uri = "mongodb+srv://admin:admin@cluster0.wknfy.mongodb.net/db?retryWrites=true&w=majority";
+const uri = mongDB_URI.uri;
 // 'mongodb://localhost/node-graphql'
 mongoose.connect(uri, { promiseLibrary: require('bluebird'), useNewUrlParser: true })
   .then(() =>  console.log('connection successful'))
@@ -34,8 +36,7 @@ var MusicListModel = require('./models/musicList');
 var MusicModel = require('./models/music');
 var ConversationModel = require('./models/conversation');
 
-const { use } = require('./routes/index');
-const { url } = require('./config');
+
 var app = express();
 
 app.use(function(req, res, next) {

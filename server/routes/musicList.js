@@ -4,11 +4,13 @@ var MusicModel = require('../models/music');
 var UserModel = require('../models/user');
 var router = express.Router();
 
+const { spotify } = require('../config');
+
 var SpotifyWebApi = require('spotify-web-api-node');
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
-  clientId: '9cf6f8ef5fb94f05bed2ec62cca84b4e',
-  clientSecret: '80205a921f5c4360acc65c72fe03a92f'
+  clientId: spotify.clientId,
+  clientSecret: spotify.clientSecret
   // accessToken: 'BQCgfkvwWeXeJqTifbjqO4Tgj4v-EP_JYoh_w2e7bN5QsCy8jN3moQssUqTHtRC9YgLf8htziHFlWt-XKXs'
 });
 

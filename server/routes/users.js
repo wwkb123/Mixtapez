@@ -2,19 +2,15 @@ var express = require('express');
 var nodemailer = require('nodemailer');  // to send emails
 var passwordHash = require('password-hash');  // to hash passwords
 var router = express.Router();
+const { email } = require('../config');
 
 var UserModel = require('../models/user');
-
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  // res.send('respond with a resource');
-});
 
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'mixtapez416@gmail.com',
-    pass: 'mixtapez888'
+    user: email.user,
+    pass: email.pass
   }
 });
 
@@ -55,7 +51,7 @@ router.post('/sendVerifyEmail', async (req, res) => {
       var link = `${url.client}/verification/${userID}`;
       console.log("preparing email...");
       var mailOptions = {
-        from: 'mixtapez416@gmail.com',
+        from: email.user,
         to: req.body.email,
         subject: 'Welcome to Mixtapez, please verify your email address',
         // text: 'That was easy!\nasdasd'
@@ -152,9 +148,9 @@ router.post('/forgetPassword', async (req, res) => {
   });
   if(user){
     var userID = user[0]._id;
-    var link = `${url.client}/changepassword/${userID}`;
+    var link = `${url.client}/users/changepassword/${userID}`;
     var mailOptions = {
-      from: 'mixtapez416@gmail.com',
+      from: email.user,
       to: req.body.email,
       subject: 'Mixtapez - Forget password',
       // text: 'That was easy!\nasdasd'
