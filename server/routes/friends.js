@@ -58,7 +58,7 @@ router.post('/sendFriendRequest', async (req, res) => {
         user.save(function (err) {
           if(err) {
               console.error('ERROR!');
-              res.status(200).json({
+              res.status(502).json({
                 status: "error"
               });
             }
@@ -67,7 +67,7 @@ router.post('/sendFriendRequest', async (req, res) => {
         target_user.save(function (err) {
           if(err) {
               console.error('ERROR!');
-              res.status(200).json({
+              res.status(502).json({
                 status: "error"
               });
             }
@@ -79,7 +79,7 @@ router.post('/sendFriendRequest', async (req, res) => {
         target_user.save(function (err) {
           if(err) {
               console.error('ERROR!');
-              res.status(200).json({
+              res.status(502).json({
                 status: "error"
               });
             }
@@ -92,7 +92,7 @@ router.post('/sendFriendRequest', async (req, res) => {
         user: user
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -153,7 +153,7 @@ router.post('/acceptFriendRequest', async (req, res) => {
       user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -162,7 +162,7 @@ router.post('/acceptFriendRequest', async (req, res) => {
       target_user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -197,7 +197,7 @@ router.post('/declineFriendRequest', async (req, res) => {
       user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -247,7 +247,7 @@ router.post('/removeFriend', async (req, res) => {
       user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -256,7 +256,7 @@ router.post('/removeFriend', async (req, res) => {
       target_user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -288,7 +288,7 @@ router.post('/getConversation', async (req, res) => {
     });
 
     if (!conversationModel) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
     }
@@ -338,7 +338,7 @@ router.post('/sendMessage', async (req, res) => {
       messages: conv.messages
     });
   }else{
-    res.status(200).json({
+    res.status(502).json({
       status: "failed"
     });
   }
@@ -356,7 +356,7 @@ router.post('/getMessages', async (req, res) => {
       messages: conv.messages
     });
   }else{
-    res.status(200).json({
+    res.status(502).json({
       status: "failed"
     });
   }

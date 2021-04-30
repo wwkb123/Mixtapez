@@ -19,7 +19,7 @@ var transporter = nodemailer.createTransport({
 router.post('/register', async (req, res) => {
   await UserModel.find({ 'userName': req.body.email }, '_id userName', function (err, result) {
     if(result.length > 0){  // email exists
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
     });
     }else{
@@ -63,7 +63,7 @@ router.post('/sendVerifyEmail', async (req, res) => {
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
           console.log(error);
-          res.status(200).json({
+          res.status(502).json({
                   status: "failed"
               });
         } else {
@@ -75,7 +75,7 @@ router.post('/sendVerifyEmail', async (req, res) => {
       });
     }else{
       console.log("not found");
-      res.status(200).json({
+      res.status(502).json({
           status: "failed"
       });
     }
@@ -94,7 +94,7 @@ router.post('/verify', async (req, res) => {
       });
     }else{
       console.log("not found");
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
     }
@@ -114,19 +114,19 @@ router.post('/signin', async (req, res) => {
             userId: result[0]._id
           });
         }else{ // not verified user
-          res.status(200).json({
+          res.status(502).json({
             status: "not verified",
             nickName: result[0].nickName,
             userId: result[0]._id
           });
         }
       }else{ // incorrcet password
-        res.status(200).json({
+        res.status(502).json({
           status: "failed"
         });
       }
     }else{ // no such user
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
     });
     }
@@ -162,7 +162,7 @@ router.post('/forgetPassword', async (req, res) => {
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
-        res.status(200).json({
+        res.status(502).json({
                 status: "failed"
             });
       } else {
@@ -174,7 +174,7 @@ router.post('/forgetPassword', async (req, res) => {
     });
   }else{ // empty ID, something is wrong
     console.log("error empty id in change password");
-    res.status(200).json({
+    res.status(502).json({
       status: "failed"
     });
   }
@@ -200,7 +200,7 @@ router.post('/changePassword', async (req, res) => {
           console.log("Something wrong when updating password!");
       }
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -217,7 +217,7 @@ router.post('/user', async (req, res) => {
         user: user
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -233,7 +233,7 @@ router.get('/user/:id', async (req, res) => {
         user: user
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -250,7 +250,7 @@ router.post('/user/nickName', async (req, res) => {
         nickName: user.nickName
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }

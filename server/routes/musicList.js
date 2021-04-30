@@ -41,7 +41,7 @@ router.post('/createMusicList', async (req, res) => {
     if (err) return handleError(err);
   });
   if (!musicListModel) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
   }
@@ -62,7 +62,7 @@ router.post('/createMusicListWithMusics', async (req, res) => {
     if (err) return handleError(err);
   });
   if (!musicListModel) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
   }
@@ -97,7 +97,7 @@ router.post('/forkMusicList', async (req, res) => {
     if (err) return handleError(err);
   });
   if (!musicListModel) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
   }
@@ -105,7 +105,7 @@ router.post('/forkMusicList', async (req, res) => {
     if(user){
       if (err) {
           console.log("Something wrong when adding musicList "+musicListModel._id+"!");
-          res.status(200).json({
+          res.status(502).json({
             status: "error"
           });
       }
@@ -115,7 +115,7 @@ router.post('/forkMusicList', async (req, res) => {
       user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -125,7 +125,7 @@ router.post('/forkMusicList', async (req, res) => {
         musicList: musicListModel
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -157,7 +157,7 @@ router.post('/createMusic', async (req, res) => {
       if (err) return handleError(err);
     });
     if (!musicModel) {
-        res.status(200).json({
+        res.status(502).json({
           status: "failed"
         });
     }
@@ -178,7 +178,7 @@ router.post('/search/song', async (req, res) => {
         results: data.body.tracks.items
       });
     }, function(err) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
       console.error(err);
@@ -195,7 +195,7 @@ router.post('/search/artist', async (req, res) => {
         results: data.body.tracks.items
       });
     }, function(err) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
       console.error(err);
@@ -212,7 +212,7 @@ router.post('/search/album', async (req, res) => {
         results: data.body.tracks.items
       });
     }, function(err) {
-      res.status(200).json({
+      res.status(502).json({
         status: "failed"
       });
       console.error(err);
@@ -248,7 +248,7 @@ router.get('/musicList/:id', async (req, res) => {
         musicList: musicList
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -264,7 +264,7 @@ router.get('/music/:id', async (req, res) => {
         music: music
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -288,7 +288,7 @@ router.post('/setIsPublic', async (req, res) => {
           console.log("Something wrong when updating playlist!");
       }
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -301,7 +301,7 @@ router.post('/addSong', async (req, res) => {
     if(musicList){
       if (err) {
           console.log("Something wrong when add song "+req.body.songID+"!");
-          res.status(200).json({
+          res.status(502).json({
             status: "error"
           });
       }
@@ -319,7 +319,7 @@ router.post('/addSong', async (req, res) => {
       musicList.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -328,7 +328,7 @@ router.post('/addSong', async (req, res) => {
         status: "success"
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -341,7 +341,7 @@ router.post('/addMusicList', async (req, res) => {
     if(user){
       if (err) {
           console.log("Something wrong when adding musicList "+req.body.musicListId+"!");
-          res.status(200).json({
+          res.status(502).json({
             status: "error"
           });
       }
@@ -351,7 +351,7 @@ router.post('/addMusicList', async (req, res) => {
       user.save(function (err) {
         if(err) {
             console.error('ERROR!');
-            res.status(200).json({
+            res.status(502).json({
               status: "error"
             });
           }
@@ -360,7 +360,7 @@ router.post('/addMusicList', async (req, res) => {
         status: "success"
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -382,7 +382,7 @@ router.post('/removeSong', async (req, res) => {
         status: "success"
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -395,7 +395,7 @@ router.post('/updateMusicList', async (req, res) => {
     if(musicList){
       if (err) {
           console.log("Something wrong when updating musiclist "+req.body.id+"!");
-          res.status(200).json({
+          res.status(502).json({
             status: "error"
           });
       }
@@ -409,7 +409,7 @@ router.post('/updateMusicList', async (req, res) => {
         status: "success"
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -425,7 +425,7 @@ router.get('/user/musicLists/:id', async (req, res) => {
         musicLists: user.musicLists
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
@@ -467,7 +467,7 @@ router.get('/randomPlaylists', async (req, res) => {
 
     if(err){
       console.log(err);
-      res.status(200).json({
+      res.status(502).json({
         status: "error",
       });
     }
@@ -484,7 +484,7 @@ router.post('/getSongAudio', async (req, res) => {
       track: data.body
     });
   }, function(err) {
-    res.status(200).json({
+    res.status(502).json({
       status: "failed"
     });
     console.error(err);
@@ -498,7 +498,7 @@ router.post('/updateNowPlaying', async (req, res) => {
     user.save(function (err) {
       if(err) {
           console.error('ERROR!');
-          res.status(200).json({
+          res.status(502).json({
             status: "failed"
           });
         }
@@ -528,7 +528,7 @@ router.post('/updatePlaylistImage', async (req, res) => {
         musicList: musicList
       });
     }else{
-      res.status(200).json({
+      res.status(502).json({
         status: "error"
       });
     }
