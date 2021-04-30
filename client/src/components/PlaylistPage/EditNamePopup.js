@@ -26,8 +26,6 @@ class EditNamePopup extends Component{
         e.preventDefault();
         let inputName = this.state.modalInputName;
         if(inputName){
-            console.log(this.props.musicListId);
-            console.log(inputName);
             this.props.updateMusicList({
                 variables:{
                     musicListId: this.props.musicListId,
@@ -38,8 +36,6 @@ class EditNamePopup extends Component{
             try{
                 const response = await UserAPI.get("/musicListRoute/user/musicLists/"+this.props.userId);
                 if(response.data.status === "success"){ // search success
-                    console.log("success");
-                    console.log("musiclists is", response.data.musicLists);
                     var playlistsChangeHandler = this.props.handler;
                     playlistsChangeHandler(response.data.musicLists);
                 }

@@ -62,7 +62,6 @@ class ChatScreen extends Component {
                 if(conversation_response.data.status === "success"){
                     var conversation_id = conversation_response.data.conv_id;
                     var messages = conversation_response.data.messages;
-                    // console.log(conversation_id, messages);
                     this.setState({conversation_id}, () => {
                         this.connectToSocket();  // connect to socket after getting a conversation_id
                     });
@@ -122,7 +121,6 @@ class ChatScreen extends Component {
 
                 if(this.state.socket && this.state.conversation_id){  
                     this.state.socket.on('chat', async (data) => {  // listen to socket's chat event
-                        console.log('from socket:', data);
                         // query database to update messages
                         const response = await UserAPI.post("/friendsRoute/getMessages", {
                             conversation_id: data

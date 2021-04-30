@@ -35,7 +35,6 @@ router.post('/createMusicList', async (req, res) => {
                                              owner: req.body.userId,
                                              isPublic: true,
                                              lastUpdate: new Date()});
-  // console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
   });
@@ -57,7 +56,6 @@ router.post('/createMusicListWithMusics', async (req, res) => {
                                              owner: req.body.userId,
                                              isPublic: true,
                                              lastUpdate: new Date()});
-  // console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
   });
@@ -93,7 +91,6 @@ router.post('/forkMusicList', async (req, res) => {
                                              forkOwner: forkOwner,
                                              forkFrom: forkFrom,
                                              lastUpdate: new Date()});
-  // console.log(musicListModel)
   musicListModel.save((err)=>{
     if (err) return handleError(err);
   });
@@ -140,7 +137,6 @@ router.post('/createMusic', async (req, res) => {
                                   URI: req.body.URI,
                                   album: req.body.album,
                                   artist: req.body.artist}).exec();
-  // console.log(music);
   if(music.length > 0){
     res.status(200).json({
       status: "success",
@@ -155,7 +151,6 @@ router.post('/createMusic', async (req, res) => {
                                       length: req.body.length,
                                       artist: req.body.artist,
                                       lastUpdate: new Date()});
-    // console.log(musicModel)
     musicModel.save((err)=>{
       if (err) return handleError(err);
     });
@@ -176,7 +171,6 @@ router.post('/search/song', async (req, res) => {
 
   spotifyApi.searchTracks(req.body.search_text)
     .then(function(data) {
-      // console.log("data", data)
       res.status(200).json({
         status: "success",
         results: data.body.tracks.items
@@ -225,7 +219,6 @@ router.post('/search/album', async (req, res) => {
 
 router.post('/search/user', async (req, res) => {
   await UserModel.find({ 'nickName': { $regex: req.body.search_text, $options: "i"} }, '_id nickName', function (err, result) {
-    // console.log("search user result is ", result);
     res.status(200).json({
       status: "success",
       results: result
@@ -236,7 +229,6 @@ router.post('/search/user', async (req, res) => {
 
 router.post('/search/playlist', async (req, res) => {
   await MusicListModel.find({ 'musicListName': { $regex: req.body.search_text, $options: "i" }, isPublic: true }, function (err, result) {
-    // console.log("search playlist result is ", result);
     res.status(200).json({
       status: "success",
       results: result
@@ -484,9 +476,7 @@ router.get('/randomPlaylists', async (req, res) => {
 // get the audio source of a song
 router.post('/getSongAudio', async (req, res) => {
   // spotifyApi
-  // console.log(req.body.URI)
   spotifyApi.getTrack(req.body.URI).then(function(data) {
-    // console.log(data.body)
     res.status(200).json({
       status: "success",
       track: data.body

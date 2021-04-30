@@ -54,7 +54,6 @@ export default function PlaylistSongCard(props){
     }
 
     const addSongToMusicList = async (e, songID, musicListID) => {
-        console.log(songID + " " + musicListID);
         try{
             const addSong_response = await UserAPI.post("/musicListRoute/addSong", {
                 musicListID,
@@ -103,10 +102,8 @@ export default function PlaylistSongCard(props){
                 }else{
                     queue = [];
                 }      
-                console.log(song._id)
                 let id = song._id
                 const song_response = await UserAPI.get("/musicListRoute/music/"+id);
-                console.log(song_response.data.music)
                 if(song_response.data.status == "success"){
                     if (queue.length > 0) {
                         let contains = queue.map((music)=>{
@@ -116,7 +113,6 @@ export default function PlaylistSongCard(props){
                                 return false
                             }
                         }).reduce((a,b)=>{ return(a||b) });
-                        console.log(contains);
                         if (!contains) {
                             queue.push(song_response.data.music);
                             localStorage.setItem('queue', JSON.stringify(queue))

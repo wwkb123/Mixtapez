@@ -101,9 +101,7 @@ export default function DisplayPlaylistScreen(props){
     }
 
     const changePageHandler = (event, value)=>{
-        console.log("previous page:"+page)
         setPage(value);
-        console.log("clicked :"+value);
         
     }
 
@@ -121,7 +119,6 @@ export default function DisplayPlaylistScreen(props){
             const response = await UserAPI.get("/musicListRoute/musicList/"+props.match.params.id);
             if(response.data.status === "success"){ // search success
                 setMusicList(response.data.musicList);
-                console.log("updatePlaylist", response.data.musicList);
                 var musics = [];
                 var music_length = 0;
                 for(let i = 0; i < response.data.musicList.musics.length; i++){
@@ -140,7 +137,6 @@ export default function DisplayPlaylistScreen(props){
                 if(owner_response.data.status === "success"){ // search success
                     setOwner(owner_response.data.user);
                 }
-                console.log("owner", owner_response.data.user);
             }
         }catch(err){
             console.log(err);
@@ -173,7 +169,6 @@ export default function DisplayPlaylistScreen(props){
                         isPublic: !isPublic
                     });
                     if(response.data.status === "success"){ // search success
-                        console.log("update isPublic success");
                         updatePlaylist();
                     }
                 }catch(err){
@@ -349,7 +344,6 @@ export default function DisplayPlaylistScreen(props){
     }
 
     const onTitleClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!title_ascending){
@@ -373,7 +367,6 @@ export default function DisplayPlaylistScreen(props){
     }
 
     const onArtistClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!artist_ascending){
@@ -397,7 +390,6 @@ export default function DisplayPlaylistScreen(props){
     }
 
     const onAlbumClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!album_ascending){
@@ -421,7 +413,6 @@ export default function DisplayPlaylistScreen(props){
     }
 
     const onTimeClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!time_ascending){

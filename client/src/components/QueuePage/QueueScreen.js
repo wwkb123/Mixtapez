@@ -65,7 +65,6 @@ export default function QueueScreen(props){
 
     useEffect(() => {
         async function fetchData() {
-            console.log(queue)
             setMusics(queue);
             setPage(1);
             var music_length = 0;
@@ -219,7 +218,6 @@ export default function QueueScreen(props){
     }
 
     const onTitleClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!title_ascending){
@@ -243,7 +241,6 @@ export default function QueueScreen(props){
     }
 
     const onArtistClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!artist_ascending){
@@ -267,7 +264,6 @@ export default function QueueScreen(props){
     }
 
     const onAlbumClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!album_ascending){
@@ -291,7 +287,6 @@ export default function QueueScreen(props){
     }
 
     const onTimeClickHandler = () => {
-        console.log("handler triggered");
         if(musics){
             var coeff = 1;  // to toggle ascending/descending order
             if(!time_ascending){

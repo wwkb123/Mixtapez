@@ -81,9 +81,6 @@ class PlaylistCard extends Component {
 
     onDeleteConfirm = async (e, removePlaylist, removeMusicList)=>{
         e.preventDefault();
-        console.log('click to remove');
-        console.log(this.props.userId);
-        console.log(this.props.musicListId);
         removePlaylist({
             variables:{
                 userId: this.props.userId,
@@ -98,8 +95,6 @@ class PlaylistCard extends Component {
         try{
             const response = await UserAPI.get("/musicListRoute/user/musicLists/"+this.props.userId);
             if(response.data.status === "success"){ // search success
-                console.log("success");
-                console.log("musiclists is", response.data.musicLists);
                 var playlistsChangeHandler = this.props.handler;
                 playlistsChangeHandler(response.data.musicLists);
             }
@@ -111,14 +106,12 @@ class PlaylistCard extends Component {
     }
 
     handleEditOnClick = () =>{
-        console.log('click to edit');
         this.setState({
             popupDisplay: true
         })
     }
 
     handleCloseOnClick = () =>{
-        console.log('click to close');
         this.setState({
             popupDisplay: false
         })

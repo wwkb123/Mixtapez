@@ -34,7 +34,6 @@ router.post('/sendFriendRequest', async (req, res) => {
       }
 
       if(userFriendRequests.includes(target_userID)){  // if self friendRequests already contains target_user's ID
-        // console.log("This guy ", target_userID, " already sent you a request");
         // remove id from both user's friendRequests,
         
         var indexOfTarget = userFriendRequests.indexOf(target_userID);
@@ -276,9 +275,6 @@ router.post('/removeFriend', async (req, res) => {
 router.post('/getConversation', async (req, res) => {
   var conv1 = await ConversationModel.findOne({'user1_id': req.body.userID, 'user2_id': req.body.friendID}).exec();
   var conv2 = await ConversationModel.findOne({'user2_id': req.body.userID, 'user1_id': req.body.friendID}).exec();
-  
-  // console.log("conv1 is", conv1);
-  // console.log("conv2 is", conv2);
 
   if(!conv1 && !conv2){  // conversation doesn't exist, create a new one
     const conversationModel = new ConversationModel(

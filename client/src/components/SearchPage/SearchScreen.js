@@ -101,9 +101,7 @@ class SearchScreen extends Component{
     }
 
     changePageHandler = (event, value)=>{
-        console.log("previous page:"+this.state.page)
         this.setState({page: value});
-        console.log("clicked :"+value);
         
     }
 
@@ -111,7 +109,6 @@ class SearchScreen extends Component{
         e.preventDefault();
         var search_for = this.state.select;  // song/artist/album/user/playlist
         var search_text = this.state.search_text;
-        console.log(search_for, search_text);
         if(search_text !== ""){  // not empty
             try {
                 const response = await UserAPI.post("/search/"+search_for, {
@@ -155,13 +152,10 @@ class SearchScreen extends Component{
                                                                     length,
                                                                     artist});
             if (create_response.data.status === "success") {
-               console.log(this.props.userId)
-               console.log(create_response.data.musicId)
                const request_musicList = await UserAPI.get("/musicListRoute/musicList/"+musicListId);
                if (request_musicList.data.status == "success") {
                  let musicList = request_musicList.data.musicList.musics;
-                 console.log(musicList);
-                 console.log(musicList.map((mus)=> {return(mus === create_response.data.musicId)}))
+
                  if (musicList.length > 0) {
                     let control = true;
                     musicList.forEach(mus => {
@@ -169,7 +163,6 @@ class SearchScreen extends Component{
                             control = false;
                         }
                     });
-                    console.log(control)
                     if (control) {
                      addMusicToMusicList({
                          variables:{
@@ -202,8 +195,6 @@ class SearchScreen extends Component{
     }
 
     childSongIdHandler(songID, songInfo) {
-        console.log(songID);
-        console.log(songInfo);
         this.setState({
             songID: songID,
             songInfo: songInfo
@@ -216,7 +207,6 @@ class SearchScreen extends Component{
         var result_title_card = "";
         var result_cards = "";
         var userId = localStorage.getItem('userId');
-        console.log("select is", select);
         if(search_results ){ 
             if(select === "song" || select === "artist" || select === "album" ){
                 result_title_card = <SongTitleCard></SongTitleCard>

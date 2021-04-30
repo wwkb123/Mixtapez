@@ -248,7 +248,6 @@ router.get('/user/:id', async (req, res) => {
 // return the nickname with a given id
 router.post('/user/nickName', async (req, res) => {
   await UserModel.findOne({'_id': req.body.id }, 'nickName', function (err, user) {
-    // console.log(user);
     if(user){
       res.status(200).json({
         status: "success",

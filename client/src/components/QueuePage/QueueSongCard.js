@@ -62,7 +62,6 @@ export default function QueueSongCard(props){
     }
 
     const addSongToMusicList = async (e, songID, musicListID) => {
-        console.log(songID + " " + musicListID);
         try{
             const addSong_response = await UserAPI.post("/musicListRoute/addSong", {
                 musicListID,
@@ -163,7 +162,6 @@ export default function QueueSongCard(props){
         }else if(mode === "remove"){  // remove
             if(song){
                 let queue = JSON.parse(localStorage.getItem('queue'));
-                console.log("before remove"+queue);
                 let index = 0;
                 for (let i = 0; i < queue.length; i++) {
                     const music = queue[i];
@@ -172,11 +170,9 @@ export default function QueueSongCard(props){
                         break;
                     }
                 }
-                console.log(index);
                 if(index > -1){
                     queue.splice(index, 1);
                 }
-                console.log("after remove"+queue);
                 localStorage.setItem('queue', JSON.stringify(queue))
                 var updateMusicsHandler = props.updateMusicsHandler;
                 updateMusicsHandler(queue);

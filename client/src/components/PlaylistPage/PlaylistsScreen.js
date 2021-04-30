@@ -32,7 +32,6 @@ export default function PlaylistsScreen(props){
     var userId = localStorage.getItem('userId');
     
     const handler = async (musicLists) => {
-        console.log('hangler triggered');
         var newMusicLists = [];
         for(let i = 0; i < musicLists.length; i++){
             let id = musicLists[i];
@@ -68,8 +67,6 @@ export default function PlaylistsScreen(props){
                 try {
                     const response = await UserAPI.get("/musicListRoute/user/musicLists/"+userId);
                     if(response.data.status === "success"){ // search success
-                        console.log("success");
-                        console.log("musiclists is", response.data.musicLists);
                         var musicLists = [];
                         for(let i = 0; i < response.data.musicLists.length; i++){
                             let id = response.data.musicLists[i];
