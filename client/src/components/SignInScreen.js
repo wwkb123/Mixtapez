@@ -49,7 +49,7 @@ class SignInScreen extends Component{
         var password = this.state.password;
         if(email !== "" && password !== ""){
             try {
-                const response = await UserAPI.post("/signin", {
+                const response = await UserAPI.post("/users/signin", {
                     email,
                     password
                 });

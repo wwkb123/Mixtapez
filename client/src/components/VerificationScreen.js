@@ -6,7 +6,7 @@ class VerificationScreen extends Component{
     onClick = async (e) => {
         e.preventDefault();
         try {
-            const response = await UserAPI.post("/verify", {
+            const response = await UserAPI.post("/users/verify", {
                 id: this.props.match.params.id
             });
             if(response.data.status === "success"){

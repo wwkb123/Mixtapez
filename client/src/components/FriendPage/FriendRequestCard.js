@@ -17,7 +17,7 @@ class FriendRequestCard extends Component {
         }
         if(target_userID && selfID){
             try{
-                const response = await UserAPI.post("/acceptFriendRequest", {
+                const response = await UserAPI.post("/friendsRoute/acceptFriendRequest", {
                     userID: selfID,
                     target_userID: target_userID
                 });
@@ -43,7 +43,7 @@ class FriendRequestCard extends Component {
         }
         if(target_userID && selfID){
             try{
-                const response = await UserAPI.post("/declineFriendRequest", {
+                const response = await UserAPI.post("/friendsRoute/declineFriendRequest", {
                     userID: selfID,
                     target_userID: target_userID
                 });

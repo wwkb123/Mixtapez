@@ -18,7 +18,7 @@ class ProfileScreen extends Component {
     getSelf = async () => {
         var selfID = localStorage.getItem('userId');
         try {
-            const response = await UserAPI.post("/user", {
+            const response = await UserAPI.post("/users/user", {
                 id: selfID
             });
             if(response.data.status === "success"){ // search success
@@ -34,19 +34,19 @@ class ProfileScreen extends Component {
         var user = "";
         // console.log("looking for user", id);
         try {
-            const response = await UserAPI.post("/user", {
+            const response = await UserAPI.post("/users/user", {
                 id: id
             });
             if(response.data.status === "success"){ // search success
                 user = response.data.user;
                 
-                const playlists_response = await UserAPI.get("/user/musicLists/"+user._id);
+                const playlists_response = await UserAPI.get("/musicListRoute/user/musicLists/"+user._id);
                 if(playlists_response.data.status === "success"){
                     var musicLists = playlists_response.data.musicLists;  // list of playlist ids
                     var publicPlaylists = [];
                     for(let i = 0; i < musicLists.length; i++){
                         let id = musicLists[i];
-                        const playlist_response = await UserAPI.get("/musicList/"+id);
+                        const playlist_response = await UserAPI.get("/musicListRoute/musicList/"+id);
                         if(playlist_response.data.status === "success"){ // search success
                             var musicList = playlist_response.data.musicList;
                             if(musicList.isPublic) // only show public playlist
@@ -116,7 +116,7 @@ class ProfileScreen extends Component {
 
         if(self && user){
             try{
-                const response = await UserAPI.post("/sendFriendRequest", {  // add self id to user's friendRequests
+                const response = await UserAPI.post("/friendsRoute/sendFriendRequest", {  // add self id to user's friendRequests
                     userID: self._id,
                     target_userID: user._id
                 });
@@ -155,7 +155,7 @@ class ProfileScreen extends Component {
 
     onRemoveFriendConfirm = async (e, self, user) => {
         try{
-            const response = await UserAPI.post("/removeFriend", {  // remove a friend
+            const response = await UserAPI.post("/friendsRoute/removeFriend", {  // remove a friend
                 userID: self._id,
                 target_userID: user._id
             });

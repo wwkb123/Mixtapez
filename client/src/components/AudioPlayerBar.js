@@ -128,11 +128,11 @@ class AudioPlayerBar extends Component {
             return;
         }
         var URI = song.URI;
-        const getSong_response = await UserAPI.post("/getSongAudio", {
+        const getSong_response = await UserAPI.post("/musicListRoute/getSongAudio", {
             URI});
         if (getSong_response.data.status === "success") {
             if(id){
-                const updateNowPlaying_response = await UserAPI.post("/updateNowPlaying", {
+                const updateNowPlaying_response = await UserAPI.post("/musicListRoute/updateNowPlaying", {
                     id: id,
                     musicID: song._id
                 });

@@ -50,7 +50,7 @@ class ChangePasswordScreen extends Component{
         if(newPassword !== "" && newPasswordConfirm !== ""){ 
             if(newPassword === newPasswordConfirm){
                 try {
-                    const response = await UserAPI.post("/changePassword", {
+                    const response = await UserAPI.post("/users/changePassword", {
                         id: this.props.match.params.id,
                         newPassword
                     });

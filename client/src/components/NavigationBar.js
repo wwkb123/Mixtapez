@@ -195,7 +195,7 @@ class NavigationBar extends Component{
     handleCreateNewList = async (addNewPlaylist, musicListName) => {
         try {
             let userId = localStorage.getItem('userId');
-            const create_response = await UserAPI.post("/createMusicList", {
+            const create_response = await UserAPI.post("/musicListRoute/createMusicList", {
                 userId,
                 musicListName
             });

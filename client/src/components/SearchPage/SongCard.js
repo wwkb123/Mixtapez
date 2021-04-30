@@ -56,7 +56,7 @@ export default function SongCard(props){
                 }else{
                     queue = [];
                 }
-                const song_response = await UserAPI.get("/music/"+create_response.data.musicId);
+                const song_response = await UserAPI.get("/musicListRoute/music/"+create_response.data.musicId);
                 if(song_response.data.status === "success"){
                     let found = false;
                     let index = queue.length-1;
@@ -99,7 +99,7 @@ export default function SongCard(props){
                 artist});
             if (create_response.data.status === "success") {
                 let songID = create_response.data.musicId
-                const addSong_response = await UserAPI.post("/addSong", {
+                const addSong_response = await UserAPI.post("/musicListRoute/addSong", {
                     musicListID,
                     songID
                 });
@@ -143,8 +143,7 @@ export default function SongCard(props){
                     if (create_response.data.status === "success") {
                         console.log(create_response.data.musicId)
                         let id = create_response.data.musicId
-                        const song_response = await UserAPI.get("/music/"+id);
-                        console.log(id);
+                        const song_response = await UserAPI.get("/musicListRoute/music/"+id);
                         if(song_response.data.status === "success"){
                             if (queue.length > 0) {
                                 let contains = queue.map((music)=>{
@@ -180,12 +179,12 @@ export default function SongCard(props){
 
                     var updateModalContentHandler = props.updateModalContentHandler;
                     try{
-                        const musicLists_response = await UserAPI.get("/user/musicLists/"+userId);
+                        const musicLists_response = await UserAPI.get("/musicListRoute/user/musicLists/"+userId);
                         if(musicLists_response.data.status === "success"){
                             var musicListsIDs = musicLists_response.data.musicLists;
                             var musicLists = [];
                             for(let i = 0; i < musicListsIDs.length; i++){
-                                const musicList_response = await UserAPI.get("/musicList/"+musicListsIDs[i]);
+                                const musicList_response = await UserAPI.get("/musicListRoute/musicList/"+musicListsIDs[i]);
                                 if(musicList_response.data.status === "success"){
                                     musicLists.push(musicList_response.data.musicList);
                                 }

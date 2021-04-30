@@ -36,7 +36,7 @@ export default function PlaylistsScreen(props){
         var newMusicLists = [];
         for(let i = 0; i < musicLists.length; i++){
             let id = musicLists[i];
-            const playlist_response = await UserAPI.get("/musicList/"+id);
+            const playlist_response = await UserAPI.get("/musicListRoute/musicList/"+id);
             if(playlist_response.data.status === "success"){ // search success
                 newMusicLists.push(playlist_response.data.musicList);
             }else{
@@ -66,14 +66,14 @@ export default function PlaylistsScreen(props){
         async function fetchData() {
             if(userId){
                 try {
-                    const response = await UserAPI.get("/user/musicLists/"+userId);
+                    const response = await UserAPI.get("/musicListRoute/user/musicLists/"+userId);
                     if(response.data.status === "success"){ // search success
                         console.log("success");
                         console.log("musiclists is", response.data.musicLists);
                         var musicLists = [];
                         for(let i = 0; i < response.data.musicLists.length; i++){
                             let id = response.data.musicLists[i];
-                            const playlist_response = await UserAPI.get("/musicList/"+id);
+                            const playlist_response = await UserAPI.get("/musicListRoute/musicList/"+id);
                             if(playlist_response.data.status === "success"){ // search success
                                 musicLists.push(playlist_response.data.musicList);
                             }else{

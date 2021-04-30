@@ -126,14 +126,14 @@ export default function QueueScreen(props){
         var name = document.getElementById('musicListName').value;  // get value of input field
         if(name === "") return;
         try{
-            const response = await UserAPI.post('/createMusicListWithMusics', {
+            const response = await UserAPI.post('/musicListRoute/createMusicListWithMusics', {
                 musicListName: name,
                 musics: musicsIDs,
                 userId
             });
             if(response.data.status === "success"){  // add musicListId to user's musicLists
                 var musicListId = response.data.musicListId;
-                const addMusicListId_response = await UserAPI.post('/addMusicList', {
+                const addMusicListId_response = await UserAPI.post('/musicListRoute/addMusicList', {
                     musicListId,
                     userId
                 });

@@ -31,7 +31,7 @@ class FriendScreen extends Component {
         var userID = localStorage.getItem('userId');
         if(userID){
             try{
-                const response = await UserAPI.post("/user", {
+                const response = await UserAPI.post("/users/user", {
                     id: userID
                 });
                 if(response.data.status === "success"){
@@ -50,7 +50,7 @@ class FriendScreen extends Component {
             let friends_IDs = user.friends;
             let friends = [];
             for(let i = 0; i < friends_IDs.length; i++){
-                const user_response = await UserAPI.post("/user", {
+                const user_response = await UserAPI.post("/users/user", {
                     id: friends_IDs[i]
                 });
                 if(user_response.data.status === "success"){
@@ -61,7 +61,7 @@ class FriendScreen extends Component {
             let friendRequests_IDs = user.friendRequests;
             let friendRequests = [];
             for(let i = 0; i < friendRequests_IDs.length; i++){
-                const user_response = await UserAPI.post("/user", {
+                const user_response = await UserAPI.post("/users/user", {
                     id: friendRequests_IDs[i]
                 });
                 if(user_response.data.status === "success"){

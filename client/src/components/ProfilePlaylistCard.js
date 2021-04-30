@@ -16,7 +16,7 @@ class ProfilePlaylistCard extends Component {
     getNickName = async (id) => {
         var owner = "";
         try {
-            const response = await UserAPI.post("/user/nickName", {
+            const response = await UserAPI.post("/users/user/nickName", {
                 id: id
             });
             if(response.data.status === "success"){ // search success

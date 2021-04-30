@@ -43,7 +43,7 @@ class FriendCard extends Component {
 
     updateNowPlaying = async (now_playing_ID) => {
         if(now_playing_ID){
-            const song_response = await UserAPI.get("/music/"+now_playing_ID);
+            const song_response = await UserAPI.get("/musicListRoute/music/"+now_playing_ID);
             if(song_response.data.status === "success"){ // search success
                 this.setState({now_playing_ID});
                 this.setState({now_playing: song_response.data.music.musicName});

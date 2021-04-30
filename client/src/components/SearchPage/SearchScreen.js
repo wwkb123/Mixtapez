@@ -157,7 +157,7 @@ class SearchScreen extends Component{
             if (create_response.data.status === "success") {
                console.log(this.props.userId)
                console.log(create_response.data.musicId)
-               const request_musicList = await UserAPI.get("/musicList/"+musicListId);
+               const request_musicList = await UserAPI.get("/musicListRoute/musicList/"+musicListId);
                if (request_musicList.data.status == "success") {
                  let musicList = request_musicList.data.musicList.musics;
                  console.log(musicList);

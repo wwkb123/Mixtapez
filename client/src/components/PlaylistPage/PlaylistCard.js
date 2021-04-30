@@ -96,7 +96,7 @@ class PlaylistCard extends Component {
             }
         });
         try{
-            const response = await UserAPI.get("/user/musicLists/"+this.props.userId);
+            const response = await UserAPI.get("/musicListRoute/user/musicLists/"+this.props.userId);
             if(response.data.status === "success"){ // search success
                 console.log("success");
                 console.log("musiclists is", response.data.musicLists);

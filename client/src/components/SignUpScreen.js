@@ -94,11 +94,11 @@ class SignUpScreen extends Component{
             if(this.state.password === this.state.passwordConfirm){
                 // check email exists
                 try {
-                    const register_response = await UserAPI.post("/register", {
+                    const register_response = await UserAPI.post("/users/register", {
                         email
                     });
                     if(register_response.data.status === "success"){  // email can be used
-                        const hashPassword_response = await UserAPI.post("/hashPassword", {
+                        const hashPassword_response = await UserAPI.post("/users/hashPassword", {
                             password: this.state.password
                         });
                         if(hashPassword_response.data.status === "success"){  // got hashed password
@@ -114,7 +114,7 @@ class SignUpScreen extends Component{
                                     verified: false
                                 }
                             })
-                            const sendEmail_response = await UserAPI.post("/sendVerifyEmail", {
+                            const sendEmail_response = await UserAPI.post("/users/sendVerifyEmail", {
                                 email
                             });
                             if(sendEmail_response.data.status === "success"){

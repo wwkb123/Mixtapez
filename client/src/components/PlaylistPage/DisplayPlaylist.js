@@ -118,7 +118,7 @@ export default function DisplayPlaylistScreen(props){
 
     const updatePlaylist = async () => {  // use setstate to trigger re-render
         try{
-            const response = await UserAPI.get("/musicList/"+props.match.params.id);
+            const response = await UserAPI.get("/musicListRoute/musicList/"+props.match.params.id);
             if(response.data.status === "success"){ // search success
                 setMusicList(response.data.musicList);
                 console.log("updatePlaylist", response.data.musicList);
@@ -126,7 +126,7 @@ export default function DisplayPlaylistScreen(props){
                 var music_length = 0;
                 for(let i = 0; i < response.data.musicList.musics.length; i++){
                     let id = response.data.musicList.musics[i];
-                    const song_response = await UserAPI.get("/music/"+id);
+                    const song_response = await UserAPI.get("/musicListRoute/music/"+id);
                     if(song_response.data.status === "success"){ // search success
                         musics.push(song_response.data.music);
                         music_length += song_response.data.music.length;
@@ -136,7 +136,7 @@ export default function DisplayPlaylistScreen(props){
                 }
                 setMusics(Array.from(musics)); // deep copy
                 setTotalLength(music_length);
-                const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                const owner_response = await UserAPI.get("/users/user/"+response.data.musicList.owner);  // get owner's info
                 if(owner_response.data.status === "success"){ // search success
                     setOwner(owner_response.data.user);
                 }
@@ -168,7 +168,7 @@ export default function DisplayPlaylistScreen(props){
                     options[0] = "Make Private";
                 }
                 try{
-                    const response = await UserAPI.post("/setIsPublic", {
+                    const response = await UserAPI.post("/musicListRoute/setIsPublic", {
                         id: musicList._id,
                         isPublic: !isPublic
                     });
@@ -276,7 +276,7 @@ export default function DisplayPlaylistScreen(props){
         if(textfield){
             var URL = textfield.value;
             try{
-                const response = await UserAPI.post('/updatePlaylistImage', {
+                const response = await UserAPI.post('/musicListRoute/updatePlaylistImage', {
                     id: musicListId,
                     imageURL: URL
                 });
@@ -463,7 +463,7 @@ export default function DisplayPlaylistScreen(props){
         async function fetchData() {
             try {
                 setPage(1);
-                const response = await UserAPI.get("/musicList/"+props.match.params.id);
+                const response = await UserAPI.get("/musicListRoute/musicList/"+props.match.params.id);
                 if(response.data.status === "success"){ // search success
                     setMusicList(response.data.musicList);
                     if(response.data.musicList.image){
@@ -474,7 +474,7 @@ export default function DisplayPlaylistScreen(props){
                     var music_length = 0;
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
                         let id = response.data.musicList.musics[i];
-                        const song_response = await UserAPI.get("/music/"+id);
+                        const song_response = await UserAPI.get("/musicListRoute/music/"+id);
                         if(song_response.data.status === "success"){ // search success
                             musics.push(song_response.data.music);
                             music_length += song_response.data.music.length;
@@ -484,7 +484,7 @@ export default function DisplayPlaylistScreen(props){
                     }
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
-                    const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                    const owner_response = await UserAPI.get("/users/user/"+response.data.musicList.owner);  // get owner's info
                     if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
@@ -495,13 +495,13 @@ export default function DisplayPlaylistScreen(props){
                     if(response.data.musicList.forkFrom && response.data.musicList.forkOwner){
                         fork_from = response.data.musicList.forkFrom;
                         fork_owner = response.data.musicList.forkOwner;
-                        const fork_from_response = await UserAPI.get("/musicList/"+fork_from);
+                        const fork_from_response = await UserAPI.get("/musicListRoute/musicList/"+fork_from);
                         if(fork_from_response.data.status === "success"){ // search success
                             setForkFromID(fork_from);
                             setForkFromName(fork_from_response.data.musicList.musicListName);
                         }
 
-                        const fork_owner_response = await UserAPI.post("/user/nickName", {
+                        const fork_owner_response = await UserAPI.post("/users/user/nickName", {
                             id: fork_owner
                         });
 
@@ -547,7 +547,7 @@ export default function DisplayPlaylistScreen(props){
         async function fetchData() {
             try {
                 setPage(1);
-                const response = await UserAPI.get("/musicList/"+props.match.params.id);
+                const response = await UserAPI.get("/musicListRoute/musicList/"+props.match.params.id);
                 if(response.data.status === "success"){ // search success
                     setMusicList(response.data.musicList);
                     if(response.data.musicList.image){
@@ -557,7 +557,7 @@ export default function DisplayPlaylistScreen(props){
                     var music_length = 0;
                     for(let i = 0; i < response.data.musicList.musics.length; i++){
                         let id = response.data.musicList.musics[i];
-                        const song_response = await UserAPI.get("/music/"+id);
+                        const song_response = await UserAPI.get("/musicListRoute/music/"+id);
                         if(song_response.data.status === "success"){ // search success
                             musics.push(song_response.data.music);
                             music_length += song_response.data.music.length;
@@ -567,7 +567,7 @@ export default function DisplayPlaylistScreen(props){
                     }
                     setMusics(Array.from(musics)); // deep copy
                     setTotalLength(music_length);
-                    const owner_response = await UserAPI.get("/user/"+response.data.musicList.owner);  // get owner's info
+                    const owner_response = await UserAPI.get("/users/user/"+response.data.musicList.owner);  // get owner's info
                     if(owner_response.data.status === "success"){ // search success
                         setOwner(owner_response.data.user);
                     }
@@ -578,13 +578,13 @@ export default function DisplayPlaylistScreen(props){
                     if(response.data.musicList.forkFrom && response.data.musicList.forkOwner){
                         fork_from = response.data.musicList.forkFrom;
                         fork_owner = response.data.musicList.forkOwner;
-                        const fork_from_response = await UserAPI.get("/musicList/"+fork_from);
+                        const fork_from_response = await UserAPI.get("/musicListRoute/musicList/"+fork_from);
                         if(fork_from_response.data.status === "success"){ // search success
                             setForkFromID(fork_from);
                             setForkFromName(fork_from_response.data.musicList.musicListName);
                         }
 
-                        const fork_owner_response = await UserAPI.post("/user/nickName", {
+                        const fork_owner_response = await UserAPI.post("/users/user/nickName", {
                             id: fork_owner
                         });
 
@@ -622,7 +622,7 @@ export default function DisplayPlaylistScreen(props){
                 musicIDs.push(musics[i]._id);
             }
             try{
-                const response = await UserAPI.post("/updateMusicList", {
+                const response = await UserAPI.post("/musicListRoute/updateMusicList", {
                     id: musicList._id,
                     musics: musicIDs
                 });

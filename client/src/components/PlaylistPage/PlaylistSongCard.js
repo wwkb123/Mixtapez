@@ -56,7 +56,7 @@ export default function PlaylistSongCard(props){
     const addSongToMusicList = async (e, songID, musicListID) => {
         console.log(songID + " " + musicListID);
         try{
-            const addSong_response = await UserAPI.post("/addSong", {
+            const addSong_response = await UserAPI.post("/musicListRoute/addSong", {
                 musicListID,
                 songID
             });
@@ -105,7 +105,7 @@ export default function PlaylistSongCard(props){
                 }      
                 console.log(song._id)
                 let id = song._id
-                const song_response = await UserAPI.get("/music/"+id);
+                const song_response = await UserAPI.get("/musicListRoute/music/"+id);
                 console.log(song_response.data.music)
                 if(song_response.data.status == "success"){
                     if (queue.length > 0) {
@@ -138,12 +138,12 @@ export default function PlaylistSongCard(props){
                     modal.style.display = "block";
                     var updateModalContentHandler = props.updateModalContentHandler;
                     try{
-                        const musicLists_response = await UserAPI.get("/user/musicLists/"+userId);
+                        const musicLists_response = await UserAPI.get("/musicListRoute/user/musicLists/"+userId);
                         if(musicLists_response.data.status === "success"){
                             var musicListsIDs = musicLists_response.data.musicLists;
                             var musicLists = [];
                             for(let i = 0; i < musicListsIDs.length; i++){
-                                const musicList_response = await UserAPI.get("/musicList/"+musicListsIDs[i]);
+                                const musicList_response = await UserAPI.get("/musicListRoute/musicList/"+musicListsIDs[i]);
                                 if(musicList_response.data.status === "success"){
                                     musicLists.push(musicList_response.data.musicList);
                                 }
@@ -199,7 +199,7 @@ export default function PlaylistSongCard(props){
         }else if(mode === "remove"){  // remove
             if(song){
                 try{
-                    const response = await UserAPI.post("/removeSong", {
+                    const response = await UserAPI.post("/musicListRoute/removeSong", {
                         musicListId: props.musicListId,
                         songID: song._id
                     });

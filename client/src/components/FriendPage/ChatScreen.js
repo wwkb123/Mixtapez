@@ -38,7 +38,7 @@ class ChatScreen extends Component {
         var userID = localStorage.getItem('userId');  // self ID
         var friendID = this.props.match.params.id;
         let friends_IDs = []
-        const response = await UserAPI.post("/user", {
+        const response = await UserAPI.post("/users/user", {
             id: userID
         });
         if(response.data.status === "success"){
@@ -49,13 +49,13 @@ class ChatScreen extends Component {
         }
        
         try{
-            const response = await UserAPI.post("/user", {  // get friend's info
+            const response = await UserAPI.post("/users/user", {  // get friend's info
                 id: friendID
             });
             if(response.data.status === "success"){
                 this.setState({friend: response.data.user});
                 this.setState({isFriend: true});
-                const conversation_response = await UserAPI.post("/getConversation", {  // get friend's info
+                const conversation_response = await UserAPI.post("/friendsRoute/getConversation", {  // get friend's info
                     userID,
                     friendID
                 });
@@ -83,7 +83,7 @@ class ChatScreen extends Component {
         var conversation_id = this.state.conversation_id;
         if(message !== ""){
             message = userID+":"+message
-            const response = await UserAPI.post("/sendMessage", {
+            const response = await UserAPI.post("/friendsRoute/sendMessage", {
                 conversation_id,
                 message
             });
@@ -124,7 +124,7 @@ class ChatScreen extends Component {
                     this.state.socket.on('chat', async (data) => {  // listen to socket's chat event
                         console.log('from socket:', data);
                         // query database to update messages
-                        const response = await UserAPI.post("/getMessages", {
+                        const response = await UserAPI.post("/friendsRoute/getMessages", {
                             conversation_id: data
                         });
                         if(response.data.status === "success"){
